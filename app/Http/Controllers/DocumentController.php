@@ -18,26 +18,22 @@ class DocumentController extends Controller
         $documents = Document::with('vehicule')->get();
         $vehicules = Vehicule::all();
 
-        // 🔔 Vérification expiration
-        foreach ($documents as $doc) {
-
-            $expire = Carbon::parse($doc->date_expiration);
-
-            if ($expire->isPast()) {
-                try {
-                    if (app()->environment('production')) {
-                        $admins = User::role('admin')->get();
-                        foreach ($admins as $admin) {
-                            $admin->notify(new DocumentExpireNotification($doc));
-                        }
-                    } else {
-Log::warning("Document expired notification skipped in dev for doc ID: {$doc->id}");
+        // 🔔 Vérification expiration (Note: Devrait idéalement être dans un Job planifié)
+        // Désactivé temporairement pour performance si trop de documents
+        /*
+        foreach ($documents->where('date_expiration', '<', now()) as $doc) {
+            try {
+                if (app()->environment('production')) {
+                    $admins = User::role('admin')->get();
+                    foreach ($admins as $admin) {
+                        $admin->notify(new DocumentExpireNotification($doc));
                     }
-                } catch (\Exception $e) {
-Log::error("Document notification failed: " . $e->getMessage());
                 }
+            } catch (\Exception $e) {
+                Log::error("Document notification failed: " . $e->getMessage());
             }
         }
+        */
 
         return view('admin.document.index', compact('documents','vehicules'));
     }
@@ -100,7 +96,8 @@ Log::error("Document notification failed: " . $e->getMessage());
     public function edit($id)
     {
         $document = Document::findOrFail($id);
-        return view('admin.document.edit', compact('document'));
+        $vehicules = Vehicule::all();
+        return view('admin.document.edit', compact('document', 'vehicules'));
     }
 
     public function update(Request $request, Document $document)
@@ -117,7 +114,7 @@ Log::error("Document notification failed: " . $e->getMessage());
         ]);
 
         try {
-            $data = $request->only(['type', 'date_emission', 'date_expiration']);
+            $data = $request->only(['vehicule_id', 'type', 'date_emission', 'date_expiration']);
 
             if ($request->hasFile('fichier')) {
                 // Delete old file
@@ -131,7 +128,7 @@ Log::error("Document notification failed: " . $e->getMessage());
 
             Log::info('Document updated', ['id' => $document->id]);
 
-            return redirect()->route('admin.documents.index')->with('success', 'Document mis à jour');
+            return redirect()->route('admin.documents.index')->with('success', 'Document mis à jour avec succès');
         } catch (\Exception $e) {
             Log::error('Document update failed', ['error' => $e->getMessage()]);
             return back()->with('error', 'Erreur : ' . $e->getMessage())->withInput();

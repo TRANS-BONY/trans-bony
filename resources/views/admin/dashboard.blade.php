@@ -74,8 +74,13 @@
             <div class="stat-card__meta">
                 <span class="meta-text">👥 Personnel actif</span>
             </div>
+            @php
+                $chauffeurs_pct = ($vehicules ?? 0) > 0
+                    ? min(100, round(($chauffeurs ?? 0) / max(1, ($vehicules ?? 1)) * 100))
+                    : (($chauffeurs ?? 0) > 0 ? 100 : 0);
+            @endphp
             <div class="stat-card__bar">
-                <div class="stat-card__bar-fill" style="--bar-w: 80%"></div>
+                <div class="stat-card__bar-fill" style="--bar-w: {{ $chauffeurs_pct }}%"></div>
             </div>
             <div class="stat-card__shine"></div>
         </div>
@@ -96,10 +101,19 @@
             </div>
             <p class="stat-card__number counter" data-target="{{ $voyages ?? 0 }}">{{ $voyages ?? 0 }}</p>
             <div class="stat-card__meta">
-                <span class="meta-text">🚀 Trajets effectués</span>
+                @if(($voyages_today ?? 0) > 0)
+                    <span class="meta-dot meta-dot--green"></span>
+                    <span class="meta-text">{{ $voyages_today ?? 0 }} aujourd'hui ·</span>
+                    <span class="meta-highlight">{{ $voyages_mois ?? 0 }} ce mois</span>
+                @else
+                    <span class="meta-text">🚀 {{ $voyages_mois ?? 0 }} ce mois</span>
+                @endif
             </div>
+            @php
+                $voyages_pct = ($voyages ?? 0) > 0 ? min(100, round(($voyages_mois ?? 0) / max(1, $voyages) * 100)) : 0;
+            @endphp
             <div class="stat-card__bar">
-                <div class="stat-card__bar-fill" style="--bar-w: 65%"></div>
+                <div class="stat-card__bar-fill" style="--bar-w: {{ $voyages_pct }}%"></div>
             </div>
             <div class="stat-card__shine"></div>
         </div>
@@ -166,16 +180,23 @@
                     </div>
                     <span>Recette Mensuelle</span>
                 </div>
-                <span class="growth-badge">
-                    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                    +15%
-                </span>
+                @if(($recettes_evolution ?? 0) >= 0)
+                    <span class="growth-badge">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        +{{ $recettes_evolution ?? 0 }}%
+                    </span>
+                @else
+                    <span class="growth-badge" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.25);color:#f87171;">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17H5m0 0V9m0 8l8-8 4 4 6-6"/></svg>
+                        {{ $recettes_evolution ?? 0 }}%
+                    </span>
+                @endif
             </div>
-            <p class="stat-card__number stat-card__number--green">{{ number_format($recettes ?? 0) }} <small>FCFA</small></p>
+            <p class="stat-card__number stat-card__number--green">{{ number_format($recettes ?? 0, 0, ',', ' ') }} <small>FCFA</small></p>
             <p class="stat-card__meta"><span class="meta-text">vs mois précédent</span></p>
             <div class="revenue-bar-track">
-                <div class="revenue-bar-fill"></div>
-                <span class="revenue-bar-label">75%</span>
+                <div class="revenue-bar-fill" style="--bar-w: {{ $recettes_pct ?? 0 }}%"></div>
+                <span class="revenue-bar-label">{{ $recettes_pct ?? 0 }}%</span>
             </div>
             <div class="stat-card__shine"></div>
         </div>
@@ -235,32 +256,28 @@
                         <span class="status-dot status-dot--amber"></span>
                         Véhicules en mission
                     </span>
-                    <span class="status-row__value">{{ $vehicules_mission ?? 0 }}</span>
+                    <span class="status-row__value" style="color:#fbbf24">{{ $vehicules_mission ?? 0 }}</span>
                 </div>
                 <div class="status-row">
                     <span class="status-row__label">
                         <span class="status-dot status-dot--green"></span>
                         Véhicules disponibles
                     </span>
-                    <span class="status-row__value">{{ $vehicules_disponibles ?? 0 }}</span>
+                    <span class="status-row__value" style="color:#4ade80">{{ $vehicules_disponibles ?? 0 }}</span>
                 </div>
                 <div class="status-row">
                     <span class="status-row__label">
                         <span class="status-dot status-dot--blue"></span>
                         Maintenance en cours
                     </span>
-                    <span class="status-row__value">{{ $vehicules_maintenance ?? 0 }}</span>
+                    <span class="status-row__value" style="color:#60a5fa">{{ $vehicules_maintenance ?? 0 }}</span>
                 </div>
                 <div class="status-row status-row--total">
-                    <span class="status-row__label status-row__label--total">Taux d'occupation</span>
-                    @php
-                        $total = ($vehicules_disponibles ?? 0) + ($vehicules_mission ?? 0) + ($vehicules_maintenance ?? 0);
-                        $occupation = $total > 0 ? (($vehicules_mission ?? 0) / $total) * 100 : 0;
-                    @endphp
-                    <span class="status-row__value status-row__value--green">{{ number_format($occupation, 1) }}%</span>
+                    <span class="status-row__label--total">Taux d'occupation</span>
+                    <span class="status-row__value status-row__value--green">{{ number_format($occupation ?? 0, 1) }}%</span>
                 </div>
                 <div class="occupation-track">
-                    <div class="occupation-fill" style="--occ: {{ number_format($occupation, 1) }}%"></div>
+                    <div class="occupation-fill" style="--occ: {{ number_format($occupation ?? 0, 1) }}%"></div>
                 </div>
             </div>
         </div>

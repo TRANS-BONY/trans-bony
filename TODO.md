@@ -1,10 +1,12 @@
-# Maintenance CRUD Fix TODO
+# Document Interface Fix - Null Vehicule Crash
 
-1. ✅ Create this TODO.md  
-2. ✅ Update MaintenanceController.php  
-3. ✅ Update create.blade.php  
-4. ✅ Seeded RolePermissionSeeder and VehiculeSeeder
-5. [ ] Assign permission to user (tinker or admin panel)  
-6. [ ] Test create maintenance → check index/DB  
-7. [ ] [DONE] attempt_completion
-8. [ ] attempt_completion
+**Status**: Approved - Implementing null-safe fixes
+
+## Steps:
+- [ ] 1. Create TODO.md ✅
+- [ ] 2. Edit resources/views/admin/document/index.blade.php - Null-safe vehicule access
+- [ ] 3. Edit app/Http/Controllers/DocumentController.php - Filter valid docs
+- [ ] 4. php artisan view:clear
+- [ ] 5. Test /admin/documents
+
+**Goal**: Handle orphaned documents (vehicule_id exists but vehicule deleted)

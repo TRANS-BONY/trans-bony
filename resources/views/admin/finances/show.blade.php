@@ -69,25 +69,25 @@
             <div class="space-y-4">
                 <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
                     <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                        <span class="text-2xl font-bold text-white">{{ substr($recette->vehicule->immatriculation ?? 'VEH', 0, 3) }}</span>
+                        <span class="text-2xl font-bold text-white">{{ substr($recette->vehicule?->immatriculation ?? 'VEH', 0, 3) }}</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-lg font-semibold text-gray-900 truncate">{{ $recette->vehicule->immatriculation ?? 'Non spécifié' }}</h4>
-                        <p class="text-sm text-gray-500">{{ $recette->vehicule->marque }} {{ $recette->vehicule->modele }} ({{ $recette->vehicule->annee ?? 'N/A' }})</p>
-                        <p class="text-sm text-gray-600 mt-1">Capacité: {{ $recette->vehicule->capacite ?? 'N/A' }} places</p>
+                        <h4 class="text-lg font-semibold text-gray-900 truncate">{{ $recette->vehicule?->immatriculation ?? 'Non spécifié' }}</h4>
+                        <p class="text-sm text-gray-500">{{ $recette->vehicule?->marque ?? '' }} {{ $recette->vehicule?->modele ?? '' }} ({{ $recette->vehicule?->annee ?? 'N/A' }})</p>
+                        <p class="text-sm text-gray-600 mt-1">Capacité: {{ $recette->vehicule?->capacite ?? 'N/A' }} places</p>
                     </div>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-{{ $recette->vehicule->statut == 'actif' ? 'emerald' : 'gray' }}-100 text-{{ $recette->vehicule->statut == 'actif' ? 'emerald' : 'gray' }}-800">
-                        {{ ucfirst($recette->vehicule->statut ?? 'inconnu') }}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-{{ ($recette->vehicule?->statut ?? '') == 'actif' ? 'emerald' : 'gray' }}-100 text-{{ ($recette->vehicule?->statut ?? '') == 'actif' ? 'emerald' : 'gray' }}-800">
+                        {{ ucfirst($recette->vehicule?->statut ?? 'inconnu') }}
                     </span>
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <span class="text-gray-500">Voyages</span>
-                        <div class="font-semibold">{{ $recette->vehicule->voyages_count ?? 0 }}</div>
+                        <div class="font-semibold">{{ $recette->vehicule?->voyages_count ?? 0 }}</div>
                     </div>
                     <div>
                         <span class="text-gray-500">Maintenances</span>
-                        <div class="font-semibold">{{ $recette->vehicule->maintenances_count ?? 0 }}</div>
+                        <div class="font-semibold">{{ $recette->vehicule?->maintenances_count ?? 0 }}</div>
                     </div>
                 </div>
             </div>

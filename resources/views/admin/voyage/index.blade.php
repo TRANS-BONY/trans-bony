@@ -395,7 +395,7 @@ events: "{{ route('admin.voyages.events') }}",
             info.el.setAttribute('title', `${info.event.title}\nDépart: ${info.event.start.toLocaleString()}`);
         },
         eventDrop: function(info) {
-            fetch('/voyages/' + info.event.id + '/move', {
+            fetch('/admin/voyages/' + info.event.id + '/move', {
                 method: 'PUT',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -423,7 +423,7 @@ events: "{{ route('admin.voyages.events') }}",
         },
         eventClick: function(info){
             if(confirm("⚠️ Supprimer ce voyage ?\n\n" + info.event.title + "\n\nCette action est irréversible.")){
-                fetch('/voyages/' + info.event.id, {
+                fetch('/admin/voyages/' + info.event.id, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',

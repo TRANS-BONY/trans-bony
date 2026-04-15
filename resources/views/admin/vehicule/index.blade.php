@@ -209,6 +209,7 @@
                                 </a>
                                 <form method="POST" action="{{ route('admin.vehicules.destroy', $v->id) }}" class="inline">
                                     @csrf
+                                    @method('DELETE')
                                     <button type="submit"
                                             onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer ce véhicule ?')"
                                             class="p-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 hover:scale-110"

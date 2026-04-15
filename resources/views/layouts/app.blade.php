@@ -164,7 +164,12 @@
                     <a href="/admin/vehicules" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                         <i class="fas fa-truck w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Véhicules</span>
-                        <span class="text-xs bg-blue-600/50 px-2 py-1 rounded-full">12</span>
+                        @if(($sidebar_vehicules ?? 0) > 0)
+                            <span title="{{ $sidebar_vehicules_dispo ?? 0 }} dispo · {{ $sidebar_vehicules_miss ?? 0 }} en mission · {{ $sidebar_vehicules_maint ?? 0 }} en maintenance"
+                                  class="text-xs bg-blue-600/50 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_vehicules ?? 0 }}
+                            </span>
+                        @endif
                     </a>
                     @endcan
 
@@ -172,7 +177,11 @@
                     <a href="/admin/chauffeurs" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                         <i class="fas fa-user-circle w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Chauffeurs</span>
-                        <span class="text-xs bg-green-600/50 px-2 py-1 rounded-full">8</span>
+                        @if(($sidebar_chauffeurs ?? 0) > 0)
+                            <span class="text-xs bg-green-600/50 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_chauffeurs ?? 0 }}
+                            </span>
+                        @endif
                     </a>
                     @endcan
 
@@ -180,6 +189,16 @@
                     <a href="/admin/voyages" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                         <i class="fas fa-route w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Voyages</span>
+                        @if(($sidebar_voyages_today ?? 0) > 0)
+                            <span title="{{ $sidebar_voyages_today ?? 0 }} voyage(s) aujourd'hui"
+                                  class="text-xs bg-amber-500/50 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_voyages_today ?? 0 }}
+                            </span>
+                        @elseif(($sidebar_voyages ?? 0) > 0)
+                            <span class="text-xs bg-amber-600/30 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_voyages ?? 0 }}
+                            </span>
+                        @endif
                     </a>
                     @endcan
 
@@ -187,7 +206,16 @@
                     <a href="/admin/maintenances" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                         <i class="fas fa-tools w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Maintenance</span>
-                        <span class="text-xs bg-yellow-600/50 px-2 py-1 rounded-full">3</span>
+                        @if(($sidebar_maintenances_encours ?? 0) > 0)
+                            <span title="{{ $sidebar_maintenances_encours ?? 0 }} en cours · {{ $sidebar_maintenances_planif ?? 0 }} planifiée(s)"
+                                  class="text-xs bg-orange-500/60 px-2 py-1 rounded-full font-semibold animate-pulse">
+                                {{ $sidebar_maintenances_encours ?? 0 }}
+                            </span>
+                        @elseif(($sidebar_maintenances ?? 0) > 0)
+                            <span class="text-xs bg-yellow-600/40 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_maintenances ?? 0 }}
+                            </span>
+                        @endif
                     </a>
                     @endcan
 
@@ -195,6 +223,23 @@
                     <a href="/admin/documents" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                         <i class="fas fa-file-alt w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Documents</span>
+                        @if(($sidebar_docs_expire ?? 0) > 0)
+                            {{-- Alerte rouge : documents déjà expirés --}}
+                            <span title="{{ $sidebar_docs_expire ?? 0 }} expiré(s) · {{ $sidebar_docs_bientot ?? 0 }} bientôt expiré(s)"
+                                  class="text-xs bg-red-600/70 px-2 py-1 rounded-full font-semibold animate-pulse">
+                                ⚠ {{ $sidebar_docs_alerte ?? 0 }}
+                            </span>
+                        @elseif(($sidebar_docs_bientot ?? 0) > 0)
+                            {{-- Alerte orange : bientôt expirés --}}
+                            <span title="{{ $sidebar_docs_bientot ?? 0 }} document(s) expirent dans 30 jours"
+                                  class="text-xs bg-orange-500/60 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_docs_bientot ?? 0 }}
+                            </span>
+                        @elseif(($sidebar_documents ?? 0) > 0)
+                            <span class="text-xs bg-purple-600/40 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_documents ?? 0 }}
+                            </span>
+                        @endif
                     </a>
                     @endcan
 
@@ -202,6 +247,12 @@
                     <a href="/admin/recettes" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                         <i class="fas fa-coins w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Recettes</span>
+                        @if(($sidebar_recettes ?? 0) > 0)
+                            <span title="{{ number_format($sidebar_recettes_mois ?? 0, 0, ',', ' ') }} FCFA ce mois"
+                                  class="text-xs bg-emerald-600/50 px-2 py-1 rounded-full font-semibold">
+                                {{ $sidebar_recettes ?? 0 }}
+                            </span>
+                        @endif
                     </a>
                     @endcan
 
@@ -220,6 +271,11 @@
                         <a href="/admin/users" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
                             <i class="fas fa-users w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                             <span class="flex-1">Utilisateurs</span>
+                            @if(($sidebar_users ?? 0) > 0)
+                                <span class="text-xs bg-indigo-600/50 px-2 py-1 rounded-full font-semibold">
+                                    {{ $sidebar_users ?? 0 }}
+                                </span>
+                            @endif
                         </a>
                     </div>
                     @endrole

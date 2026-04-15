@@ -215,9 +215,9 @@
                                         <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                                         </svg>
-                                        <span class="font-semibold text-gray-900">{{ $doc->vehicule->immatriculation }}</span>
+<span class="font-semibold text-gray-900">{{ $doc->vehicule?->immatriculation ?? 'Véhicule supprimé' }}</span>
                                     </div>
-                                    <div class="text-xs text-gray-500 mt-1">{{ $doc->vehicule->marque }} {{ $doc->vehicule->modele }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">{{ $doc->vehicule?->marque ?? 'N/A' }} {{ $doc->vehicule?->modele ?? '' }}</div>
                                 </td>
                                 <td class="p-4">
                                     <span class="inline-flex items-center gap-1 {{ $typeInfo['color'] }}">

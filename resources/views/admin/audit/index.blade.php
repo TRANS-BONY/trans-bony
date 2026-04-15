@@ -175,8 +175,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-gray-900">{{ $m->vehicule->immatriculation ?? 'N/A' }}</p>
-                                    <p class="text-xs text-gray-500">{{ $m->vehicule->marque ?? '' }} {{ $m->vehicule->modele ?? '' }}</p>
+                                    <p class="font-semibold text-gray-900">{{ $m->vehicule?->immatriculation ?? 'N/A' }}</p>
+                                    <p class="text-xs text-gray-500">{{ $m->vehicule?->marque ?? '' }} {{ $m->vehicule?->modele ?? '' }}</p>
                                 </div>
                             </div>
                         </td>
@@ -241,7 +241,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                            onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette maintenance ?\n\nVéhicule : {{ $m->vehicule->immatriculation ?? 'N/A' }}\nType : {{ $m->type }}\nDate : {{ $datePrevue->format('d/m/Y') }}\n\nCette action est irréversible.')"
+                                            onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette maintenance ?\n\nVéhicule : {{ $m->vehicule?->immatriculation ?? 'N/A' }}\nType : {{ $m->type }}\nDate : {{ $datePrevue->format('d/m/Y') }}\n\nCette action est irréversible.')"
                                             class="p-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 hover:scale-110"
                                             title="Supprimer la maintenance">
                                         <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
