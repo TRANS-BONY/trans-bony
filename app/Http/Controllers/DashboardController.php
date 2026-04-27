@@ -20,6 +20,10 @@ class DashboardController extends Controller
         $roles = $user->getRoleNames();
         $role  = strtolower($roles->first() ?? 'agent');
 
+        // Redirection dédiée pour le rôle comptable
+        if ($role === 'comptable') {
+            return redirect()->route('comptable.dashboard');
+        }
         // ── Véhicules ──────────────────────────────────────────
         $vehicules              = Vehicule::count();
         $vehicules_disponibles  = Vehicule::where('statut', 'disponible')->count();

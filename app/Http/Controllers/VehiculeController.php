@@ -50,7 +50,7 @@ class VehiculeController extends Controller
             'marque' => 'required|regex:/^[A-Za-z0-9 ]+$/',
             'modele' => 'required|regex:/^[A-Za-z0-9 ]+$/',
             'annee' => 'required|integer|between:1950,2026',
-            'capacite' => 'required|integer|between:0,52',
+            'capacite' => 'required|integer|between:1,52',
             'statut' => 'required|in:disponible,maintenance,mission'
         ]);
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.comptable')
 
 @section('content')
 <div class="space-y-6">
@@ -18,15 +18,15 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('admin.rapports.create') }}"
+                <a href="{{ route('comptable.rapports.create') }}"
                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-indigo-700 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
                     <i class="fas fa-plus"></i> Nouveau rapport
                 </a>
-                <a href="{{ route('admin.rapports.pdf') }}"
+                <a href="{{ route('comptable.rapports.pdf') }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
                     <i class="fas fa-file-pdf"></i> PDF
                 </a>
-                <a href="{{ route('admin.rapports.excel') }}"
+                <a href="{{ route('comptable.rapports.excel') }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
                     <i class="fas fa-file-excel"></i> Excel
                 </a>
@@ -95,7 +95,7 @@
                     <p class="text-xs text-gray-400">Gérez vos rapports comptables</p>
                 </div>
             </div>
-            <a href="{{ route('admin.rapports.create') }}"
+            <a href="{{ route('comptable.rapports.create') }}"
                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
                 <i class="fas fa-plus"></i> Créer
             </a>
@@ -160,15 +160,15 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-1.5">
-                                <a href="{{ route('admin.rapports.show', $rapport) }}"
+                                <a href="{{ route('comptable.rapports.show', $rapport) }}"
                                    class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 transition hover:scale-110" title="Voir">
                                     <i class="fas fa-eye text-xs"></i>
                                 </a>
-                                <a href="{{ route('admin.rapports.edit', $rapport) }}"
+                                <a href="{{ route('comptable.rapports.edit', $rapport) }}"
                                    class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-800/40 text-blue-600 dark:text-blue-400 transition hover:scale-110" title="Modifier">
                                     <i class="fas fa-edit text-xs"></i>
                                 </a>
-                                <form method="POST" action="{{ route('admin.rapports.destroy', $rapport) }}" class="inline">
+                                <form method="POST" action="{{ route('comptable.rapports.destroy', $rapport) }}" class="inline">
                                     @csrf @method('DELETE')
                                     <button type="submit" onclick="return confirm('Supprimer « {{ $rapport->titre }} » ?')"
                                             class="p-2 rounded-lg bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 transition hover:scale-110" title="Supprimer">
@@ -187,7 +187,7 @@
                                 </div>
                                 <p class="text-base font-semibold text-gray-500 dark:text-gray-400">Aucun rapport créé</p>
                                 <p class="text-sm">Créez votre premier rapport comptable</p>
-                                <a href="{{ route('admin.rapports.create') }}"
+                                <a href="{{ route('comptable.rapports.create') }}"
                                    class="mt-2 inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
                                     <i class="fas fa-plus"></i> Créer un rapport
                                 </a>
@@ -218,7 +218,7 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Export PDF</h3>
                     <p class="text-xs text-gray-400 mt-0.5">Rapport complet avec statistiques</p>
                 </div>
-                <a href="{{ route('admin.rapports.pdf') }}"
+                <a href="{{ route('comptable.rapports.pdf') }}"
                    class="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl shadow transition hover:scale-105">
                     <i class="fas fa-download"></i> Télécharger
                 </a>
@@ -234,7 +234,7 @@
                     <h3 class="font-bold text-gray-800 dark:text-white">Export Excel</h3>
                     <p class="text-xs text-gray-400 mt-0.5">Données tabulaires analysables</p>
                 </div>
-                <a href="{{ route('admin.rapports.excel') }}"
+                <a href="{{ route('comptable.rapports.excel') }}"
                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl shadow transition hover:scale-105">
                     <i class="fas fa-download"></i> Télécharger
                 </a>
@@ -315,4 +315,3 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 @endif
 @endsection
-

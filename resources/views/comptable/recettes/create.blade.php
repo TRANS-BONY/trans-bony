@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.comptable')
 
 @section('content')
 <div class="space-y-6">
@@ -17,7 +17,7 @@
                     <p class="text-emerald-100 text-sm mt-1">Enregistrez un nouveau revenu mensuel</p>
                 </div>
             </div>
-            <a href="{{ route('admin.recettes.index') }}"
+            <a href="{{ route('comptable.recettes.index') }}"
                class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl border border-white/30 backdrop-blur-sm transition hover:scale-105">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>
@@ -26,7 +26,7 @@
 
     {{-- FORM --}}
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 animate-fade-in-up">
-        <form method="POST" action="{{ route('admin.recettes.store') }}" class="p-8 space-y-6">
+        <form method="POST" action="{{ route('comptable.recettes.store') }}" class="p-8 space-y-6">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -99,7 +99,7 @@
                         class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
                     <i class="fas fa-save"></i> Enregistrer la recette
                 </button>
-                <a href="{{ route('admin.recettes.index') }}"
+                <a href="{{ route('comptable.recettes.index') }}"
                    class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:scale-105 transition-all duration-300">
                     <i class="fas fa-times"></i> Annuler
                 </a>
@@ -115,4 +115,3 @@
 .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards; }
 </style>
 @endsection
-

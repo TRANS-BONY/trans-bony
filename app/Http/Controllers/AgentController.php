@@ -7,14 +7,47 @@ use App\Models\Chauffeur;
 use App\Models\Voyage;
 use Illuminate\Http\Request;
 
-class VoyageController extends Controller
+class AgentController extends Controller
 {
+    public function dashboard()
+    {
+        $vehicules = Vehicule::count();
+        $chauffeurs = Chauffeur::count();
+        $voyages = Voyage::count();
+        
+        return view('agent.index', compact('vehicules', 'chauffeurs', 'voyages'));
+    }
+
     public function index()
     {
         $vehicules = Vehicule::all();
         $chauffeurs = Chauffeur::all();
+        $voyages = Voyage::with(['vehicule', 'chauffeur'])->orderByDesc('date_depart')->paginate(10);
 
-return view('admin.voyage.index', compact('vehicules','chauffeurs'));
+        return view('agent.voyage.index', compact('vehicules','chauffeurs','voyages'));
+    }
+
+    public function show($id)
+    {
+        $voyage = Voyage::with(['vehicule', 'chauffeur'])->findOrFail($id);
+        return view('agent.voyage.show', compact('voyage'));
+    }
+
+    public function create()
+    {
+        $vehicules = Vehicule::all();
+        $chauffeurs = Chauffeur::all();
+
+        return view('agent.voyage.create', compact('vehicules', 'chauffeurs'));
+    }
+
+    public function edit($id)
+    {
+        $voyage = Voyage::findOrFail($id);
+        $vehicules = Vehicule::all();
+        $chauffeurs = Chauffeur::all();
+        
+        return view('agent.voyage.edit', compact('voyage', 'vehicules', 'chauffeurs'));
     }
 
     // 📅 EVENTS POUR FULLCALENDAR
@@ -27,7 +60,7 @@ return view('admin.voyage.index', compact('vehicules','chauffeurs'));
         foreach ($voyages as $v) {
             $events[] = [
                 'id' => $v->id,
-                'title' => $v->destination . ' - ' . $v->chauffeur->nom,
+                'title' => $v->destination . ' - ' . ($v->chauffeur ? $v->chauffeur->nom : 'N/A'),
                 'start' => $v->date_depart,
                 'color' => $v->type == 'maintenance' ? 'red' : 'blue'
             ];
@@ -52,7 +85,7 @@ return view('admin.voyage.index', compact('vehicules','chauffeurs'));
         $chauffeur = Chauffeur::find($data['chauffeur_id']);
 
         // 🚫 règles métier
-        if ($vehicule->statut == 'maintenance') {
+        if ($vehicule->statut == 'maintenance' && $data['type'] != 'maintenance') {
             return back()->withErrors(['vehicule_id' => 'Véhicule en maintenance']);
         }
 
@@ -92,7 +125,7 @@ return view('admin.voyage.index', compact('vehicules','chauffeurs'));
         $vehicule = Vehicule::find($data['vehicule_id']);
         $chauffeur = Chauffeur::find($data['chauffeur_id']);
 
-        if ($vehicule->statut == 'maintenance') {
+        if ($vehicule->statut == 'maintenance' && $data['type'] != 'maintenance') {
             return back()->withErrors(['vehicule_id' => 'Véhicule en maintenance']);
         }
 
@@ -135,6 +168,12 @@ return view('admin.voyage.index', compact('vehicules','chauffeurs'));
     public function destroy($id)
     {
         Voyage::destroy($id);
+        // Voyage::destroy in the frontend relies on successful JSON for eventClick usually... Oh wait!
+        // VoyageController destroy returns back()! Wait, the JS fetch uses json response!
+        // Let's return JSON to be safe, because index.blade.php expects JSON for destroy:
+        if(request()->ajax()) {
+            return response()->json(['success'=>true]);
+        }
         return back()->with('success','Supprimé');
     }
 }

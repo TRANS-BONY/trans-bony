@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.comptable')
 
 @section('content')
 <div class="space-y-6">
@@ -20,11 +20,11 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('admin.recettes.edit', $recette) }}"
+                <a href="{{ route('comptable.recettes.edit', $recette) }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-emerald-700 font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
                     <i class="fas fa-edit"></i> Modifier
                 </a>
-                <a href="{{ route('admin.recettes.index') }}"
+                <a href="{{ route('comptable.recettes.index') }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl border border-white/30 backdrop-blur-sm transition hover:scale-105">
                     <i class="fas fa-arrow-left"></i> Retour
                 </a>
@@ -47,11 +47,11 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">FCFA</p>
 
                 <div class="mt-6 space-y-2">
-                    <a href="{{ route('admin.recettes.edit', $recette) }}"
+                    <a href="{{ route('comptable.recettes.edit', $recette) }}"
                        class="flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-sm font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
                         <i class="fas fa-edit"></i> Modifier
                     </a>
-                    <form method="POST" action="{{ route('admin.recettes.destroy', $recette) }}">
+                    <form method="POST" action="{{ route('comptable.recettes.destroy', $recette) }}">
                         @csrf @method('DELETE')
                         <button type="submit" onclick="return confirm('Supprimer cette recette ?')"
                                 class="w-full flex items-center justify-center gap-2 py-2.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 text-sm font-semibold rounded-xl transition hover:scale-105">
@@ -126,4 +126,3 @@
 .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 </style>
 @endsection
-

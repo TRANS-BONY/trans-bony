@@ -12,10 +12,23 @@ class RecetteController extends Controller
 {
     public function index()
     {
-        $vehicules = Vehicule::count();
-        $voyages = Voyage::count();
-        $recettes = RecetteMensuelle::orderBy('date', 'desc')->paginate(10);
-        return view('admin.finances.index', compact('vehicules', 'voyages', 'recettes'));
+        $recettes = RecetteMensuelle::orderByDesc('date')->paginate(15);
+
+        // Agrégats globaux (sur toute la table, pas seulement la page courante)
+        $recettes_total      = RecetteMensuelle::sum('montant');
+        $recettes_mois_total = RecetteMensuelle::whereMonth('date', now()->month)
+                                                ->whereYear('date', now()->year)
+                                                ->sum('montant');
+        $recettes_avg        = RecetteMensuelle::avg('montant') ?? 0;
+        $recettes_count      = RecetteMensuelle::count();
+
+        return view('admin.finances.index', compact(
+            'recettes',
+            'recettes_total',
+            'recettes_mois_total',
+            'recettes_avg',
+            'recettes_count'
+        ));
     }
 
     public function create()
