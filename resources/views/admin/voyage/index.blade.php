@@ -408,11 +408,11 @@ events: "{{ route('admin.voyages.events') }}",
             .then(res => res.json())
             .then(data => {
                 if(data.error){
-                    alert(data.error);
+                    showNotification(data.error, 'error');
                     info.revert();
                 } else {
                     // Afficher une notification de succès
-                    showNotification('Événement déplacé avec succès', 'success');
+                    showNotification(data.message || 'Événement déplacé avec succès', 'success');
                 }
             })
             .catch(error => {
@@ -434,14 +434,14 @@ events: "{{ route('admin.voyages.events') }}",
                 .then(data => {
                     if(data.success) {
                         info.event.remove();
-                        showNotification('Événement supprimé avec succès', 'success');
+                        showNotification(data.message || 'Événement supprimé avec succès', 'success');
                     } else {
-                        showNotification('Erreur lors de la suppression', 'error');
+                        showNotification(data.error || 'Erreur lors de la suppression', 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Erreur:', error);
-                    showNotification('Erreur lors de la suppression', 'error');
+                    showNotification('Erreur réseau lors de la suppression', 'error');
                 });
             }
         },

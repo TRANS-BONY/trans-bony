@@ -11,7 +11,9 @@ use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\RecetteController;
 use App\Http\Controllers\RapportController;
-use App\Http\Controllers\ComptableController;
+use App\Http\Controllers\TechnicienController;
+use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\GestionnaireController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,6 +140,102 @@ Route::middleware('role:admin')->group(function () {
         Route::put('/voyages/{id}', [\App\Http\Controllers\AgentController::class, 'update'])->name('voyages.update');
         Route::put('/voyages/{id}/move', [\App\Http\Controllers\AgentController::class, 'move'])->name('voyages.move');
         Route::delete('/voyages/{id}', [\App\Http\Controllers\AgentController::class, 'destroy'])->name('voyages.destroy');
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // ESPACE TECHNICIEN — accessible au rôle technicien
+    // ──────────────────────────────────────────────────────────────
+    Route::middleware('role:technicien')->prefix('technicien')->name('technicien.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [TechnicienController::class, 'dashboard'])->name('dashboard');
+        
+        // Véhicules (Read-only)
+        Route::get('/vehicules', [TechnicienController::class, 'vehiculesIndex'])->name('vehicules.index');
+        Route::get('/vehicules/{vehicule}', [TechnicienController::class, 'vehiculesShow'])->name('vehicules.show');
+        
+        // Maintenances (CRUD complet)
+        Route::get('/maintenances', [TechnicienController::class, 'maintenancesIndex'])->name('maintenances.index');
+        Route::get('/maintenances/create', [TechnicienController::class, 'maintenancesCreate'])->name('maintenances.create');
+        Route::post('/maintenances', [TechnicienController::class, 'maintenancesStore'])->name('maintenances.store');
+        Route::get('/maintenances/{maintenance}', [TechnicienController::class, 'maintenancesShow'])->name('maintenances.show');
+        Route::get('/maintenances/{maintenance}/edit', [TechnicienController::class, 'maintenancesEdit'])->name('maintenances.edit');
+        Route::put('/maintenances/{maintenance}', [TechnicienController::class, 'maintenancesUpdate'])->name('maintenances.update');
+        Route::delete('/maintenances/{maintenance}', [TechnicienController::class, 'maintenancesDestroy'])->name('maintenances.destroy');
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // ESPACE MANAGER — accessible au rôle manager
+    // ──────────────────────────────────────────────────────────────
+    Route::middleware('role:manager')->prefix('manager')->name('manager.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [ManagerController::class, 'dashboard'])->name('dashboard');
+        
+        // Modules (Lecture seule)
+        Route::get('/vehicules', [ManagerController::class, 'vehiculesIndex'])->name('vehicules.index');
+        Route::get('/vehicules/{vehicule}', [ManagerController::class, 'vehiculesShow'])->name('vehicules.show');
+        
+        Route::get('/chauffeurs', [ManagerController::class, 'chauffeursIndex'])->name('chauffeurs.index');
+        Route::get('/chauffeurs/{chauffeur}', [ManagerController::class, 'chauffeursShow'])->name('chauffeurs.show');
+        
+        Route::get('/voyages', [ManagerController::class, 'voyagesIndex'])->name('voyages.index');
+        Route::get('/voyages/{id}', [ManagerController::class, 'voyagesShow'])->name('voyages.show');
+        
+        Route::get('/maintenances', [ManagerController::class, 'maintenancesIndex'])->name('maintenances.index');
+        Route::get('/maintenances/{maintenance}', [ManagerController::class, 'maintenancesShow'])->name('maintenances.show');
+        
+        Route::get('/documents', [ManagerController::class, 'documentsIndex'])->name('documents.index');
+        Route::get('/documents/{document}', [ManagerController::class, 'documentsShow'])->name('documents.show');
+        
+        Route::get('/recettes', [ManagerController::class, 'recettesIndex'])->name('recettes.index');
+        Route::get('/recettes/{recette}', [ManagerController::class, 'recettesShow'])->name('recettes.show');
+        
+        Route::get('/rapports', [ManagerController::class, 'rapportsIndex'])->name('rapports.index');
+        Route::get('/rapports/{rapport}', [ManagerController::class, 'rapportsShow'])->name('rapports.show');
+        
+        Route::get('/audits', [ManagerController::class, 'auditsIndex'])->name('audits.index');
+        Route::get('/audits/{id}', [ManagerController::class, 'auditsShow'])->name('audits.show');
+        
+        Route::get('/users', [ManagerController::class, 'usersIndex'])->name('users.index');
+        Route::get('/users/{id}', [ManagerController::class, 'usersShow'])->name('users.show');
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // ESPACE GESTIONNAIRE — accessible au rôle gestionnaire
+    // ──────────────────────────────────────────────────────────────
+    Route::middleware('role:gestionnaire')->prefix('gestionnaire')->name('gestionnaire.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [GestionnaireController::class, 'dashboard'])->name('dashboard');
+        
+        // Chauffeurs (CRUD)
+        Route::get('/chauffeurs', [GestionnaireController::class, 'chauffeursIndex'])->name('chauffeurs.index');
+        Route::get('/chauffeurs/create', [GestionnaireController::class, 'chauffeursCreate'])->name('chauffeurs.create');
+        Route::post('/chauffeurs', [GestionnaireController::class, 'chauffeursStore'])->name('chauffeurs.store');
+        Route::get('/chauffeurs/{chauffeur}', [GestionnaireController::class, 'chauffeursShow'])->name('chauffeurs.show');
+        Route::get('/chauffeurs/{chauffeur}/edit', [GestionnaireController::class, 'chauffeursEdit'])->name('chauffeurs.edit');
+        Route::put('/chauffeurs/{chauffeur}', [GestionnaireController::class, 'chauffeursUpdate'])->name('chauffeurs.update');
+        Route::delete('/chauffeurs/{chauffeur}', [GestionnaireController::class, 'chauffeursDestroy'])->name('chauffeurs.destroy');
+
+        // Documents (CRUD)
+        Route::get('/documents', [GestionnaireController::class, 'documentsIndex'])->name('documents.index');
+        Route::get('/documents/create', [GestionnaireController::class, 'documentsCreate'])->name('documents.create');
+        Route::post('/documents', [GestionnaireController::class, 'documentsStore'])->name('documents.store');
+        Route::get('/documents/{document}', [GestionnaireController::class, 'documentsShow'])->name('documents.show');
+        Route::get('/documents/{document}/edit', [GestionnaireController::class, 'documentsEdit'])->name('documents.edit');
+        Route::put('/documents/{document}', [GestionnaireController::class, 'documentsUpdate'])->name('documents.update');
+        Route::delete('/documents/{document}', [GestionnaireController::class, 'documentsDestroy'])->name('documents.destroy');
+
+        // Vehicules (CRUD)
+        Route::get('/vehicules', [GestionnaireController::class, 'vehiculesIndex'])->name('vehicules.index');
+        Route::get('/vehicules/create', [GestionnaireController::class, 'vehiculesCreate'])->name('vehicules.create');
+        Route::post('/vehicules', [GestionnaireController::class, 'vehiculesStore'])->name('vehicules.store');
+        Route::get('/vehicules/{vehicule}', [GestionnaireController::class, 'vehiculesShow'])->name('vehicules.show');
+        Route::get('/vehicules/{vehicule}/edit', [GestionnaireController::class, 'vehiculesEdit'])->name('vehicules.edit');
+        Route::put('/vehicules/{vehicule}', [GestionnaireController::class, 'vehiculesUpdate'])->name('vehicules.update');
+        Route::delete('/vehicules/{vehicule}', [GestionnaireController::class, 'vehiculesDestroy'])->name('vehicules.destroy');
+
+        // Maintenances (Read-only)
+        Route::get('/maintenances', [GestionnaireController::class, 'maintenancesIndex'])->name('maintenances.index');
+        Route::get('/maintenances/{maintenance}', [GestionnaireController::class, 'maintenancesShow'])->name('maintenances.show');
     });
 
     // Profile for all authenticated users

@@ -129,12 +129,17 @@ return view('admin.voyage.index', compact('vehicules','chauffeurs'));
 
         $voyage->update(['date_depart'=>$newDate]);
 
-        return response()->json(['success'=>true]);
+        return response()->json(['success'=>true, 'message' => 'Voyage déplacé avec succès']);
     }
 
     public function destroy($id)
     {
         Voyage::destroy($id);
-        return back()->with('success','Supprimé');
+        
+        if (request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Voyage supprimé avec succès']);
+        }
+
+        return back()->with('success','Voyage supprimé avec succès');
     }
 }
