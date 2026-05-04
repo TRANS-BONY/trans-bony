@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Coût</p>
-                    <p class="font-bold text-gray-900 dark:text-white">{{ $maintenance->cout ? number_format($maintenance->cout, 0, ',', ' ') . ' FCFA' : '-' }}</p>
+                    <p class="font-bold text-gray-900 dark:text-white">{{ $maintenance->cout ? number_format($maintenance->cout, 0, ',', ' ') . ' Franc CFA' : '-' }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Statut</p>

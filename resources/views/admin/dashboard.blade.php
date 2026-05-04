@@ -19,7 +19,7 @@
             </svg>
         </div>
         <div class="dash-header__text">
-            <h1 class="dash-header__title">Admin <span class="title-accent">Dashboard</span></h1>
+            <h1 class="dash-header__title">Tableau de bord <span class="title-accent">Administrateur</span></h1>
             <p class="dash-header__sub">Vue d'ensemble &amp; statistiques en temps réel</p>
         </div>
         <div class="dash-header__badge">
@@ -192,7 +192,7 @@
                     </span>
                 @endif
             </div>
-            <p class="stat-card__number stat-card__number--green">{{ number_format($recettes ?? 0, 0, ',', ' ') }} <small>FCFA</small></p>
+            <p class="stat-card__number stat-card__number--green">{{ number_format($recettes ?? 0, 0, ',', ' ') }} <small>Franc CFA</small></p>
             <p class="stat-card__meta"><span class="meta-text">vs mois précédent</span></p>
             <div class="revenue-bar-track">
                 <div class="revenue-bar-fill" style="--bar-w: {{ $recettes_pct ?? 0 }}%"></div>

@@ -8,10 +8,7 @@
         <div class="relative p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
             <div class="relative group">
                 <div class="w-32 h-32 rounded-full ring-4 ring-white/30 shadow-xl overflow-hidden bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <i class="fas fa-user-astronaut text-6xl text-white"></i>
-                </div>
-                <div class="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                    <i class="fas fa-camera text-white text-xl"></i>
+                    <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                 </div>
             </div>
             

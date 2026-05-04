@@ -127,7 +127,7 @@
                 <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-4 text-center shadow-md">
                     <i class="fas fa-coins text-white/70 text-xl mb-2"></i>
                     <p class="text-xl font-black text-white">{{ number_format($rapport->recettes_total, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-emerald-100 mt-0.5">FCFA recettes</p>
+                    <p class="text-xs text-emerald-100 mt-0.5">Franc CFA recettes</p>
                 </div>
                 <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 text-center shadow-md">
                     <i class="fas fa-route text-white/70 text-xl mb-2"></i>
@@ -153,7 +153,7 @@
                         <i class="fas fa-chart-bar text-indigo-500"></i> Recettes de la période
                     </h3>
                     <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">
-                        {{ number_format($rapport->recettes_total, 0, ',', ' ') }} FCFA
+                        {{ number_format($rapport->recettes_total, 0, ',', ' ') }} Franc CFA
                     </span>
                 </div>
                 @php

@@ -47,7 +47,7 @@
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Coût estimé / réel</p>
                     <p class="font-medium text-gray-900 dark:text-white">
-                        {{ $maintenance->cout ? number_format($maintenance->cout, 0, ',', ' ') . ' FCFA' : 'Non défini' }}
+                        {{ $maintenance->cout ? number_format($maintenance->cout, 0, ',', ' ') . ' Franc CFA' : 'Non défini' }}
                     </p>
                 </div>
                 <div>
@@ -66,23 +66,23 @@
                     <i class="fas fa-bus"></i>
                 </div>
                 <div>
-                    <p class="font-bold text-gray-900 dark:text-white text-lg">{{ $maintenance->vehicule->immatriculation }}</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $maintenance->vehicule->marque }} {{ $maintenance->vehicule->modele }}</p>
+                    <p class="font-bold text-gray-900 dark:text-white text-lg">{{ $maintenance->vehicule?->immatriculation ?? 'N/A' }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $maintenance->vehicule?->marque ?? '' }} {{ $maintenance->vehicule?->modele ?? '' }}</p>
                 </div>
             </div>
 
             <div class="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500 dark:text-gray-400">Statut du véhicule</span>
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ ucfirst($maintenance->vehicule->statut) }}</span>
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $maintenance->vehicule ? ucfirst($maintenance->vehicule->statut) : 'N/A' }}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500 dark:text-gray-400">Année</span>
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $maintenance->vehicule->annee }}</span>
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $maintenance->vehicule?->annee ?? 'N/A' }}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500 dark:text-gray-400">Capacité</span>
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $maintenance->vehicule->capacite }} places</span>
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ $maintenance->vehicule?->capacite ?? '?' }} places</span>
                 </div>
             </div>
             

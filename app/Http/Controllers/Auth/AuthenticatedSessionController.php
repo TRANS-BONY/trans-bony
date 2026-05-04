@@ -34,6 +34,10 @@ class AuthenticatedSessionController extends Controller
         // 🔥 REDIRECTION SELON ROLE
         $user = Auth::user();
 
+        if ($user->roles->isEmpty()) {
+            return redirect()->route('waiting.room');
+        }
+
         if ($user->hasRole('admin')) {
             return redirect('/dashboard');
         }

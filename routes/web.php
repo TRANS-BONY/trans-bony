@@ -14,6 +14,7 @@ use App\Http\Controllers\RapportController;
 use App\Http\Controllers\TechnicienController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\GestionnaireController;
+use App\Http\Controllers\ComptableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +39,17 @@ require __DIR__.'/auth.php';
 */
 Route::middleware(['auth','active'])->group(function(){
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('admin.dashboard');
+    // ──────────────────────────────────────────────────────────────
+    // SALLE D'ATTENTE (Pour les utilisateurs sans rôle)
+    // ──────────────────────────────────────────────────────────────
+    Route::get('/waiting-room', function() {
+        return view('auth.waiting-room');
+    })->name('waiting.room');
+
+    Route::middleware('check.role')->group(function() {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+                ->name('dashboard');
 
     // MODULES - Role/Permission protected
 Route::middleware('permission:gerer vehicules')->group(function () {
@@ -77,12 +87,9 @@ Route::middleware('permission:voir rapports')->group(function () {
         Route::resource('admin/rapports', RapportController::class)->names('admin.rapports');
     });
 
-    // Notifications accessible to all auth
-    Route::get('/notifications', function(){
-        return response()->json([
-            'count' => \App\Models\Audit::count()
-        ]);
-    });
+    // Notifications
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/mark-as-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 
     // Admin only - Audits
 Route::middleware('role:admin')->group(function () {
@@ -251,5 +258,7 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/settings', function () {
         return view('settings');
     })->name('settings');
+
+    }); // End check.role
 
 });

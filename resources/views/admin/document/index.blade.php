@@ -160,133 +160,112 @@
             </div>
         </div>
 
-        <!-- Tableau des documents -->
-        <div class="animate-fade-in-up" style="animation-delay: 0.2s">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-purple-100 rounded-lg">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="text-xl font-semibold text-gray-800">Documents enregistrés</h2>
-                            <p class="text-sm text-gray-500 mt-0.5">{{ $documents->count() }} document(s) au total</p>
+        <!-- Liste des documents (Tableau Desktop / Cartes Mobile) -->
+        <div class="animate-fade-in-up lg:col-span-1" style="animation-delay: 0.2s">
+            
+            {{-- Vue Mobile : Grille de Cartes --}}
+            <div class="grid grid-cols-1 gap-4 lg:hidden">
+                @forelse($documents as $doc)
+                    @php
+                        $expire = \Carbon\Carbon::parse($doc->date_expiration);
+                        $statusConfig = [];
+                        if ($expire->isPast()) {
+                            $statusConfig = ['bg' => 'bg-red-500', 'text' => 'text-white', 'icon' => 'fas fa-exclamation-circle', 'label' => 'Expiré'];
+                        } elseif ($expire->diffInDays(now()) <= 7) {
+                            $statusConfig = ['bg' => 'bg-amber-500', 'text' => 'text-white', 'icon' => 'fas fa-clock', 'label' => 'Bientôt'];
+                        } else {
+                            $statusConfig = ['bg' => 'bg-emerald-500', 'text' => 'text-white', 'icon' => 'fas fa-check-circle', 'label' => 'Valide'];
+                        }
+                    @endphp
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center">
+                                        <i class="fas fa-file-alt text-purple-600 dark:text-purple-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">{{ $doc->vehicule?->immatriculation ?? 'N/A' }}</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 capitalize">{{ $doc->type }}</p>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }}">
+                                    {{ $statusConfig['label'] }}
+                                </span>
+                            </div>
+
+                            <div class="flex items-center justify-between py-2 border-t border-gray-50 dark:border-gray-700/50">
+                                <span class="text-xs text-gray-500">Expire le :</span>
+                                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">{{ $expire->format('d/m/Y') }}</span>
+                            </div>
+
+                            <div class="flex gap-2 mt-3">
+                                <a href="{{ route('admin.documents.download', $doc) }}" class="flex-1 text-center py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl text-xs font-bold transition hover:bg-emerald-100">
+                                    <i class="fas fa-download mr-1"></i> Télécharger
+                                </a>
+                                <a href="{{ route('admin.documents.edit', $doc) }}" class="p-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl transition hover:text-indigo-600">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @empty
+                    <div class="text-center py-10 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-600">
+                        <p class="text-gray-500">Aucun document</p>
+                    </div>
+                @endforelse
+            </div>
 
+            {{-- Vue Desktop : Tableau --}}
+            <div class="hidden lg:block bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-800/50 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Documents enregistrés</h2>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
-                        <thead>
-                            <tr class="border-b border-gray-200 bg-gray-50">
-                                <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Véhicule</th>
-                                <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                                <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Émission</th>
-                                <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Expiration</th>
-                                <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Fichier</th>
-                                <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Statut</th>
+                        <thead class="bg-gray-50 dark:bg-gray-900/50 text-gray-600 dark:text-gray-400">
+                            <tr>
+                                <th class="p-4 uppercase text-[10px] font-bold">Véhicule</th>
+                                <th class="p-4 uppercase text-[10px] font-bold">Type</th>
+                                <th class="p-4 uppercase text-[10px] font-bold">Expiration</th>
+                                <th class="p-4 uppercase text-[10px] font-bold text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse($documents as $doc)
-                            @php
-                                $expire = \Carbon\Carbon::parse($doc->date_expiration);
-                                $statusConfig = [];
-                                if ($expire->isPast()) {
-                                    $statusConfig = ['bg' => 'bg-red-100', 'text' => 'text-red-700', 'icon' => 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Expiré'];
-                                } elseif ($expire->diffInDays(now()) <= 7) {
-                                    $statusConfig = ['bg' => 'bg-amber-100', 'text' => 'text-amber-700', 'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z', 'label' => 'Bientôt'];
-                                } else {
-                                    $statusConfig = ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-700', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Valide'];
-                                }
-
-                                $typeConfig = [
-                                    'assurance' => ['icon' => '🛡️', 'color' => 'text-blue-600'],
-                                    'carte grise' => ['icon' => '📄', 'color' => 'text-purple-600'],
-                                    'visite technique' => ['icon' => '🔧', 'color' => 'text-amber-600'],
-                                ];
-                                $typeInfo = $typeConfig[$doc->type] ?? ['icon' => '📁', 'color' => 'text-gray-600'];
-                            @endphp
-                            <tr class="hover:bg-gray-50 transition-all duration-300 group">
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                                        </svg>
-<span class="font-semibold text-gray-900">{{ $doc->vehicule?->immatriculation ?? 'Véhicule supprimé' }}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-500 mt-1">{{ $doc->vehicule?->marque ?? 'N/A' }} {{ $doc->vehicule?->modele ?? '' }}</div>
-                                </td>
-                                <td class="p-4">
-                                    <span class="inline-flex items-center gap-1 {{ $typeInfo['color'] }}">
-                                        <span class="text-lg">{{ $typeInfo['icon'] }}</span>
-                                        <span class="capitalize">{{ $doc->type }}</span>
-                                    </span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <span class="text-gray-700">{{ $doc->date_emission ? \Carbon\Carbon::parse($doc->date_emission)->format('d/m/Y') : '-' }}</span>
-                                    </div>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <span class="text-gray-700">{{ $expire->format('d/m/Y') }}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-500 mt-1">{{ $expire->diffForHumans() }}</div>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex flex-wrap gap-2">
-                                        <a href="{{ route('admin.documents.download', $doc) }}" target="_blank"
-                                           class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-all duration-200 group/btn border border-emerald-200/50 shadow-sm hover:shadow-md rounded">
-                                            <span class="text-sm font-medium">📄 Télécharger</span>
-                                        </a>
-                                        <a href="{{ route('admin.documents.edit', $doc) }}"
-                                           class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 transition-all duration-200 group/btn border border-blue-200/50 shadow-sm hover:shadow-md rounded">
-                                            <span class="text-sm font-medium">✏️ Modifier</span>
-                                        </a>
-                                        <form action="{{ route('admin.documents.destroy', $doc) }}" method="POST" class="inline" onsubmit="return confirm('Confirmer la suppression ?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 transition-all duration-200 group/btn border border-red-200/50 shadow-sm hover:shadow-md rounded">
-                                                <span class="text-sm font-medium">🗑️</span>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td class="p-4">
-                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }}">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $statusConfig['icon'] }}"></path>
-                                        </svg>
-                                        {{ $statusConfig['label'] }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="p-12 text-center">
-                                    <div class="flex flex-col items-center gap-3">
-                                        <div class="p-4 rounded-full bg-gray-100">
-                                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                            </svg>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                            @foreach($documents as $doc)
+                                @php
+                                    $expire = \Carbon\Carbon::parse($doc->date_expiration);
+                                    $statusClass = $expire->isPast() ? 'text-red-500' : ($expire->diffInDays(now()) <= 7 ? 'text-amber-500' : 'text-emerald-500');
+                                @endphp
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group">
+                                    <td class="p-4">
+                                        <div class="font-bold text-gray-900 dark:text-white">{{ $doc->vehicule?->immatriculation ?? 'N/A' }}</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="px-2 py-1 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded text-[10px] font-bold uppercase">{{ $doc->type }}</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="font-semibold {{ $statusClass }}">{{ $expire->format('d/m/Y') }}</div>
+                                        <div class="text-[10px] text-gray-400">{{ $expire->diffForHumans() }}</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex justify-center gap-1">
+                                            <a href="{{ route('admin.documents.download', $doc) }}" class="p-2 text-gray-400 hover:text-emerald-600 transition" title="Télécharger">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            <a href="{{ route('admin.documents.edit', $doc) }}" class="p-2 text-gray-400 hover:text-indigo-600 transition" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="{{ route('admin.documents.destroy', $doc) }}" method="POST" class="inline">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="p-2 text-gray-400 hover:text-red-600 transition" onclick="return confirm('Supprimer ce document ?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
-                                        <div>
-                                            <p class="text-lg font-semibold text-gray-700">Aucun document</p>
-                                            <p class="text-sm text-gray-500 mt-1">Commencez par ajouter un document</p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

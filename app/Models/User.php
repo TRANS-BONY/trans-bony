@@ -17,8 +17,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_active'
+        'is_active',
+        'profile_photo',
     ];
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo 
+            ? asset('storage/' . $this->profile_photo) 
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+    }
 
     protected $hidden = [
         'password',

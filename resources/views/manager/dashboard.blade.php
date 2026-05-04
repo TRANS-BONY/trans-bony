@@ -76,7 +76,7 @@
                 <div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Chiffre d'Affaires</p>
                     <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($stats['recettes_total'] ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-green-500 mt-0.5">FCFA cumulés</p>
+                    <p class="text-xs text-green-500 mt-0.5">Franc CFA cumulés</p>
                 </div>
                 <div class="p-3 rounded-xl bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
                     <i class="fas fa-coins text-xl"></i>

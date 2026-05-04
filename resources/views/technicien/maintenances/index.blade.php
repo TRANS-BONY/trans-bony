@@ -49,7 +49,7 @@
                             </span>
                         </td>
                         <td class="p-4 text-gray-500 dark:text-gray-400">
-                            {{ $m->cout ? number_format($m->cout, 0, ',', ' ') . ' FCFA' : '-' }}
+                            {{ $m->cout ? number_format($m->cout, 0, ',', ' ') . ' Franc CFA' : '-' }}
                         </td>
                         <td class="p-4 text-right space-x-2">
                             <a href="{{ route('technicien.maintenances.show', $m) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition" title="Voir">

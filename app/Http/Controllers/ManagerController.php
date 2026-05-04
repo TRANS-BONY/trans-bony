@@ -143,7 +143,7 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     public function auditsIndex()
     {
-        $audits = \App\Models\Audit::latest()->paginate(20);
+        $audits = \App\Models\Audit::with('user')->latest()->paginate(20);
         return view('manager.audits.index', compact('audits'));
     }
 

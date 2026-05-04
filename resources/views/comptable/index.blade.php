@@ -34,7 +34,7 @@
                 <div>
                     <p class="text-xs text-emerald-100 uppercase tracking-wider font-semibold">Recettes du mois</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_mois ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-emerald-200 mt-0.5">FCFA</p>
+                    <p class="text-xs text-emerald-200 mt-0.5">Franc CFA</p>
                 </div>
                 <div class="p-3 rounded-xl bg-white/20 backdrop-blur-sm">
                     <i class="fas fa-coins text-white text-xl"></i>
@@ -59,7 +59,7 @@
                 <div>
                     <p class="text-xs text-teal-100 uppercase tracking-wider font-semibold">Total recettes</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_total ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-teal-200 mt-0.5">FCFA cumulés</p>
+                    <p class="text-xs text-teal-200 mt-0.5">Franc CFA cumulés</p>
                 </div>
                 <div class="p-3 rounded-xl bg-white/20 backdrop-blur-sm">
                     <i class="fas fa-chart-line text-white text-xl"></i>
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                     <span class="text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                        {{ number_format($recette->montant, 0, ',', ' ') }} FCFA
+                        {{ number_format($recette->montant, 0, ',', ' ') }} Franc CFA
                     </span>
                 </div>
                 @empty
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
         data: {
             labels: @json($chart_labels),
             datasets: [{
-                label: 'Recettes (FCFA)',
+                label: 'Recettes (Franc CFA)',
                 data: @json($chart_data),
                 backgroundColor: 'rgba(16, 185, 129, 0.15)',
                 borderColor: '#10b981',
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     bodyColor: '#d1fae5',
                     borderColor: '#10b981',
                     borderWidth: 1,
-                    callbacks: { label: ctx => ` ${ctx.raw.toLocaleString('fr-FR')} FCFA` }
+                    callbacks: { label: ctx => ` ${ctx.raw.toLocaleString('fr-FR')} Franc CFA` }
                 }
             },
             scales: {

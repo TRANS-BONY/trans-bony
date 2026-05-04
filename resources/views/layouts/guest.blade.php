@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Trans Bony - Plateforme professionnelle de gestion de flotte de transport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Trans Bony — Connexion</title>
 
     <!-- Google Fonts -->

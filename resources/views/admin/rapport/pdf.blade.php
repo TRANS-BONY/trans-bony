@@ -18,7 +18,7 @@
 
 <tr>
 <td>Recettes</td>
-<td>{{ $recettes }} €</td>
+<td>{{ $recettes }} Franc CFA</td>
 </tr>
 
 </table>

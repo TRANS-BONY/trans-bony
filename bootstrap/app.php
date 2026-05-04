@@ -38,6 +38,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \App\Http\Middleware\PermissionMiddleware::class,
             'audit' => \App\Http\Middleware\LogActivity::class,
             'active' => \App\Http\Middleware\CheckActiveUser::class,
+            'check.role' => \App\Http\Middleware\RedirectIfNoRole::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'logout',
         ]);
 
     })
@@ -49,6 +54,10 @@ return Application::configure(basePath: dirname(__DIR__))
     */
     ->withExceptions(function (Exceptions $exceptions) {
         //
+    })
+
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('alerts:check')->daily();
     })
 
     ->create();

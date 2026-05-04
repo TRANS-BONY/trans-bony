@@ -81,11 +81,12 @@
                     <!-- Permis -->
                     <div class="space-y-2">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Catégorie de Permis <span class="text-red-500">*</span>
+                            Numéro de Permis <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="permis" value="{{ old('permis', $chauffeur->permis) }}"
+                        <input type="text" name="permis" value="{{ old('permis', $chauffeur->permis) }}" placeholder="Ex: CG-123456-ABC-2024"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('permis') border-red-500 @enderror"
                                required>
+                        <p class="text-[10px] text-gray-400">Format requis: CG-123456-ABC-202X</p>
                         @error('permis') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
@@ -94,9 +95,19 @@
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                             Téléphone
                         </label>
-                        <input type="text" name="telephone" value="{{ old('telephone', $chauffeur->telephone) }}"
+                        <input type="text" name="telephone" value="{{ old('telephone', $chauffeur->telephone) }}" placeholder="Ex: 0102030405"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('telephone') border-red-500 @enderror">
                         @error('telephone') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Contact d'urgence -->
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Contact d'urgence
+                        </label>
+                        <input type="text" name="contact" value="{{ old('contact', $chauffeur->contact) }}" placeholder="Nom et numéro du contact"
+                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('contact') border-red-500 @enderror">
+                        @error('contact') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <!-- Photo de Profil -->

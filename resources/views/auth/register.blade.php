@@ -2,24 +2,138 @@
 
 @section('content')
 
-<div class="glass">
+<div class="form-container">
 
-    <h3 style="color:rgb(21, 20, 20);">Créer un compte</h3>
+    {{-- Header --}}
+    <div class="form-header">
+        <p class="form-eyebrow">
+            <i class="fas fa-user-plus" style="margin-right:6px;font-size:10px;"></i>
+            Nouveau membre
+        </p>
+        <h1 class="form-title">Rejoindre la plateforme<br>Trans Bony</h1>
+        <p class="form-desc">Créez votre compte pour commencer à gérer votre activité de transport.</p>
+    </div>
 
-    <form method="POST" action="{{ route('register') }}">
+    {{-- Validation Errors --}}
+    @if ($errors->any())
+        <div class="error-box">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Registration Form --}}
+    <form method="POST" action="{{ route('register') }}" id="register-form">
         @csrf
 
-        <input type="text" name="name" placeholder="Nom" class="input" required>
+        {{-- Name --}}
+        <div class="input-group">
+            <label for="name" class="input-label">Nom complet</label>
+            <div class="input-wrapper">
+                <i class="fas fa-user input-icon"></i>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="auth-input"
+                    placeholder="Jean Dupont"
+                    value="{{ old('name') }}"
+                    required
+                    autofocus
+                    autocomplete="name"
+                >
+            </div>
+        </div>
 
-        <input type="email" name="email" placeholder="Email" class="input" required>
+        {{-- Email --}}
+        <div class="input-group">
+            <label for="email" class="input-label">Adresse e-mail</label>
+            <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="auth-input"
+                    placeholder="nom@entreprise.com"
+                    value="{{ old('email') }}"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+        </div>
 
-        <input type="password" name="password" placeholder="Mot de passe" class="input" required>
+        {{-- Password --}}
+        <div class="input-group">
+            <label for="password" class="input-label">Mot de passe</label>
+            <div class="input-wrapper">
+                <i class="fas fa-key input-icon"></i>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="auth-input"
+                    placeholder="••••••••••••"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+        </div>
 
-        <input type="password" name="password_confirmation" placeholder="Confirmer mot de passe" class="input" required>
+        {{-- Confirm Password --}}
+        <div class="input-group">
+            <label for="password_confirmation" class="input-label">Confirmer le mot de passe</label>
+            <div class="input-wrapper">
+                <i class="fas fa-shield-check input-icon"></i>
+                <input
+                    type="password"
+                    id="password_confirmation"
+                    name="password_confirmation"
+                    class="auth-input"
+                    placeholder="••••••••••••"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+        </div>
 
-        <button class="btn">Créer compte</button>
+        {{-- Submit --}}
+        <button type="submit" class="btn-submit" id="submit-btn">
+            <span>
+                <i class="fas fa-user-plus"></i>
+                CRÉER MON COMPTE
+            </span>
+        </button>
+
+        {{-- Login Link --}}
+        <div style="text-align: center; margin-top: 25px;">
+            <p style="color: #64748b; font-size: 0.875rem;">
+                Déjà inscrit ? 
+                <a href="{{ route('login') }}" style="color: #3b82f6; font-weight: 600; text-decoration: none; border-bottom: 1px dashed #3b82f6; transition: all 0.2s ease;" onmouseover="this.style.color='#2563eb'; this.style.borderBottomStyle='solid';" onmouseout="this.style.color='#3b82f6'; this.style.borderBottomStyle='dashed';">
+                    Se connecter
+                </a>
+            </p>
+        </div>
     </form>
 
+    {{-- Footer --}}
+    <div class="form-footer">
+        <p>&copy; {{ date('Y') }} Trans Bony &mdash; Tous droits réservés</p>
+    </div>
+
 </div>
+
+<script>
+    // Loading state on submit
+    document.getElementById('register-form').addEventListener('submit', function() {
+        const btn  = document.getElementById('submit-btn');
+        btn.innerHTML = '<span><i class="fas fa-circle-notch fa-spin"></i> Création en cours…</span>';
+        btn.disabled = true;
+        btn.style.opacity = '0.8';
+    });
+</script>
 
 @endsection

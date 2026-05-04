@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Maintenance;
 use App\Models\Vehicule;
 use Illuminate\Http\Request;
+use App\Http\Requests\MaintenanceRequest;
 use Illuminate\Support\Facades\Log;
 
 class MaintenanceController extends Controller
@@ -27,19 +28,10 @@ class MaintenanceController extends Controller
 return view('admin.maintenance.index', compact('maintenances'));
     }
 
-    public function store(Request $request)
+    public function store(MaintenanceRequest $request)
     {
-        $request->validate([
-            'vehicule_id' => 'required|exists:vehicules,id',
-            'type' => 'required',
-            'date_prevue' => 'required|date',
-            'cout' => 'required|numeric'
-        ]);
-
         try {
-            Maintenance::create(array_merge($request->only([
-                'vehicule_id','type','date_prevue','cout'
-            ]), ['statut' => 'planifiee']));
+            Maintenance::create($request->validated());
             return redirect()->route('admin.maintenances.index')->with('success','Maintenance enregistrée');
         } catch (\Exception $e) {
             Log::error('Maintenance create failed: ' . $e->getMessage());
@@ -71,16 +63,9 @@ return view('admin.maintenance.index', compact('maintenances'));
         return view('admin.maintenance.edit', compact('maintenance','vehicules'));
     }
 
-    public function update(Request $request, Maintenance $maintenance)
+    public function update(MaintenanceRequest $request, Maintenance $maintenance)
     {
-        $request->validate([
-            'vehicule_id' => 'required|exists:vehicules,id',
-            'type' => 'required',
-            'date_prevue' => 'required|date',
-            'cout' => 'required|numeric'
-        ]);
-
-        $maintenance->update(array_merge($request->only(['vehicule_id', 'type', 'date_prevue', 'cout']), ['statut' => $maintenance->statut]));
+        $maintenance->update($request->validated());
 
         return redirect()->route('admin.maintenances.index')->with('success', 'Maintenance mise à jour');
     }

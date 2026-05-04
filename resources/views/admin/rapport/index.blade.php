@@ -74,7 +74,7 @@
                 <div>
                     <p class="text-xs text-amber-100 uppercase tracking-wider font-semibold">Recettes Total</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_total ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-amber-200">FCFA</p>
+                    <p class="text-xs text-amber-200">Franc CFA</p>
                 </div>
                 <div class="p-3 rounded-xl bg-white/20 group-hover:rotate-12 transition-transform duration-300">
                     <i class="fas fa-coins text-white text-xl"></i>
@@ -146,7 +146,7 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <span class="text-base font-bold text-emerald-600 dark:text-emerald-400">
-                                {{ number_format($rapport->recettes_total, 0, ',', ' ') }} FCFA
+                                {{ number_format($rapport->recettes_total, 0, ',', ' ') }} Franc CFA
                             </span>
                         </td>
                         <td class="px-6 py-4 text-center">
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
         data: {
             labels: @json($chart_labels),
             datasets: [{
-                label: 'Recettes (FCFA)',
+                label: 'Recettes (Franc CFA)',
                 data: @json($chart_data),
                 borderColor: '#6366f1',
                 backgroundColor: 'rgba(99,102,241,0.08)',
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     bodyColor: '#e0e7ff',
                     borderColor: '#6366f1',
                     borderWidth: 1,
-                    callbacks: { label: ctx => ` ${ctx.raw.toLocaleString('fr-FR')} FCFA` }
+                    callbacks: { label: ctx => ` ${ctx.raw.toLocaleString('fr-FR')} Franc CFA` }
                 }
             },
             scales: {

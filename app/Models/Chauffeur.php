@@ -13,6 +13,7 @@ class Chauffeur extends Model
         'prenom',
         'permis',
         'telephone',
+        'contact',
         'photo',
         'actif'
     ];

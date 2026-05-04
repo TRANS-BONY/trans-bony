@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRANS BONY - Dashboard Professionnel</title>
+<title>TRANS BONY - Tableau de bord Professionnel</title>
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -256,7 +256,7 @@
                         <i class="fas fa-coins w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Recettes</span>
                         @if(($sidebar_recettes ?? 0) > 0)
-                            <span title="{{ number_format($sidebar_recettes_mois ?? 0, 0, ',', ' ') }} FCFA ce mois"
+                            <span title="{{ number_format($sidebar_recettes_mois ?? 0, 0, ',', ' ') }} Franc CFA ce mois"
                                   class="text-xs bg-emerald-600/50 px-2 py-1 rounded-full font-semibold">
                                 {{ $sidebar_recettes ?? 0 }}
                             </span>
@@ -292,8 +292,8 @@
                 <!-- Info utilisateur dans sidebar (visible sur mobile) -->
                 <div class="lg:hidden mt-8 pt-6 border-t border-white/20 dark:border-gray-700">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                            <i class="fas fa-user text-white"></i>
+                        <div class="w-10 h-10 rounded-full overflow-hidden shadow-lg">
+                            <img src="{{ auth()->user()->profile_photo_url }}" alt="" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <p class="text-sm font-semibold text-white dark:text-gray-200">{{ auth()->user()->name }}</p>
@@ -374,8 +374,8 @@
                         <!-- USER MENU -->
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center space-x-2 sm:space-x-3 hover:opacity-80 transition p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
-                                    <i class="fas fa-user text-white text-sm sm:text-base"></i>
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-lg">
+                                    <img src="{{ auth()->user()->profile_photo_url }}" alt="" class="w-full h-full object-cover">
                                 </div>
                                 <div class="hidden md:block text-left">
                                     <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</p>
@@ -531,8 +531,20 @@
                 },
 
                 markAllAsRead() {
-                    this.notificationCount = 0;
-                    this.notifications = [];
+                    fetch('/notifications/mark-as-read', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.notificationCount = 0;
+                            this.notifications = [];
+                        }
+                    });
                 }
             }
         }

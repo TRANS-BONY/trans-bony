@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vehicule;
 use App\Models\Maintenance;
 use Illuminate\Http\Request;
+use App\Http\Requests\MaintenanceRequest;
 
 class TechnicienController extends Controller
 {
@@ -68,17 +69,9 @@ class TechnicienController extends Controller
         return view('technicien.maintenances.create', compact('vehicules'));
     }
 
-    public function maintenancesStore(Request $request)
+    public function maintenancesStore(MaintenanceRequest $request)
     {
-        $validated = $request->validate([
-            'vehicule_id' => 'required|exists:vehicules,id',
-            'type'        => 'required|in:preventive,curative',
-            'date_prevue' => 'required|date',
-            'statut'      => 'required|in:planifiee,en cours,terminee',
-            'cout'        => 'nullable|numeric|min:0',
-        ]);
-
-        Maintenance::create($validated);
+        Maintenance::create($request->validated());
 
         return redirect()->route('technicien.maintenances.index')
                          ->with('success', 'Maintenance ajoutée avec succès.');
@@ -96,17 +89,9 @@ class TechnicienController extends Controller
         return view('technicien.maintenances.edit', compact('maintenance', 'vehicules'));
     }
 
-    public function maintenancesUpdate(Request $request, Maintenance $maintenance)
+    public function maintenancesUpdate(MaintenanceRequest $request, Maintenance $maintenance)
     {
-        $validated = $request->validate([
-            'vehicule_id' => 'required|exists:vehicules,id',
-            'type'        => 'required|in:preventive,curative',
-            'date_prevue' => 'required|date',
-            'statut'      => 'required|in:planifiee,en cours,terminee',
-            'cout'        => 'nullable|numeric|min:0',
-        ]);
-
-        $maintenance->update($validated);
+        $maintenance->update($request->validated());
 
         return redirect()->route('technicien.maintenances.index')
                          ->with('success', 'Maintenance mise à jour avec succès.');

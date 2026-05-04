@@ -23,7 +23,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Montant</p>
-                    <p class="font-bold text-gray-900 dark:text-white">{{ number_format($recette->montant, 0, ',', ' ') }} FCFA</p>
+                    <p class="font-bold text-gray-900 dark:text-white">{{ number_format($recette->montant, 0, ',', ' ') }} Franc CFA</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Type</p>

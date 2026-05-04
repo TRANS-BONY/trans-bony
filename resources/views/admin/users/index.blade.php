@@ -56,11 +56,18 @@
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition mb-1 truncate">{{ $user->name }}</h3>
                                     <p class="text-gray-600 dark:text-gray-400 text-sm mb-1 truncate">{{ $user->email }}</p>
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r
-                                        {{ $user->is_active ? 'from-green-400 to-green-500 text-white shadow-md shadow-green-200' : 'from-red-400 to-red-500 text-white shadow-md shadow-red-200' }}">
-                                        <i class="fas fa-circle mr-1"></i>
-                                        {{ $user->is_active ? 'Actif' : 'Inactif' }}
-                                    </span>
+                                    @if($user->roles->isEmpty())
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-md shadow-amber-200">
+                                            <i class="fas fa-hourglass-start mr-1"></i>
+                                            En attente
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r
+                                            {{ $user->is_active ? 'from-green-400 to-green-500 text-white shadow-md shadow-green-200' : 'from-red-400 to-red-500 text-white shadow-md shadow-red-200' }}">
+                                            <i class="fas fa-circle mr-1"></i>
+                                            {{ $user->is_active ? 'Actif' : 'Inactif' }}
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="flex-shrink-0 ml-auto">
                                     <i class="fas fa-chevron-down text-2xl text-gray-400 group-hover:text-indigo-500 transition transform rotate-0 group-hover:rotate-180" x-show="!open"></i>

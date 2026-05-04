@@ -28,10 +28,13 @@ class ChauffeurController extends Controller
         $data = $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'permis' => 'required|unique:chauffeurs',
+            'permis' => ['required', 'unique:chauffeurs', 'regex:/^CG-\d{6}-[A-Z]{3}-202\d$/'],
             'telephone' => 'nullable',
+            'contact' => 'nullable',
             'actif' => 'required|in:0,1',
             'photo' => 'nullable|image'
+        ], [
+            'permis.regex' => 'Le format du permis doit être CG-123456-ABC-202X'
         ]);
 
         $data['nom'] = strtoupper($data['nom']);
@@ -61,10 +64,13 @@ class ChauffeurController extends Controller
         $data = $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'permis' => 'required|unique:chauffeurs,permis,' . $id,
+            'permis' => ['required', 'unique:chauffeurs,permis,' . $id, 'regex:/^CG-\d{6}-[A-Z]{3}-202\d$/'],
             'telephone' => 'nullable',
+            'contact' => 'nullable',
             'actif' => 'required|in:0,1',
             'photo' => 'nullable|image'
+        ], [
+            'permis.regex' => 'Le format du permis doit être CG-123456-ABC-202X'
         ]);
 
         $data['nom'] = strtoupper($data['nom']);

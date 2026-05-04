@@ -42,9 +42,8 @@ class DashboardController extends Controller
 
         // ── Maintenances ───────────────────────────────────────
         $maintenances         = Maintenance::count();
-        $maintenances_encours = Maintenance::where('statut', 'en_cours')->count();
+        $maintenances_encours = Maintenance::where('statut', 'en cours')->count();
         $maintenances_planif  = Maintenance::where('statut', 'planifiee')
-                                           ->orWhere('statut', 'planifié')
                                            ->count();
         $maintenance_cout_total = Maintenance::sum('cout');
 

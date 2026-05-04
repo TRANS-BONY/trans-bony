@@ -24,7 +24,7 @@
                     @forelse($audits as $a)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                         <td class="p-4">
-                            <p class="font-bold text-gray-900 dark:text-white">{{ $a->user_name ?? 'Système' }}</p>
+                            <p class="font-bold text-gray-900 dark:text-white">{{ $a->user?->name ?? 'Système' }}</p>
                         </td>
                         <td class="p-4 text-gray-700 dark:text-gray-300">{{ $a->action }}</td>
                         <td class="p-4 text-gray-700 dark:text-gray-300">{{ $a->created_at->format('d/m/Y H:i:s') }}</td>

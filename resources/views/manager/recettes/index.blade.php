@@ -28,7 +28,7 @@
                             <p class="font-bold text-gray-900 dark:text-white">{{ $r->date->format('d/m/Y') }}</p>
                         </td>
                         <td class="p-4 text-gray-700 dark:text-gray-300">{{ $r->vehicule->immatriculation ?? 'N/A' }}</td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ number_format($r->montant, 0, ',', ' ') }} FCFA</td>
+                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ number_format($r->montant, 0, ',', ' ') }} Franc CFA</td>
                         <td class="p-4 text-gray-700 dark:text-gray-300">{{ $r->type }}</td>
                         <td class="p-4 text-right">
                             <a href="{{ route('manager.recettes.show', $r) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition" title="Voir">

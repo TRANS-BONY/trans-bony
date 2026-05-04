@@ -346,7 +346,7 @@
 
                 <div class="mt-2">
                     <h3 class="text-sm font-medium text-gray-400 uppercase tracking-wider mb-1">Recette Mensuelle</h3>
-                    <p class="text-3xl font-bold text-emerald-400">{{ number_format($recettes ?? 0) }} <span class="text-base">FCFA</span></p>
+                    <p class="text-3xl font-bold text-emerald-400">{{ number_format($recettes ?? 0) }} <span class="text-base">Franc CFA</span></p>
                     <div class="mt-3 flex items-center gap-2">
                         <div class="flex items-center gap-1">
                             <svg class="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

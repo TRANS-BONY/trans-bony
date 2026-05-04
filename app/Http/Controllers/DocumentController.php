@@ -15,6 +15,7 @@ class DocumentController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Document::class);
         $documents = Document::with('vehicule')->get();
         $vehicules = Vehicule::all();
 
@@ -88,9 +89,10 @@ class DocumentController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Document $document)
     {
-        Document::destroy($id);
+        $this->authorize('delete', $document);
+        $document->delete();
         return back()->with('success','Document supprimé');
     }
     public function edit($id)

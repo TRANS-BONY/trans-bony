@@ -99,6 +99,16 @@
                 SE CONNECTER
             </span>
         </button>
+
+        {{-- Register Link --}}
+        <div style="text-align: center; margin-top: 20px;">
+            <p style="color: #64748b; font-size: 0.875rem;">
+                Pas encore de compte ? 
+                <a href="{{ route('register') }}" style="color: #3b82f6; font-weight: 600; text-decoration: none; border-bottom: 1px dashed #3b82f6; transition: all 0.2s ease;" onmouseover="this.style.color='#2563eb'; this.style.borderBottomStyle='solid';" onmouseout="this.style.color='#3b82f6'; this.style.borderBottomStyle='dashed';">
+                    Créer un compte
+                </a>
+            </p>
+        </div>
     </form>
 
 

@@ -37,7 +37,7 @@
             <div class="space-y-4">
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500">Total Recettes</span>
-                    <span class="font-bold text-gray-900 dark:text-white">{{ number_format($rapport->recettes_total ?? 0, 0, ',', ' ') }} FCFA</span>
+                    <span class="font-bold text-gray-900 dark:text-white">{{ number_format($rapport->recettes_total ?? 0, 0, ',', ' ') }} Franc CFA</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500">Nombre de Voyages</span>

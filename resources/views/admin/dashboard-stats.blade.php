@@ -4,7 +4,7 @@
 <div class="space-y-8">
     <!-- Header with Animation -->
     <div class="animate-fade-in-down">
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Admin Dashboard</h1>
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Tableau de bord Administrateur</h1>
         <p class="text-gray-400 mt-1">Vue d'ensemble de l'activité et des statistiques</p>
     </div>
 
@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="text-center py-2">
-                    <p class="text-4xl font-bold text-green-400">{{ number_format($recette_mensuelle ?? 0) }} <span class="text-lg">FCFA</span></p>
+                    <p class="text-4xl font-bold text-green-400">{{ number_format($recette_mensuelle ?? 0) }} <span class="text-lg">Franc CFA</span></p>
                     <div class="flex items-center justify-center gap-2 mt-2">
                         <span class="inline-flex items-center text-sm text-green-400">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

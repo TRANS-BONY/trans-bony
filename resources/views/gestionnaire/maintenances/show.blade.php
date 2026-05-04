@@ -34,7 +34,7 @@
                     </div>
                     <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                         <span class="text-sm text-gray-500 font-medium">Coût estimé</span>
-                        <span class="text-sm font-bold">{{ number_format($maintenance->cout, 0, ',', ' ') }} FCFA</span>
+                        <span class="text-sm font-bold">{{ number_format($maintenance->cout, 0, ',', ' ') }} Franc CFA</span>
                     </div>
                 </div>
             </div>

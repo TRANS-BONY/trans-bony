@@ -44,7 +44,7 @@
                 <p class="text-4xl font-black text-emerald-600 dark:text-emerald-400">
                     {{ number_format($recette->montant, 0, ',', ' ') }}
                 </p>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">FCFA</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Franc CFA</p>
 
                 <div class="mt-6 space-y-2">
                     <a href="{{ route('admin.recettes.edit', $recette) }}"

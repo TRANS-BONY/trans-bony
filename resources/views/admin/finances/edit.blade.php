@@ -16,7 +16,7 @@
                     <h1 class="text-2xl md:text-3xl font-bold text-white">Modifier la Recette</h1>
                     <p class="text-indigo-100 text-sm mt-1">
                         {{ \Carbon\Carbon::parse($recette->mois ?? $recette->date)->isoFormat('MMMM YYYY') }}
-                        — {{ number_format($recette->montant, 0, ',', ' ') }} FCFA
+                        — {{ number_format($recette->montant, 0, ',', ' ') }} Franc CFA
                     </p>
                 </div>
             </div>
@@ -70,10 +70,10 @@
                 {{-- Montant --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Montant (FCFA) <span class="text-red-500">*</span>
+                        Montant (Franc CFA) <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm">XOF</span>
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm">CFA</span>
                         <input type="number" name="montant" step="0.01" min="0" required
                                value="{{ old('montant', $recette->montant) }}"
                                class="w-full pl-14 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">

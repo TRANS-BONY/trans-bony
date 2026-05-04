@@ -113,7 +113,7 @@
                                     @if($v->chauffeur)
                                         <div class="flex items-center gap-2">
                                             <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">
-                                                {{ substr($v->chauffeur->nom, 0, 1) }}
+                                                {{ $v->chauffeur ? substr($v->chauffeur->nom, 0, 1) : '?' }}
                                             </div>
                                             <span>{{ $v->chauffeur->nom }}</span>
                                         </div>

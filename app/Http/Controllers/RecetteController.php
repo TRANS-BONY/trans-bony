@@ -12,7 +12,7 @@ class RecetteController extends Controller
 {
     public function index()
     {
-        $recettes = RecetteMensuelle::orderByDesc('date')->paginate(15);
+        $recettes = RecetteMensuelle::with('vehicule')->orderByDesc('date')->paginate(15);
 
         // Agrégats globaux (sur toute la table, pas seulement la page courante)
         $recettes_total      = RecetteMensuelle::sum('montant');
