@@ -31,9 +31,14 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[^0-9]*$/'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class, 'regex:/^[a-z0-9._%+-]+@(gmail\.com|transbony\.com)$/i'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'name.regex' => 'Le nom ne doit pas contenir de chiffres.',
+            'email.email' => 'L\'adresse e-mail doit impérativement contenir le symbole "@".',
+            'email.regex' => 'L\'adresse mail doit utiliser les domaines @gmail.com ou @transbony.com',
+            'email.unique' => 'cette adresse est déjà prise',
         ]);
 
         $user = User::create([
@@ -46,6 +51,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('waiting.room', absolute: false));
+        return redirect(route('waiting.room', absolute: false))
+            ->with('status', 'Les informations ont été reçues. Veuillez attendre que l\'administrateur valide votre adhésion et vous donne les droits de connexion.');
     }
 }

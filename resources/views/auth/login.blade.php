@@ -38,13 +38,16 @@
                     type="email"
                     id="email"
                     name="email"
-                    class="auth-input"
-                    placeholder="nom@entreprise.com"
+                    class="auth-input @error('email') is-invalid @enderror"
+                    placeholder="utilisateur@gmail.com ou @transbony.com"
                     value="{{ old('email') }}"
                     required
                     autocomplete="email"
                     autofocus
                 >
+                @error('email')
+                    <span class="inline-error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -57,7 +60,7 @@
                     type="password"
                     id="password"
                     name="password"
-                    class="auth-input"
+                    class="auth-input @error('password') is-invalid @enderror"
                     placeholder="••••••••••••"
                     required
                     autocomplete="current-password"
@@ -71,6 +74,9 @@
                 >
                     <i class="fas fa-eye" id="pwd-icon"></i>
                 </button>
+                @error('password')
+                    <span class="inline-error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 

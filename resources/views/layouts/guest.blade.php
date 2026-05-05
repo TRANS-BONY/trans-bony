@@ -588,6 +588,25 @@
             color: var(--danger);
         }
 
+        .inline-error {
+            display: block;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #f87171;
+            font-weight: 500;
+            animation: fadeInError 0.3s ease;
+        }
+
+        @keyframes fadeInError {
+            from { opacity: 0; transform: translateY(-5px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-input.is-invalid {
+            border-color: var(--danger) !important;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
         /* ─── FOOTER ───────────────────────────────────────────────── */
         .form-footer {
             margin-top: 40px;

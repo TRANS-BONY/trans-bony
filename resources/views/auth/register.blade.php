@@ -38,13 +38,16 @@
                     type="text"
                     id="name"
                     name="name"
-                    class="auth-input"
+                    class="auth-input @error('name') is-invalid @enderror"
                     placeholder="Jean Dupont"
                     value="{{ old('name') }}"
                     required
                     autofocus
                     autocomplete="name"
                 >
+                @error('name')
+                    <span class="inline-error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -57,12 +60,15 @@
                     type="email"
                     id="email"
                     name="email"
-                    class="auth-input"
-                    placeholder="nom@entreprise.com"
+                    class="auth-input @error('email') is-invalid @enderror"
+                    placeholder="utilisateur@gmail.com ou @transbony.com"
                     value="{{ old('email') }}"
                     required
                     autocomplete="email"
                 >
+                @error('email')
+                    <span class="inline-error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -75,11 +81,14 @@
                     type="password"
                     id="password"
                     name="password"
-                    class="auth-input"
+                    class="auth-input @error('password') is-invalid @enderror"
                     placeholder="••••••••••••"
                     required
                     autocomplete="new-password"
                 >
+                @error('password')
+                    <span class="inline-error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 

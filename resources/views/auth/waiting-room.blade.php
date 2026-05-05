@@ -14,7 +14,11 @@
 
     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 25px; margin: 25px 0; text-align: left;">
         <p style="color: #475569; font-size: 0.95rem; line-height: 1.6;">
-            Votre inscription a été enregistrée avec succès. Cependant, pour des raisons de sécurité, un administrateur doit valider votre profil et vous assigner un rôle avant que vous ne puissiez accéder au tableau de bord.
+            @if (session('status'))
+                {{ session('status') }}
+            @else
+                Les informations ont été reçues. Veuillez attendre que l'administrateur valide votre adhésion et vous donne les droits de connexion.
+            @endif
         </p>
         <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
             <div style="width: 10px; height: 10px; background: #f59e0b; border-radius: 50%; animation: pulse 2s infinite;"></div>

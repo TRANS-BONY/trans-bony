@@ -17,14 +17,16 @@ class AuthenticatedSessionController extends Controller
     {
         // Validation
         $credentials = $request->validate([
-            'email' => ['required','email'],
+            'email' => ['required', 'email', 'regex:/^[a-z0-9._%+-]+@(gmail\.com|transbony\.com)$/i'],
             'password' => ['required'],
+        ], [
+            'email.regex' => 'L\'adresse mail doit utiliser les domaines @gmail.com ou @transbony.com',
         ]);
 
         // Tentative connexion
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'email' => 'Identifiants incorrects',
+                'email' => 'Vos identifiants sont incorrects',
             ]);
         }
 
