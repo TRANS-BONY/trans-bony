@@ -26,8 +26,8 @@ class AuthenticatedSessionController extends Controller
         // Tentative connexion
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'email' => 'Vos identifiants sont incorrects',
-            ]);
+                'login_error' => 'Vos identifiants sont incorrects',
+            ])->withInput($request->only('email'));
         }
 
         // Régénérer session

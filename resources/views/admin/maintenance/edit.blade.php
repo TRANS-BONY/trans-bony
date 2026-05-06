@@ -100,9 +100,8 @@
                         <select name="type" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer @error('type') border-red-500 @enderror">
                             <option value="" disabled>-- Sélectionnez un type --</option>
-                            <option value="préventive" {{ old('type', $maintenance->type) == 'préventive' ? 'selected' : '' }}>🛡️ Préventive - Entretien régulier</option>
+                            <option value="preventive" {{ old('type', $maintenance->type) == 'preventive' ? 'selected' : '' }}>🛡️ Préventive - Entretien régulier</option>
                             <option value="curative" {{ old('type', $maintenance->type) == 'curative' ? 'selected' : '' }}>🔧 Curative - Réparation après panne</option>
-                            <option value="urgente" {{ old('type', $maintenance->type) == 'urgente' ? 'selected' : '' }}>⚠️ Urgente - Intervention immédiate</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,8 +115,34 @@
                     <div class="mt-2 flex flex-wrap gap-2">
                         <span class="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">🛡️ Préventive: Vidange, révisions</span>
                         <span class="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">🔧 Curative: Réparation moteur</span>
-                        <span class="inline-flex items-center gap-1 text-xs text-red-600 bg-red-50 px-2 py-1 rounded">⚠️ Urgente: Dépannage immédiat</span>
                     </div>
+                </div>
+
+                <!-- Statut -->
+                <div class="mb-6">
+                    <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Statut <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <select name="statut" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer @error('statut') border-red-500 @enderror">
+                            <option value="" disabled>-- Sélectionnez un statut --</option>
+                            <option value="planifiee" {{ old('statut', $maintenance->statut) == 'planifiee' ? 'selected' : '' }}>📅 Planifiée</option>
+                            <option value="en cours" {{ old('statut', $maintenance->statut) == 'en cours' ? 'selected' : '' }}>⏳ En cours</option>
+                            <option value="terminee" {{ old('statut', $maintenance->statut) == 'terminee' ? 'selected' : '' }}>✅ Terminée</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    @error('statut')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Date prévue -->
@@ -160,7 +185,7 @@
                         <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        Coût (Franc CFA) <span class="text-red-500">*</span>
+                        Coût (FCFA) <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -171,14 +196,15 @@
                                name="cout"
                                value="{{ old('cout', $maintenance->cout) }}"
                                placeholder="0.00"
-                               min="0"
+                               min="5000"
+                               max="65000"
                                required
                                class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 @error('cout') border-red-500 @enderror">
                     </div>
                     @error('cout')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
-                    <p class="text-xs text-gray-500 mt-1">Coût total de la maintenance (pièces + main d'œuvre)</p>
+                    <p class="text-xs text-gray-500 mt-1">Coût compris entre 5 000 et 65 000 FCFA</p>
                 </div>
 
                 <!-- Aperçu de la maintenance -->
@@ -204,7 +230,7 @@
                         </div>
                         <div>
                             <span class="text-gray-500">Coût:</span>
-                            <p class="font-medium text-green-600">{{ number_format($maintenance->cout, 2) }} Franc CFA</p>
+                            <p class="font-medium text-green-600">{{ number_format($maintenance->cout, 0, ',', ' ') }} FCFA</p>
                         </div>
                     </div>
                 </div>

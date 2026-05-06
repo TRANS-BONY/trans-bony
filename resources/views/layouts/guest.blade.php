@@ -551,8 +551,8 @@
 
         /* ─── ERROR MESSAGES ──────────────────────────────────────── */
         .error-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
             border-radius: var(--radius);
             padding: 14px 16px;
             margin-bottom: 24px;
@@ -574,10 +574,11 @@
 
         .error-box li {
             font-size: 13px;
-            color: #fca5a5;
+            color: #ff4d4d;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 500;
         }
 
         .error-box li::before {
@@ -592,8 +593,8 @@
             display: block;
             margin-top: 6px;
             font-size: 11px;
-            color: #f87171;
-            font-weight: 500;
+            color: #ff4d4d;
+            font-weight: 600;
             animation: fadeInError 0.3s ease;
         }
 

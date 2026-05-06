@@ -31,7 +31,7 @@
                 <div>
                     <p class="text-xs text-emerald-100 uppercase tracking-wider font-semibold">Total recettes</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_total, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-emerald-200">Franc CFA</p>
+                    <p class="text-xs text-emerald-200">FCFA</p>
                 </div>
                 <div class="p-3 rounded-xl bg-white/20"><i class="fas fa-coins text-white text-xl"></i></div>
             </div>
@@ -41,7 +41,7 @@
                 <div>
                     <p class="text-xs text-teal-100 uppercase tracking-wider font-semibold">Moyenne mensuelle</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_avg ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-teal-200">Franc CFA / mois</p>
+                    <p class="text-xs text-teal-200">FCFA / mois</p>
                 </div>
                 <div class="p-3 rounded-xl bg-white/20"><i class="fas fa-chart-line text-white text-xl"></i></div>
             </div>
@@ -61,7 +61,7 @@
                 <div>
                     <p class="text-xs text-amber-100 uppercase tracking-wider font-semibold">Ce mois</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_mois_total ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-amber-200">Franc CFA</p>
+                    <p class="text-xs text-amber-200">FCFA</p>
                 </div>
                 <div class="p-3 rounded-xl bg-white/20"><i class="fas fa-calendar-alt text-white text-xl"></i></div>
             </div>
@@ -129,7 +129,7 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <span class="text-base font-bold text-emerald-600 dark:text-emerald-400">
-                                {{ number_format($recette->montant, 0, ',', ' ') }} Franc CFA
+                                {{ number_format($recette->montant, 0, ',', ' ') }} FCFA
                             </span>
                         </td>
                         <td class="px-6 py-4">

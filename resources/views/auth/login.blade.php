@@ -14,8 +14,18 @@
         <p class="form-desc">Entrez vos identifiants pour accéder au tableau de bord de gestion de flotte.</p>
     </div>
 
-    {{-- Validation Errors --}}
-    @if ($errors->any())
+    {{-- Global Authentication Errors --}}
+    @error('login_error')
+        <div class="error-box" style="background: rgba(239, 68, 68, 0.15); border-color: #ef4444;">
+            <p style="color: #ff4d4d; font-weight: 700; font-size: 14px; text-align: center;">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                {{ $message }}
+            </p>
+        </div>
+    @enderror
+
+    {{-- Validation Errors (Regex, format, etc.) --}}
+    @if ($errors->any() && !$errors->has('login_error'))
         <div class="error-box">
             <ul>
                 @foreach ($errors->all() as $error)

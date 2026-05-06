@@ -18,7 +18,7 @@ class MaintenanceRequest extends FormRequest
             'type'        => 'required|in:preventive,curative',
             'date_prevue' => 'required|date',
             'statut'      => 'required|in:planifiee,en cours,terminee',
-            'cout'        => 'nullable|numeric|min:0',
+            'cout'        => 'required|numeric|between:5000,65000',
         ];
     }
 
@@ -33,8 +33,9 @@ class MaintenanceRequest extends FormRequest
             'date_prevue.date'     => 'La date prévue doit être une date valide.',
             'statut.required'      => 'Le statut est obligatoire.',
             'statut.in'            => 'Le statut est invalide.',
+            'cout.required'        => 'Le coût est obligatoire.',
             'cout.numeric'         => 'Le coût doit être un nombre.',
-            'cout.min'             => 'Le coût ne peut pas être négatif.',
+            'cout.between'         => 'Le coût doit être compris entre 5 000 et 65 000 FCFA.',
         ];
     }
 }

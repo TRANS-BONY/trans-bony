@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="text-center py-2">
-                    <p class="text-4xl font-bold text-green-400">{{ number_format($recette_mensuelle ?? 0) }} <span class="text-lg">Franc CFA</span></p>
+                    <p class="text-4xl font-bold text-green-400">{{ number_format($recette_mensuelle ?? 0, 0, ',', ' ') }} <span class="text-lg">FCFA</span></p>
                     <div class="flex items-center justify-center gap-2 mt-2">
                         <span class="inline-flex items-center text-sm text-green-400">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

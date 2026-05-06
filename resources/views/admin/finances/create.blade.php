@@ -67,15 +67,16 @@
                 {{-- Montant --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Montant (Franc CFA) <span class="text-red-500">*</span>
+                        Montant (FCFA) <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">CFA</span>
-                        <input type="number" name="montant" step="0.01" min="0" required
+                        <input type="number" name="montant" step="1" min="7500" required
                                value="{{ old('montant') }}"
                                class="w-full pl-14 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-                               placeholder="0.00">
+                               placeholder="Minimum 7500">
                     </div>
+                    <p class="mt-1 text-xs text-gray-500">Minimum 7 500 FCFA, pas de nombres décimaux.</p>
                     @error('montant') <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 

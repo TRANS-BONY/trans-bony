@@ -15,9 +15,18 @@ class StoreRecetteRequest extends FormRequest
     {
         return [
             'vehicule_id' => 'required|exists:vehicules,id',
-            'montant' => 'required|numeric|min:0|max:999999.99',
+            'montant' => 'required|integer|min:7500',
             'date' => 'required|date',
             'type' => 'required|string|max:50',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'montant.required' => 'Le montant est obligatoire.',
+            'montant.integer'  => 'Le montant doit être un nombre entier (pas de virgule).',
+            'montant.min'      => 'Le montant doit être d\'au moins 7 500 FCFA.',
         ];
     }
 }
