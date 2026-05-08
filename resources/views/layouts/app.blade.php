@@ -409,7 +409,7 @@
             <!-- MAIN CONTENT -->
             <div class="p-4 sm:p-6">
                 @if(session('success'))
-                    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show">
+                    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show" style="display:block">
                         <div class="flex items-center justify-between">
                             <span class="font-semibold">{{ session('success') }}</span>
                             <button @click="show = false" class="text-green-700 hover:text-green-900 text-xl font-bold">&times;</button>
@@ -417,7 +417,7 @@
                     </div>
                 @endif
                 @if(session('error'))
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show">
+                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show" style="display:block">
                         <div class="flex items-center justify-between">
                             <span class="font-semibold">{{ session('error') }}</span>
                             <button @click="show = false" class="text-red-700 hover:text-red-900 text-xl font-bold">&times;</button>
@@ -425,7 +425,7 @@
                     </div>
                 @endif
                 @if($errors->any())
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show">
+                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show" style="display:block">
                         <div class="flex items-start justify-between">
                             <ul class="list-disc pl-5">
                                 @foreach($errors->all() as $error)

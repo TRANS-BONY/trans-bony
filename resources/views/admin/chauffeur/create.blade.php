@@ -85,7 +85,7 @@
                         <input type="text" name="permis" value="{{ old('permis') }}" placeholder="Ex: CG-123456-ABC-2024"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('permis') border-red-500 @enderror"
                                required>
-                        <p class="text-[10px] text-gray-400">Format requis: CG-123456-ABC-202X</p>
+                        <p class="text-[10px] text-gray-400">Exemple: CG-123456-ABC-202X</p>
                         @error('permis') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 

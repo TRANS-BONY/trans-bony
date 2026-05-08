@@ -14,6 +14,16 @@
         <p class="form-desc">Entrez vos identifiants pour accéder au tableau de bord de gestion de flotte.</p>
     </div>
 
+    {{-- Message de succès (ex: après inscription) --}}
+    @if (session('status'))
+        <div class="error-box" style="background: rgba(16, 185, 129, 0.15); border-color: #10b981; margin-bottom: 24px;">
+            <p style="color: #34d399; font-weight: 600; font-size: 13px; text-align: center;">
+                <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+                {{ session('status') }}
+            </p>
+        </div>
+    @endif
+
     {{-- Global Authentication Errors --}}
     @error('login_error')
         <div class="error-box" style="background: rgba(239, 68, 68, 0.15); border-color: #ef4444;">
@@ -24,7 +34,7 @@
         </div>
     @enderror
 
-    {{-- Validation Errors (Regex, format, etc.) --}}
+    {{-- Validation Errors (format, etc.) --}}
     @if ($errors->any() && !$errors->has('login_error'))
         <div class="error-box">
             <ul>

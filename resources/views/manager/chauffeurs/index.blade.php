@@ -16,13 +16,14 @@
                 <div class="w-12 h-12 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center text-xl">
                     <i class="fas fa-id-card"></i>
                 </div>
-                <span class="px-2 py-1 text-xs font-semibold rounded-lg bg-gray-100 text-gray-700">
-                    {{ ucfirst($c->statut) }}
+                <span class="px-2 py-1 text-xs font-semibold rounded-lg
+                    {{ $c->actif ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    {{ $c->actif ? 'Actif' : 'Inactif' }}
                 </span>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ $c->nom }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ $c->nom }} {{ $c->prenom }}</h3>
             <p class="text-sm text-gray-500 mb-1">{{ $c->telephone }}</p>
-            <p class="text-xs font-mono text-gray-400 mb-4">Permis: {{ $c->numero_permis }}</p>
+            <p class="text-xs font-mono text-gray-400 mb-4">Permis: {{ $c->permis }}</p>
             <a href="{{ route('manager.chauffeurs.show', $c) }}" class="block text-center py-2 bg-gray-50 hover:bg-gray-100 text-sm font-semibold text-gray-700 rounded-lg transition">
                 Détails
             </a>

@@ -19,16 +19,16 @@ class ManagerController extends Controller
     public function dashboard()
     {
         $stats = [
-            'vehicules' => Vehicule::count(),
-            'chauffeurs' => Chauffeur::count(),
-            'voyages' => Voyage::count(),
-            'voyages_en_cours' => Voyage::where('statut', 'en cours')->count(),
-            'maintenances' => Maintenance::count(),
-            'recettes_total' => RecetteMensuelle::sum('montant'),
+            'vehicules'         => Vehicule::count(),
+            'chauffeurs'        => Chauffeur::count(),
+            'voyages'           => Voyage::count(),
+            'voyages_en_cours'  => Voyage::where('type', 'voyage')->count(),
+            'maintenances'      => Maintenance::count(),
+            'recettes_total'    => RecetteMensuelle::sum('montant'),
         ];
 
-        $derniers_voyages = Voyage::with(['vehicule', 'chauffeur'])->latest('created_at')->take(5)->get();
-        $dernieres_maintenances = Maintenance::with('vehicule')->latest('created_at')->take(5)->get();
+        $derniers_voyages        = Voyage::with(['vehicule', 'chauffeur'])->latest('created_at')->take(5)->get();
+        $dernieres_maintenances  = Maintenance::with('vehicule')->latest('created_at')->take(5)->get();
 
         return view('manager.dashboard', compact('stats', 'derniers_voyages', 'dernieres_maintenances'));
     }

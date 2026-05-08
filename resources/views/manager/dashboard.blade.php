@@ -112,8 +112,15 @@
                     <li class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $v->ville_depart }} <i class="fas fa-arrow-right text-gray-400 text-xs mx-1"></i> {{ $v->ville_arrivee }}</p>
-                                <p class="text-xs text-gray-500 mt-1">{{ $v->vehicule->immatriculation ?? 'N/A' }} • {{ $v->chauffeur->nom ?? 'N/A' }}</p>
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                    <i class="fas fa-map-marker-alt text-orange-400 text-xs mr-1"></i>
+                                    {{ $v->destination }}
+                                </p>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    {{ $v->vehicule->immatriculation ?? 'N/A' }}
+                                    &bull;
+                                    {{ $v->chauffeur->nom ?? 'N/A' }} {{ $v->chauffeur->prenom ?? '' }}
+                                </p>
                             </div>
                             <span class="px-2 py-1 text-xs font-semibold rounded-lg bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
                                 {{ $v->date_depart->format('d/m/Y') }}

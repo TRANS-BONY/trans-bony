@@ -24,6 +24,26 @@ class DashboardController extends Controller
         if ($role === 'comptable') {
             return redirect()->route('comptable.dashboard');
         }
+
+        // Redirection dédiée pour le rôle manager
+        if ($role === 'manager') {
+            return redirect()->route('manager.dashboard');
+        }
+
+        // Redirection dédiée pour le rôle agent
+        if ($role === 'agent') {
+            return redirect()->route('agent.dashboard');
+        }
+
+        // Redirection dédiée pour le rôle technicien
+        if ($role === 'technicien') {
+            return redirect()->route('technicien.dashboard');
+        }
+
+        // Redirection dédiée pour le rôle gestionnaire
+        if ($role === 'gestionnaire') {
+            return redirect()->route('gestionnaire.dashboard');
+        }
         // ── Véhicules ──────────────────────────────────────────
         $vehicules              = Vehicule::count();
         $vehicules_disponibles  = Vehicule::where('statut', 'disponible')->count();

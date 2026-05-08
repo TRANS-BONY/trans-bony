@@ -17,10 +17,8 @@ class AuthenticatedSessionController extends Controller
     {
         // Validation
         $credentials = $request->validate([
-            'email' => ['required', 'email', 'regex:/^[a-z0-9._%+-]+@(gmail\.com|transbony\.com)$/i'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
-        ], [
-            'email.regex' => 'L\'adresse mail doit utiliser les domaines @gmail.com ou @transbony.com',
         ]);
 
         // Tentative connexion

@@ -11,27 +11,26 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6">Informations de Trajet</h3>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6">Informations du Voyage</h3>
             <div class="space-y-4">
                 <div>
-                    <p class="text-sm text-gray-500">Ville de Départ</p>
-                    <p class="font-bold text-gray-900 dark:text-white">{{ $voyage->ville_depart }}</p>
+                    <p class="text-sm text-gray-500">Destination</p>
+                    <p class="font-bold text-gray-900 dark:text-white">{{ $voyage->destination }}</p>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Ville d'Arrivée</p>
-                    <p class="font-bold text-gray-900 dark:text-white">{{ $voyage->ville_arrivee }}</p>
+                    <p class="text-sm text-gray-500">Nombre de passagers</p>
+                    <p class="font-bold text-gray-900 dark:text-white">{{ $voyage->nb_passagers }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Date de Départ</p>
                     <p class="font-bold text-gray-900 dark:text-white">{{ $voyage->date_depart->format('d/m/Y H:i') }}</p>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Date d'Arrivée Prévue</p>
-                    <p class="font-bold text-gray-900 dark:text-white">{{ $voyage->date_arrivee ? $voyage->date_arrivee->format('d/m/Y H:i') : '-' }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Statut</p>
-                    <p class="font-bold text-gray-900 dark:text-white">{{ ucfirst($voyage->statut) }}</p>
+                    <p class="text-sm text-gray-500">Type</p>
+                    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-lg
+                        {{ $voyage->type === 'voyage' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700' }}">
+                        {{ ucfirst($voyage->type) }}
+                    </span>
                 </div>
             </div>
         </div>

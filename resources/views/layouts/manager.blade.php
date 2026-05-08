@@ -301,16 +301,27 @@
         <!-- ALERTS -->
         <div class="px-4 sm:px-6 pt-4">
             @if(session('success'))
-                <div class="mb-4 flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl shadow-sm" x-data="{ show: true }" x-show="show">
+                <div class="mb-4 flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl shadow-sm" x-data="{ show: true }" x-show="show" style="display:block">
                     <i class="fas fa-check-circle text-emerald-500 flex-shrink-0"></i>
                     <span class="flex-1 font-medium text-sm">{{ session('success') }}</span>
                     <button @click="show = false" class="text-emerald-600 hover:text-emerald-800 text-lg font-bold">&times;</button>
                 </div>
             @endif
             @if(session('error'))
-                <div class="mb-4 flex items-center gap-3 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl shadow-sm" x-data="{ show: true }" x-show="show">
+                <div class="mb-4 flex items-center gap-3 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl shadow-sm" x-data="{ show: true }" x-show="show" style="display:block">
                     <i class="fas fa-exclamation-circle text-red-500 flex-shrink-0"></i>
                     <span class="flex-1 font-medium text-sm">{{ session('error') }}</span>
+                    <button @click="show = false" class="text-red-600 hover:text-red-800 text-lg font-bold">&times;</button>
+                </div>
+            @endif
+            @if($errors->any())
+                <div class="mb-4 flex items-start gap-3 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl shadow-sm" x-data="{ show: true }" x-show="show" style="display:block">
+                    <i class="fas fa-exclamation-circle text-red-500 flex-shrink-0 mt-0.5"></i>
+                    <ul class="flex-1 list-disc list-inside text-sm font-medium space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                     <button @click="show = false" class="text-red-600 hover:text-red-800 text-lg font-bold">&times;</button>
                 </div>
             @endif

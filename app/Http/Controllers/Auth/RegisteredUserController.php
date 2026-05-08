@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
             'name.regex' => 'Le nom ne doit pas contenir de chiffres.',
             'email.email' => 'L\'adresse e-mail doit impérativement contenir le symbole "@".',
             'email.regex' => 'L\'adresse mail doit utiliser les domaines @gmail.com ou @transbony.com',
-            'email.unique' => 'cette adresse est déjà prise',
+            'email.unique' => 'Cette adresse e-mail est déjà enregistrée.',
         ]);
 
         $user = User::create([
@@ -49,9 +49,11 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        // ❌ Ne pas connecter l'utilisateur automatiquement :
+        // il doit attendre la validation de l'administrateur.
+        // Auth::login($user) est volontairement supprimé.
 
-        return redirect(route('waiting.room', absolute: false))
-            ->with('status', 'Les informations ont été reçues. Veuillez attendre que l\'administrateur valide votre adhésion et vous donne les droits de connexion.');
+        return redirect()->route('login')
+            ->with('status', 'Votre compte a été créé avec succès. Veuillez attendre que l\'administrateur valide votre accès avant de vous connecter.');
     }
 }
