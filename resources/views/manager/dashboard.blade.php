@@ -1,7 +1,11 @@
 @extends('layouts.manager')
 
 @section('content')
-<div class="space-y-6">
+<style>
+    /* Désactiver le scroll global sur le tableau de bord */
+    html, body { overflow: hidden !important; height: 100vh !important; }
+</style>
+<div class="flex flex-col gap-4 h-[calc(100vh-140px)] overflow-hidden">
 
     {{-- ─── HEADER ─── --}}
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 p-6 animate-slide-down shadow-xl">
@@ -29,7 +33,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 animate-fade-in-up" style="animation-delay:0.1s">
 
         {{-- Véhicules --}}
-        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer">
+        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Parc Automobile</p>
@@ -43,7 +47,7 @@
         </div>
 
         {{-- Chauffeurs --}}
-        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer">
+        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Effectif Chauffeurs</p>
@@ -57,7 +61,7 @@
         </div>
 
         {{-- Voyages --}}
-        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer">
+        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Voyages En Cours</p>
@@ -71,7 +75,7 @@
         </div>
 
         {{-- Finances --}}
-        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer">
+        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Chiffre d'Affaires</p>
@@ -86,7 +90,7 @@
     </div>
 
     {{-- ─── MODULES APERCU ─── --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in-up" style="animation-delay:0.2s">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0 animate-fade-in-up" style="animation-delay:0.2s">
 
         {{-- DERNIERS VOYAGES --}}
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
@@ -106,7 +110,7 @@
                     </a>
                 </div>
             </div>
-            <div class="p-0">
+            <div class="p-0 overflow-y-auto h-[calc(100%-70px)] custom-scrollbar">
                 <ul class="divide-y divide-gray-50 dark:divide-gray-700/50">
                     @forelse($derniers_voyages as $v)
                     <li class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
@@ -152,7 +156,7 @@
                     </a>
                 </div>
             </div>
-            <div class="p-0">
+            <div class="p-0 overflow-y-auto h-[calc(100%-70px)] custom-scrollbar">
                 <ul class="divide-y divide-gray-50 dark:divide-gray-700/50">
                     @forelse($dernieres_maintenances as $m)
                     <li class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">

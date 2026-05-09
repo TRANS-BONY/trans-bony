@@ -16,7 +16,7 @@ class DocumentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Document::class);
-        $documents = Document::with('vehicule')->get();
+        $documents = Document::with('vehicule')->paginate(10);
         $vehicules = Vehicule::all();
 
         // 🔔 Vérification expiration (Note: Devrait idéalement être dans un Job planifié)

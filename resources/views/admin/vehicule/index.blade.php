@@ -256,6 +256,11 @@
             </div>
         </div>
     </div>
+    
+    <!-- Pagination -->
+    <div class="mt-6 animate-fade-in-up" style="animation-delay: 0.4s">
+        {{ $vehicules->links() }}
+    </div>
 </div>
 </div>
 

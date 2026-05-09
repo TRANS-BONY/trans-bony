@@ -23,6 +23,15 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <style>
+    @keyframes floating {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+    .floating { animation: floating 4s ease-in-out infinite; }
+    .floating-fast { animation: floating 2.5s ease-in-out infinite; }
+    .floating-slow { animation: floating 6s ease-in-out infinite; }
+    .nav-fluid-hover { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
     * { font-family: 'Inter', sans-serif; }
@@ -111,7 +120,7 @@
                         <p class="text-xs text-emerald-300 font-medium">Espace Comptable</p>
                     </div>
                 </div>
-                <button @click="sidebarOpen = false" class="lg:hidden text-white/60 hover:text-white transition p-1">
+                <button @click="sidebarOpen = false" class="lg:hidden text-white/60 hover:text-white transition p-1" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -139,7 +148,7 @@
                 </p>
 
                 <!-- Dashboard -->
-                <a href="{{ route('comptable.dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('comptable.dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-emerald-500/30 transition-all">
                         <i class="fas fa-tachometer-alt text-sm text-emerald-300"></i>
                     </div>
@@ -152,7 +161,7 @@
                 </div>
 
                 <!-- Recettes -->
-                <a href="{{ route('comptable.recettes.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('comptable.recettes.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-emerald-500/30 transition-all">
                         <i class="fas fa-coins text-sm text-yellow-300"></i>
                     </div>
@@ -165,7 +174,7 @@
                 </a>
 
                 <!-- Rapports -->
-                <a href="{{ route('comptable.rapports.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('comptable.rapports.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-emerald-500/30 transition-all">
                         <i class="fas fa-chart-bar text-sm text-blue-300"></i>
                     </div>
@@ -206,7 +215,7 @@
         <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10 border-b border-gray-100 dark:border-gray-700">
             <div class="px-4 sm:px-6 py-3 flex justify-between items-center">
                 <div class="flex items-center space-x-4">
-                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 dark:text-gray-400 hover:text-emerald-600 transition p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 dark:text-gray-400 hover:text-emerald-600 transition p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                         <i class="fas fa-bars text-lg"></i>
                     </button>
                     <div>
@@ -217,14 +226,14 @@
 
                 <div class="flex items-center space-x-2 sm:space-x-3">
                     <!-- Dark mode -->
-                    <button @click="toggleTheme" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <button @click="toggleTheme" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                         <i x-show="!isDarkMode" class="fas fa-moon text-gray-500 dark:text-gray-400 text-lg"></i>
                         <i x-show="isDarkMode" class="fas fa-sun text-yellow-400 text-lg"></i>
                     </button>
 
                     <!-- Profil -->
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <button @click="open = !open" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                             <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md">
                                 <i class="fas fa-user-tie text-white text-xs"></i>
                             </div>

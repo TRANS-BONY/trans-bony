@@ -22,7 +22,7 @@
 <!-- Alpine.js -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<style>
+<style> @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } } .floating { animation: floating 4s ease-in-out infinite; } .floating-fast { animation: floating 2.5s ease-in-out infinite; } .floating-slow { animation: floating 6s ease-in-out infinite; } .floating-hover { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); } .floating-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     /* Transitions personnalisées */
     .sidebar-transition {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,7 +151,7 @@
                             <p class="text-xs text-blue-300 dark:text-gray-400 mt-1">Gestion de flotte</p>
                         </div>
                     </div>
-                    <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gray-300 transition">
+                    <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gray-300 transition" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -161,7 +161,7 @@
                         <i class="fas fa-compass mr-2"></i> Navigation Principale
                     </p>
 
-<a href="/dashboard" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+<a href="/dashboard" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-chart-line w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Tableau de bord</span>
                     </a>
@@ -169,7 +169,7 @@
 
 
 @can('gerer vehicules')
-                    <a href="/admin/vehicules" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/vehicules" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-truck w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Véhicules</span>
                         @if(($sidebar_vehicules ?? 0) > 0)
@@ -182,7 +182,7 @@
                     @endcan
 
 @can('gerer chauffeurs')
-                    <a href="/admin/chauffeurs" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/chauffeurs" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-user-circle w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Chauffeurs</span>
                         @if(($sidebar_chauffeurs ?? 0) > 0)
@@ -194,7 +194,7 @@
                     @endcan
 
 @can('gerer voyages')
-                    <a href="/admin/voyages" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/voyages" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-route w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Voyages</span>
                         @if(($sidebar_voyages_today ?? 0) > 0)
@@ -211,7 +211,7 @@
                     @endcan
 
 @can('gerer maintenance')
-                    <a href="/admin/maintenances" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/maintenances" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-tools w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Maintenance</span>
                         @if(($sidebar_maintenances_encours ?? 0) > 0)
@@ -228,7 +228,7 @@
                     @endcan
 
 @can('gerer documents')
-                    <a href="/admin/documents" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/documents" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-file-alt w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Documents</span>
                         @if(($sidebar_docs_expire ?? 0) > 0)
@@ -252,7 +252,7 @@
                     @endcan
 
 @can('gerer finances')
-                    <a href="/admin/recettes" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/recettes" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-coins w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Recettes</span>
                         @if(($sidebar_recettes ?? 0) > 0)
@@ -265,7 +265,7 @@
                     @endcan
 
 @can('voir rapports')
-                    <a href="/admin/rapports" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                    <a href="/admin/rapports" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                         <i class="fas fa-chart-bar w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                         <span class="flex-1">Rapports</span>
                     </a>
@@ -276,7 +276,7 @@
                         <p class="text-xs uppercase tracking-wider text-blue-300 dark:text-gray-400 mb-4 font-semibold">
                             <i class="fas fa-shield-alt mr-2"></i> Administration
                         </p>
-                        <a href="/admin/users" class="nav-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200">
+                        <a href="/admin/users" class="nav-item flex items-center relative overflow-hidden transition-all duration-300 floating-hover space-x-3 px-4 py-3 rounded-lg transition-all group text-white dark:text-gray-200 nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                             <i class="fas fa-users w-5 text-blue-300 dark:text-blue-400 group-hover:text-white transition"></i>
                             <span class="flex-1">Utilisateurs</span>
                             @if(($sidebar_users ?? 0) > 0)
@@ -323,7 +323,7 @@
             <div class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-10 transition-colors duration-300">
                 <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
                     <div class="flex items-center space-x-3">
-                        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
                         <div>
@@ -335,7 +335,7 @@
                     <div class="flex items-center space-x-2 sm:space-x-4">
                         <!-- NOTIFICATIONS -->
                         <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                            <button @click="open = !open" class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                                 <i class="fas fa-bell text-lg sm:text-xl text-gray-600 dark:text-gray-300"></i>
                                 <span x-show="notificationCount > 0" x-text="notificationCount" class="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold"></span>
                             </button>
@@ -347,7 +347,7 @@
                                 </div>
                                 <div class="max-h-96 overflow-y-auto">
                                     <template x-for="notif in notifications" :key="notif.id">
-                                        <div class="p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition border-b border-gray-100 dark:border-gray-700">
+                                        <a :href="notif.url" class="block p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition border-b border-gray-100 dark:border-gray-700">
                                             <div class="flex items-start space-x-2">
                                                 <i :class="notif.icon" class="mt-1 text-blue-500 dark:text-blue-400"></i>
                                                 <div class="flex-1">
@@ -355,7 +355,7 @@
                                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="notif.time"></p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </template>
                                     <div x-show="notifications.length === 0" class="p-8 text-center text-gray-500 dark:text-gray-400">
                                         <i class="fas fa-bell-slash text-3xl mb-2"></i>
@@ -366,14 +366,14 @@
                         </div>
 
                         <!-- DARK MODE TOGGLE -->
-                        <button @click="toggleTheme" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition relative">
+                        <button @click="toggleTheme" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition relative" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                             <i x-show="!isDarkMode" class="fas fa-moon text-lg sm:text-xl text-gray-600 dark:text-gray-300"></i>
                             <i x-show="isDarkMode" class="fas fa-sun text-lg sm:text-xl text-yellow-400"></i>
                         </button>
 
                         <!-- USER MENU -->
                         <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center space-x-2 sm:space-x-3 hover:opacity-80 transition p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <button @click="open = !open" class="flex items-center space-x-2 sm:space-x-3 hover:opacity-80 transition p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                                 <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-lg">
                                     <img src="{{ auth()->user()->profile_photo_url }}" alt="" class="w-full h-full object-cover">
                                 </div>
@@ -517,9 +517,9 @@
                             // Données de démonstration
                             this.notificationCount = 3;
                             this.notifications = [
-                                { id: 1, message: '🚛 Nouveau voyage programmé pour demain', time: 'Il y a 5 min', icon: 'fas fa-truck' },
-                                { id: 2, message: '🔧 Maintenance prévue pour le véhicule #1234', time: 'Il y a 1 heure', icon: 'fas fa-tools' },
-                                { id: 3, message: '📄 Document d\'assurance expirant dans 3 jours', time: 'Il y a 2 heures', icon: 'fas fa-file-alt' }
+                                { id: 1, message: '🚛 Nouveau voyage programmé pour demain', time: 'Il y a 5 min', icon: 'fas fa-truck', url: '/admin/voyages' },
+                                { id: 2, message: '🔧 Maintenance prévue pour le véhicule #1234', time: 'Il y a 1 heure', icon: 'fas fa-tools', url: '/admin/maintenances' },
+                                { id: 3, message: '📄 Document d\'assurance expirant dans 3 jours', time: 'Il y a 2 heures', icon: 'fas fa-file-alt', url: '/admin/documents' }
                             ];
                         });
                 },

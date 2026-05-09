@@ -19,7 +19,7 @@ class VehiculeController extends Controller
                   ->orWhere('modele', 'like', "%{$request->search}%");
         }
 
-        $vehicules = $query->latest()->get();
+        $vehicules = $query->latest()->paginate(10)->appends($request->query());
 
         return view('admin.vehicule.index', compact('vehicules'));
     }

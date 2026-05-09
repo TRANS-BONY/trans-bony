@@ -9,7 +9,7 @@ class ChauffeurController extends Controller
 {
     public function index()
     {
-        $chauffeurs = Chauffeur::latest()->get();
+        $chauffeurs = Chauffeur::latest()->paginate(10);
         return view('admin.chauffeur.index', compact('chauffeurs'));
     }
 

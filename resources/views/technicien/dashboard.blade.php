@@ -29,7 +29,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 animate-fade-in-up" style="animation-delay:0.1s">
 
         {{-- Véhicules --}}
-        <div class="card-hover rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-lg cursor-pointer">
+        <div class="card-hover rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-lg cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-blue-100 uppercase tracking-wider font-semibold">Total Véhicules</p>
@@ -43,7 +43,7 @@
         </div>
 
         {{-- Maintenances En Cours --}}
-        <div class="card-hover rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-5 shadow-lg cursor-pointer">
+        <div class="card-hover rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-5 shadow-lg cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-orange-100 uppercase tracking-wider font-semibold">En Cours</p>
@@ -57,7 +57,7 @@
         </div>
 
         {{-- Maintenances Planifiées --}}
-        <div class="card-hover rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-500 p-5 shadow-lg cursor-pointer">
+        <div class="card-hover rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-500 p-5 shadow-lg cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-amber-100 uppercase tracking-wider font-semibold">Planifiées</p>
@@ -71,7 +71,7 @@
         </div>
 
         {{-- Maintenances Terminées --}}
-        <div class="card-hover rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 p-5 shadow-lg cursor-pointer">
+        <div class="card-hover rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 p-5 shadow-lg cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs text-green-100 uppercase tracking-wider font-semibold">Terminées</p>
@@ -108,39 +108,41 @@
                 </div>
             </div>
 
-            <div class="p-5 space-y-3">
-                @forelse($dernieres_maintenances ?? [] as $m)
-                <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700 last:border-0">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
-                            {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : '' }}
-                            {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
-                            {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : '' }}">
-                            <i class="fas fa-tools text-sm"></i>
+            <div class="p-5">
+                <div class="space-y-3 overflow-hidden max-h-[200px] custom-scrollbar pr-2">
+                    @forelse($dernieres_maintenances ?? [] as $m)
+                    <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
+                                {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : '' }}
+                                {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
+                                {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : '' }}">
+                                <i class="fas fa-tools text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-800 dark:text-white">
+                                    {{ $m->vehicule->immatriculation ?? 'N/A' }}
+                                </p>
+                                <p class="text-xs text-gray-400">{{ ucfirst($m->type) }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800 dark:text-white">
-                                {{ $m->vehicule->immatriculation ?? 'N/A' }}
-                            </p>
-                            <p class="text-xs text-gray-400">{{ ucfirst($m->type) }}</p>
+                        <div class="text-right">
+                            <span class="text-xs px-2 py-1 rounded-md font-semibold
+                                {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : '' }}
+                                {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
+                                {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}">
+                                {{ ucfirst($m->statut) }}
+                            </span>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $m->date_prevue->format('d/m/Y') }}</p>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <span class="text-xs px-2 py-1 rounded-md font-semibold
-                            {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : '' }}
-                            {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
-                            {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}">
-                            {{ ucfirst($m->statut) }}
-                        </span>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $m->date_prevue->format('d/m/Y') }}</p>
+                    @empty
+                    <div class="flex flex-col items-center justify-center py-6 text-gray-400">
+                        <i class="fas fa-check-circle text-4xl mb-3 text-gray-200 dark:text-gray-600"></i>
+                        <p class="text-sm">Aucune maintenance récente</p>
                     </div>
+                    @endforelse
                 </div>
-                @empty
-                <div class="flex flex-col items-center justify-center py-6 text-gray-400">
-                    <i class="fas fa-check-circle text-4xl mb-3 text-gray-200 dark:text-gray-600"></i>
-                    <p class="text-sm">Aucune maintenance récente</p>
-                </div>
-                @endforelse
 
                 <div class="mt-4 flex gap-3">
                     <a href="{{ route('technicien.maintenances.create') }}" class="flex-1 flex items-center justify-center gap-2 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-xl transition shadow-sm">

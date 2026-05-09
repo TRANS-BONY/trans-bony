@@ -178,6 +178,11 @@
         </div>
         @endforelse
     </div>
+
+    <!-- Pagination -->
+    <div class="mt-6 animate-fade-in-up" style="animation-delay: 0.4s">
+        {{ $chauffeurs->links() }}
+    </div>
 </div>
 
 <style>

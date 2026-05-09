@@ -42,7 +42,7 @@ class CheckAlerts extends Command
             $this->notifyUsers($adminUsers, [
                 'message' => $msg,
                 'type' => 'warning',
-                'url' => route('admin.documents.index'),
+                'base_url' => '/documents',
                 'icon' => 'fas fa-exclamation-triangle'
             ]);
         }
@@ -54,7 +54,7 @@ class CheckAlerts extends Command
             $this->notifyUsers($adminUsers, [
                 'message' => $msg,
                 'type' => 'info',
-                'url' => route('admin.voyages.index'),
+                'base_url' => '/voyages',
                 'icon' => 'fas fa-route'
             ]);
         }
@@ -66,7 +66,7 @@ class CheckAlerts extends Command
             $this->notifyUsers($adminUsers, [
                 'message' => $msg,
                 'type' => 'warning',
-                'url' => route('technicien.maintenances.index'),
+                'base_url' => '/maintenances',
                 'icon' => 'fas fa-tools'
             ]);
         }
@@ -77,9 +77,23 @@ class CheckAlerts extends Command
     private function notifyUsers($users, $data)
     {
         foreach ($users as $user) {
-            // Éviter les doublons de notifications identiques le même jour? 
-            // Pour l'instant on envoie.
-            $user->notify(new AppNotification($data));
+            $prefix = '';
+            if ($user->hasRole('admin')) {
+                $prefix = '/admin';
+            } elseif ($user->hasRole('manager')) {
+                $prefix = '/manager';
+            } elseif ($user->hasRole('technicien')) {
+                $prefix = '/technicien';
+            } elseif ($user->hasRole('gestionnaire')) {
+                $prefix = '/gestionnaire';
+            }
+            
+            $notifData = $data;
+            if (isset($data['base_url'])) {
+                $notifData['url'] = url($prefix . $data['base_url']);
+            }
+            
+            $user->notify(new AppNotification($notifData));
         }
     }
 }

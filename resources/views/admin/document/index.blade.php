@@ -270,6 +270,11 @@
                     </table>
                 </div>
             </div>
+            
+            <!-- Pagination -->
+            <div class="mt-4 animate-fade-in-up" style="animation-delay: 0.3s">
+                {{ $documents->links() }}
+            </div>
         </div>
     </div>
 

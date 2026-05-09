@@ -23,6 +23,15 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <style>
+    @keyframes floating {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+    .floating { animation: floating 4s ease-in-out infinite; }
+    .floating-fast { animation: floating 2.5s ease-in-out infinite; }
+    .floating-slow { animation: floating 6s ease-in-out infinite; }
+    .nav-fluid-hover { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     * { font-family: 'Inter', sans-serif; }
 
@@ -62,7 +71,7 @@
             </div>
 
             <nav class="space-y-1">
-                <a href="{{ route('gestionnaire.dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('gestionnaire.dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <i class="fas fa-chart-line w-5"></i>
                     <span class="text-sm font-medium">Tableau de bord</span>
                 </a>
@@ -71,17 +80,17 @@
                     <p class="text-[10px] uppercase tracking-widest text-teal-400/60 font-bold">Gestion Active</p>
                 </div>
 
-                <a href="{{ route('gestionnaire.vehicules.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('gestionnaire.vehicules.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <i class="fas fa-bus w-5 text-blue-400"></i>
                     <span class="text-sm font-medium">Véhicules</span>
                 </a>
 
-                <a href="{{ route('gestionnaire.chauffeurs.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('gestionnaire.chauffeurs.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <i class="fas fa-id-card w-5 text-yellow-400"></i>
                     <span class="text-sm font-medium">Chauffeurs</span>
                 </a>
 
-                <a href="{{ route('gestionnaire.documents.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('gestionnaire.documents.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <i class="fas fa-file-alt w-5 text-emerald-400"></i>
                     <span class="text-sm font-medium">Documents</span>
                 </a>
@@ -90,7 +99,7 @@
                     <p class="text-[10px] uppercase tracking-widest text-teal-400/60 font-bold">Consultation</p>
                 </div>
 
-                <a href="{{ route('gestionnaire.maintenances.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group">
+                <a href="{{ route('gestionnaire.maintenances.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
                     <i class="fas fa-tools w-5 text-orange-400"></i>
                     <span class="text-sm font-medium">Maintenances</span>
                 </a>
@@ -112,14 +121,14 @@
     <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
         <header class="bg-white dark:bg-gray-800 shadow-sm px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 text-gray-500">
+                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 text-gray-500" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                     <i class="fas fa-bars"></i>
                 </button>
                 <h1 class="text-xl font-bold text-gray-800 dark:text-white">@yield('title', 'Gestionnaire')</h1>
             </div>
 
             <div class="flex items-center gap-4">
-                <button @click="isDarkMode = !isDarkMode" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500">
+                <button @click="isDarkMode = !isDarkMode" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
                     <i :class="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
                 </button>
                 <div class="flex items-center gap-2">

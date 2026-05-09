@@ -31,47 +31,47 @@
     <section class="stats-grid">
 
         {{-- Card: Véhicules --}}
-        <div class="stat-card stat-card--blue reveal-up" style="--delay: 0.08s">
-            <div class="stat-card__glow"></div>
-            <div class="stat-card__top">
-                <div class="stat-card__label">
+        <div class="stat-card stat-card--blue reveal-up" style="--delay: 0.08s" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+            <div class="stat-card__glow" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
+            <div class="stat-card__top" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__label" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <div class="stat-icon stat-icon--blue">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                     </div>
                     <span>Véhicules</span>
                 </div>
-                <div class="stat-card__badge-circle stat-icon--blue">
+                <div class="stat-card__badge-circle stat-icon--blue" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
             <p class="stat-card__number counter" data-target="{{ $vehicules ?? 0 }}">{{ $vehicules ?? 0 }}</p>
-            <div class="stat-card__meta">
+            <div class="stat-card__meta" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                 <span class="meta-dot meta-dot--green"></span>
                 <span class="meta-text">Actifs ·</span>
                 <span class="meta-highlight">{{ ($vehicules ?? 0) > 0 ? round(($vehicules_disponibles ?? 0) / ($vehicules ?? 1) * 100) : 0 }}% disponibles</span>
             </div>
-            <div class="stat-card__bar">
-                <div class="stat-card__bar-fill" style="--bar-w: {{ ($vehicules ?? 0) > 0 ? round(($vehicules_disponibles ?? 0) / ($vehicules ?? 1) * 100) : 0 }}%"></div>
+            <div class="stat-card__bar" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__bar-fill" style="--bar-w: {{ ($vehicules ?? 0)  x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms> 0 ? round(($vehicules_disponibles ?? 0) / ($vehicules ?? 1) * 100) : 0 }}%"></div>
             </div>
-            <div class="stat-card__shine"></div>
+            <div class="stat-card__shine" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
         </div>
 
         {{-- Card: Chauffeurs --}}
-        <div class="stat-card stat-card--emerald reveal-up" style="--delay: 0.16s">
-            <div class="stat-card__glow"></div>
-            <div class="stat-card__top">
-                <div class="stat-card__label">
+        <div class="stat-card stat-card--emerald reveal-up" style="--delay: 0.16s" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+            <div class="stat-card__glow" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
+            <div class="stat-card__top" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__label" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <div class="stat-icon stat-icon--emerald">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     </div>
                     <span>Chauffeurs</span>
                 </div>
-                <div class="stat-card__badge-circle stat-icon--emerald">
+                <div class="stat-card__badge-circle stat-icon--emerald" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
             </div>
             <p class="stat-card__number counter" data-target="{{ $chauffeurs ?? 0 }}">{{ $chauffeurs ?? 0 }}</p>
-            <div class="stat-card__meta">
+            <div class="stat-card__meta" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                 <span class="meta-text">👥 Personnel actif</span>
             </div>
             @php
@@ -79,28 +79,28 @@
                     ? min(100, round(($chauffeurs ?? 0) / max(1, ($vehicules ?? 1)) * 100))
                     : (($chauffeurs ?? 0) > 0 ? 100 : 0);
             @endphp
-            <div class="stat-card__bar">
-                <div class="stat-card__bar-fill" style="--bar-w: {{ $chauffeurs_pct }}%"></div>
+            <div class="stat-card__bar" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__bar-fill" style="--bar-w: {{ $chauffeurs_pct }}%" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
             </div>
-            <div class="stat-card__shine"></div>
+            <div class="stat-card__shine" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
         </div>
 
         {{-- Card: Voyages --}}
-        <div class="stat-card stat-card--amber reveal-up" style="--delay: 0.24s">
-            <div class="stat-card__glow"></div>
-            <div class="stat-card__top">
-                <div class="stat-card__label">
+        <div class="stat-card stat-card--amber reveal-up" style="--delay: 0.24s" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+            <div class="stat-card__glow" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
+            <div class="stat-card__top" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__label" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <div class="stat-icon stat-icon--amber">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     </div>
                     <span>Voyages</span>
                 </div>
-                <div class="stat-card__badge-circle stat-icon--amber">
+                <div class="stat-card__badge-circle stat-icon--amber" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </div>
             </div>
             <p class="stat-card__number counter" data-target="{{ $voyages ?? 0 }}">{{ $voyages ?? 0 }}</p>
-            <div class="stat-card__meta">
+            <div class="stat-card__meta" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                 @if(($voyages_today ?? 0) > 0)
                     <span class="meta-dot meta-dot--green"></span>
                     <span class="meta-text">{{ $voyages_today ?? 0 }} aujourd'hui ·</span>
@@ -112,69 +112,69 @@
             @php
                 $voyages_pct = ($voyages ?? 0) > 0 ? min(100, round(($voyages_mois ?? 0) / max(1, $voyages) * 100)) : 0;
             @endphp
-            <div class="stat-card__bar">
-                <div class="stat-card__bar-fill" style="--bar-w: {{ $voyages_pct }}%"></div>
+            <div class="stat-card__bar" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__bar-fill" style="--bar-w: {{ $voyages_pct }}%" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
             </div>
-            <div class="stat-card__shine"></div>
+            <div class="stat-card__shine" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
         </div>
 
         {{-- Card: Alertes --}}
-        <div class="stat-card stat-card--red reveal-up {{ ($alertes ?? 0) > 0 ? 'stat-card--alert' : '' }}" style="--delay: 0.32s">
-            <div class="stat-card__glow"></div>
+        <div class="stat-card stat-card--red reveal-up {{ ($alertes ?? 0) > 0 ? 'stat-card--alert' : '' }}" style="--delay: 0.32s" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+            <div class="stat-card__glow" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
             @if(($alertes ?? 0) > 0)
             <div class="alert-ring">
                 <span class="alert-ring__ping"></span>
                 <span class="alert-ring__dot"></span>
             </div>
             @endif
-            <div class="stat-card__top">
-                <div class="stat-card__label">
+            <div class="stat-card__top" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__label" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <div class="stat-icon stat-icon--red">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                     </div>
                     <span>Alertes</span>
                 </div>
-                <div class="stat-card__badge-circle stat-icon--red">
+                <div class="stat-card__badge-circle stat-icon--red" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                 </div>
             </div>
             <p class="stat-card__number counter {{ ($alertes ?? 0) > 0 ? 'stat-card__number--alert' : '' }}" data-target="{{ $alertes ?? 0 }}">{{ $alertes ?? 0 }}</p>
-            <div class="stat-card__meta">
+            <div class="stat-card__meta" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                 <span class="meta-text">⚠️ Actions nécessaires</span>
             </div>
-            <div class="stat-card__bar">
-                <div class="stat-card__bar-fill" style="--bar-w: {{ ($alertes ?? 0) > 0 ? '100%' : '0%' }}"></div>
+            <div class="stat-card__bar" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__bar-fill" style="--bar-w: {{ ($alertes ?? 0)  x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms> 0 ? '100%' : '0%' }}"></div>
             </div>
-            <div class="stat-card__shine"></div>
+            <div class="stat-card__shine" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
         </div>
 
         {{-- Card: Documents --}}
-        <div class="stat-card stat-card--purple reveal-up" style="--delay: 0.40s">
-            <div class="stat-card__glow"></div>
-            <div class="stat-card__top">
-                <div class="stat-card__label">
+        <div class="stat-card stat-card--purple reveal-up" style="--delay: 0.40s" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+            <div class="stat-card__glow" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
+            <div class="stat-card__top" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__label" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <div class="stat-icon stat-icon--purple">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                     <span>Documents</span>
                 </div>
-                <div class="stat-card__badge-circle stat-icon--purple">
+                <div class="stat-card__badge-circle stat-icon--purple" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 </div>
             </div>
             <p class="stat-card__number counter" data-target="{{ $documents ?? 0 }}">{{ $documents ?? 0 }}</p>
-            <div class="stat-card__meta docs-meta">
+            <div class="stat-card__meta docs-meta" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                 <span class="tag tag--orange">📄 {{ $docs_bientot ?? 0 }} bientôt expirés</span>
                 <span class="tag tag--red">⚠️ {{ $docs_expire ?? 0 }} expirés</span>
             </div>
-            <div class="stat-card__shine"></div>
+            <div class="stat-card__shine" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
         </div>
 
         {{-- Card: Recette Mensuelle --}}
-        <div class="stat-card stat-card--green reveal-up stat-card--wide" style="--delay: 0.48s">
-            <div class="stat-card__glow"></div>
-            <div class="stat-card__top">
-                <div class="stat-card__label">
+        <div class="stat-card stat-card--green reveal-up stat-card--wide" style="--delay: 0.48s" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+            <div class="stat-card__glow" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
+            <div class="stat-card__top" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
+                <div class="stat-card__label" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
                     <div class="stat-icon stat-icon--green">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
@@ -198,7 +198,7 @@
                 <div class="revenue-bar-fill" style="--bar-w: {{ $recettes_pct ?? 0 }}%"></div>
                 <span class="revenue-bar-label">{{ $recettes_pct ?? 0 }}%</span>
             </div>
-            <div class="stat-card__shine"></div>
+            <div class="stat-card__shine" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms></div>
         </div>
 
     </section>
@@ -322,9 +322,17 @@
     font-family: var(--font-body);
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 0.5rem 0 2rem;
+    gap: 1rem;
+    padding: 0;
     z-index: 1;
+    height: calc(100vh - 140px); /* Adjusted to prevent vertical scrolling */
+    overflow: hidden;
+}
+
+/* Ensure body doesn't scroll on dashboard */
+html, body {
+    overflow: hidden !important;
+    height: 100vh !important;
 }
 
 /* ── Particle Background ───────────────── */
@@ -443,11 +451,12 @@
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 1.25rem;
+    gap: 1rem;
+    flex-shrink: 0;
 }
 @media (min-width: 640px)  { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1280px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1440px) { .stats-grid { grid-template-columns: repeat(6, 1fr); } }
 
 /* ── Stat Card ─────────────────────────── */
 .stat-card {
@@ -456,7 +465,7 @@
     background: var(--bg-card);
     border: 1px solid var(--border);
     backdrop-filter: blur(20px);
-    padding: 1.4rem 1.5rem 1.2rem;
+    padding: 1rem 1.2rem 0.8rem;
     overflow: hidden;
     cursor: default;
     transition: transform 0.35s var(--ease-spring),
@@ -549,14 +558,14 @@
 /* Number */
 .stat-card__number {
     font-family: var(--font-display);
-    font-size: 2.6rem;
+    font-size: 1.8rem;
     font-weight: 800;
     color: var(--text-primary);
     line-height: 1;
     letter-spacing: -0.04em;
     margin-bottom: 0.5rem;
 }
-.stat-card__number--green { color: #4ade80; font-size: 2.2rem; }
+.stat-card__number--green { color: #4ade80; font-size: 1.5rem; }
 .stat-card__number--green small { font-size: 1rem; font-weight: 500; opacity: 0.7; }
 .stat-card__number--alert { color: #f87171; animation: alertPulse 1.8s ease-in-out infinite; }
 @keyframes alertPulse {
@@ -691,7 +700,9 @@
 .panels-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1rem;
+    flex: 1 1 0;
+    min-height: 0;
 }
 @media (min-width: 1024px) { .panels-grid { grid-template-columns: 1fr 1fr; } }
 
@@ -700,10 +711,12 @@
     border: 1px solid var(--border);
     backdrop-filter: blur(20px);
     border-radius: 20px;
-    padding: 1.5rem;
+    padding: 1.2rem 1.5rem;
     position: relative;
     overflow: hidden;
     transition: border-color 0.3s;
+    display: flex;
+    flex-direction: column;
 }
 .panel:hover { border-color: var(--border-h); }
 .panel::before {
@@ -741,7 +754,11 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
+    overflow: hidden;
+    padding-right: 0.5rem;
 }
+.actions-grid::-webkit-scrollbar, .status-list::-webkit-scrollbar { width: 4px; }
+.actions-grid::-webkit-scrollbar-thumb, .status-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 .action-btn {
     display: flex;
     align-items: center;
@@ -787,7 +804,7 @@
 .action-btn__icon--purple  { background: rgba(168,85,247,0.18);  color: #c084fc; }
 
 /* Status list */
-.status-list { display: flex; flex-direction: column; gap: 0; }
+.status-list { display: flex; flex-direction: column; gap: 0; overflow: hidden; padding-right: 0.5rem; flex: 1 1 0; }
 .status-row {
     display: flex;
     justify-content: space-between;
