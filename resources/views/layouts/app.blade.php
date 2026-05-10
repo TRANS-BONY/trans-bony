@@ -140,7 +140,7 @@
     <div class="flex">
         <!-- SIDEBAR - Toujours visible sur desktop, overlay sur mobile -->
         <div
-            class="fixed inset-y-0 left-0 z-30 w-72 bg-gradient-to-br from-blue-900 to-indigo-900 dark:from-gray-800 dark:to-gray-900 shadow-2xl transform transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 overflow-y-auto"
+            class="fixed inset-y-0 left-0 z-30 w-72 bg-gradient-to-br from-blue-900 to-indigo-900 dark:from-gray-800 dark:to-gray-900 shadow-2xl transform transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 overflow-y-auto lg:h-screen lg:sticky lg:top-0"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8">
@@ -287,6 +287,20 @@
                         </a>
                     </div>
                     @endrole
+                </div>
+
+                
+                <!-- Déconnexion -->
+                <div class="pt-4 mt-4 border-t border-white/20 dark:border-gray-700">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group nav-fluid-hover transition" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-red-500/10 scale-[1.02] floating-fast' : ''">
+                            <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 group-hover:bg-red-500/30 transition-all">
+                                <i class="fas fa-sign-out-alt text-sm"></i>
+                            </div>
+                            <span class="flex-1 text-sm font-medium text-left">Déconnexion</span>
+                        </button>
+                    </form>
                 </div>
 
                 <!-- Info utilisateur dans sidebar (visible sur mobile) -->

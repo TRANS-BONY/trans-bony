@@ -1,7 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6">
+<style>
+    /* Désactiver le scroll global */
+    html, body { overflow: hidden !important; height: 100vh !important; }
+    
+    /* Scrollbar minimaliste */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+    
+    /* Wrapper Layout */
+    .module-index-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: calc(100vh - 100px);
+        overflow: hidden;
+        padding-bottom: 0.5rem;
+    }
+    
+    /* By default, all direct children shouldn't shrink (Headers, Stats, Pagination) */
+    .module-index-wrapper > * {
+        flex-shrink: 0;
+    }
+    
+    /* The main list container gets flex-1 and scroll */
+    .module-index-wrapper > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Match grids except the stats grid */
+    .module-index-wrapper > .animate-fade-in-up > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Nested grid */
+    .module-index-wrapper > .list-scroll-container {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding-right: 0.25rem;
+    }
+    
+    /* Fix for nested list containers in some views */
+    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        display: flex;
+        flex-direction: column;
+    }
+    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .grid,
+    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .hidden.lg\:block {
+        flex: 1 1 0% !important;
+        overflow-y: auto !important;
+        min-height: 0 !important;
+    }
+</style>
+<div class="module-index-wrapper custom-scrollbar">
     <!-- Header avec dégradé plein -->
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6 animate-slide-down shadow-xl">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
@@ -125,9 +173,12 @@
 
     <!-- Liste des véhicules (Tableau Desktop / Cartes Mobile) -->
     <div class="animate-fade-in-up" style="animation-delay: 0.3s">
-        
+        <style>
+            .animate-fade-in-up[style*="0.3s"] { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+            .animate-fade-in-up[style*="0.3s"] > div { flex: 1; overflow-y: auto; }
+        </style>
         {{-- Vue Mobile : Grille de Cartes (Cachée sur LG) --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden">
+        <div class="list-scroll-container custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden">
             @forelse($vehicules as $v)
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300">
                     <div class="p-5">

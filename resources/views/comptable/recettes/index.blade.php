@@ -1,7 +1,38 @@
 @extends('layouts.comptable')
 
 @section('content')
-<div class="space-y-6">
+
+<style>
+    /* Désactiver le scroll global */
+    html, body { overflow: hidden !important; height: 100vh !important; }
+    
+    /* Scrollbar minimaliste */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+    
+    /* Wrapper Layout */
+    .module-index-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: calc(100vh - 100px);
+        overflow: hidden;
+        padding-bottom: 0.5rem;
+    }
+    
+    .module-index-wrapper > * {
+        flex-shrink: 0;
+    }
+    
+    .module-index-wrapper > .list-scroll-container {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding-right: 0.25rem;
+    }
+</style>
+<div class="module-index-wrapper custom-scrollbar">
 
     {{-- HEADER --}}
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 p-6 animate-slide-down shadow-xl">
@@ -69,8 +100,8 @@
     </div>
 
     {{-- TABLE --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 animate-fade-in-up" style="animation-delay:0.2s">
-        <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-white dark:from-gray-750 dark:to-gray-800 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 animate-fade-in-up flex flex-col flex-1 min-h-0" style="animation-delay:0.2s">
+        <div class="shrink-0 px-6 py-4 bg-gradient-to-r from-gray-50 to-white dark:from-gray-750 dark:to-gray-800 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between rounded-t-2xl">
             <div class="flex items-center gap-3">
                 <div class="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl">
                     <i class="fas fa-list text-emerald-600 dark:text-emerald-400"></i>
@@ -85,11 +116,11 @@
                 <i class="fas fa-plus"></i> Ajouter
             </a>
         </div>
-
-        <div class="overflow-x-auto">
+        
+        <div class="overflow-auto flex-1 min-h-0 custom-scrollbar">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750">
+                    <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750 sticky top-0 z-10 shadow-sm">
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Mois / Date</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Type</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Véhicule</th>
@@ -174,7 +205,7 @@
         </div>
 
         @if($recettes->hasPages())
-        <div class="border-t border-gray-100 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750">
+        <div class="shrink-0 border-t border-gray-100 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750 rounded-b-2xl">
             {{ $recettes->links() }}
         </div>
         @endif

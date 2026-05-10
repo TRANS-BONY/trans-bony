@@ -24,8 +24,8 @@ class MaintenanceController extends Controller
             });
         }
 
-        $maintenances = $query->paginate(15)->appends($request->query());
-return view('admin.maintenance.index', compact('maintenances'));
+        $maintenances = $query->paginate(5)->appends($request->query());
+        return view('admin.maintenance.index', compact('maintenances'));
     }
 
     public function store(MaintenanceRequest $request)

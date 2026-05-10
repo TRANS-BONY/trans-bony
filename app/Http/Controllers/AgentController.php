@@ -18,11 +18,18 @@ class AgentController extends Controller
         return view('agent.index', compact('vehicules', 'chauffeurs', 'voyages'));
     }
 
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         $vehicules = Vehicule::all();
         $chauffeurs = Chauffeur::all();
-        $voyages = Voyage::with(['vehicule', 'chauffeur'])->orderByDesc('date_depart')->paginate(10);
+        $search = request('search');
+        $voyages = Voyage::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('destination', 'like', "%{$search}%")
+                   ->orWhere('statut', 'like', "%{$search}%")
+                ;
+            });
+        })->with(['vehicule', 'chauffeur'])->orderByDesc('date_depart')->paginate(10)->appends(request()->query());
 
         return view('agent.voyage.index', compact('vehicules','chauffeurs','voyages'));
     }

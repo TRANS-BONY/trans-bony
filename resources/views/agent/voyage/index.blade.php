@@ -4,7 +4,38 @@
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
-<div class="space-y-6">
+
+<style>
+    /* Désactiver le scroll global */
+    html, body { overflow: hidden !important; height: 100vh !important; }
+    
+    /* Scrollbar minimaliste */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+    
+    /* Wrapper Layout */
+    .module-index-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: calc(100vh - 100px);
+        overflow: hidden;
+        padding-bottom: 0.5rem;
+    }
+    
+    .module-index-wrapper > * {
+        flex-shrink: 0;
+    }
+    
+    .module-index-wrapper > .list-scroll-container {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding-right: 0.25rem;
+    }
+</style>
+<div class="module-index-wrapper custom-scrollbar">
     <!-- Header avec dégradé plein -->
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 p-6 animate-slide-down shadow-xl">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
@@ -38,7 +69,7 @@
     </div>
 
     <!-- Contenu principal -->
-    <div class="flex flex-col lg:flex-row gap-6">
+    <div class="list-scroll-container custom-scrollbar flex flex-col lg:flex-row gap-6 w-full">
         <!-- 📅 CALENDRIER -->
         <div class="w-full animate-fade-in-up" style="animation-delay: 0.1s">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -346,7 +377,7 @@ events: "{{ route('agent.voyages.events') }}",
             }
 
             // Ajouter un tooltip
-            info.el.setAttribute('title', `${info.event.title}\nDépart: ${info.event.start.toLocaleString()}`);
+            info.el.setAttribute('title', `${info.event.title}Départ: ${info.event.start.toLocaleString()}`);
         },
         eventDrop: function(info) {
             fetch('/agent/voyages/' + info.event.id + '/move', {
@@ -376,7 +407,7 @@ events: "{{ route('agent.voyages.events') }}",
             });
         },
         eventClick: function(info){
-            if(confirm("⚠️ Supprimer ce voyage ?\n\n" + info.event.title + "\n\nCette action est irréversible.")){
+            if(confirm("⚠️ Supprimer ce voyage ?" + info.event.title + "Cette action est irréversible.")){
                 fetch('/agent/voyages/' + info.event.id, {
                     method: 'DELETE',
                     headers: {

@@ -163,6 +163,15 @@
         <!-- Liste des documents (Tableau Desktop / Cartes Mobile) -->
         <div class="animate-fade-in-up lg:col-span-1" style="animation-delay: 0.2s">
             
+            <!-- Search Bar -->
+            <div class="mb-4">
+                <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" name="search" placeholder="Rechercher (type, référence...)" value="{{ request('search') }}"
+                           class="w-full pl-12 pr-4 py-3 border-none bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-purple-500 outline-none">
+                </form>
+            </div>
+            
             {{-- Vue Mobile : Grille de Cartes --}}
             <div class="grid grid-cols-1 gap-4 lg:hidden">
                 @forelse($documents as $doc)

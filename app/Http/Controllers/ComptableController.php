@@ -95,9 +95,15 @@ class ComptableController extends Controller
     // ─────────────────────────────────────────
     //  RECETTES — CRUD
     // ─────────────────────────────────────────
-    public function recettesIndex()
+    public function recettesIndex(\Illuminate\Http\Request $request)
     {
-        $recettes = RecetteMensuelle::orderByDesc('date')->paginate(15);
+        $search = request('search');
+        $recettes = RecetteMensuelle::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('montant', 'like', "%{$search}%")
+                ;
+            });
+        })->orderByDesc('date')->paginate(15)->appends(request()->query());
 
         // Agrégats globaux (sur toute la table, pas seulement la page courante)
         $recettes_total      = RecetteMensuelle::sum('montant');
@@ -178,9 +184,15 @@ class ComptableController extends Controller
     // ─────────────────────────────────────────
     //  RAPPORTS — CRUD
     // ─────────────────────────────────────────
-    public function rapportsIndex()
+    public function rapportsIndex(\Illuminate\Http\Request $request)
     {
-        $rapports       = Rapport::orderByDesc('created_at')->paginate(10);
+        $search = request('search');
+        $rapports = Rapport::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('titre', 'like', "%{$search}%")
+                ;
+            });
+        })->orderByDesc('created_at')->paginate(10)->appends(request()->query());
         $nb_rapports    = Rapport::count();
         $vehicules      = Vehicule::count();
         $voyages        = Voyage::count();

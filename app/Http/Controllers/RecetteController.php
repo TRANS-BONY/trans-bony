@@ -10,9 +10,15 @@ use App\Models\Voyage;
 
 class RecetteController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $recettes = RecetteMensuelle::with('vehicule')->orderByDesc('date')->paginate(15);
+        $search = request('search');
+        $recettes = RecetteMensuelle::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('montant', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->orderByDesc('date')->paginate(15)->appends(request()->query());
 
         // Agrégats globaux (sur toute la table, pas seulement la page courante)
         $recettes_total      = RecetteMensuelle::sum('montant');

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class VoyageController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         $vehicules = Vehicule::all();
         $chauffeurs = Chauffeur::all();

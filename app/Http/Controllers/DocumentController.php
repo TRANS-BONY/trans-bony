@@ -13,10 +13,17 @@ use App\Notifications\DocumentExpireNotification;
 
 class DocumentController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         $this->authorize('viewAny', Document::class);
-        $documents = Document::with('vehicule')->paginate(10);
+        $search = request('search');
+        $documents = Document::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('type', 'like', "%{$search}%")
+                   ->orWhere('reference', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->paginate(10)->appends(request()->query());
         $vehicules = Vehicule::all();
 
         // 🔔 Vérification expiration (Note: Devrait idéalement être dans un Job planifié)

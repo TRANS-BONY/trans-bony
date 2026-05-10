@@ -206,7 +206,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit"
-                                    onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette maintenance ?\n\nVéhicule : {{ $maintenance->vehicule?->immatriculation ?? 'N/A' }}\nType : {{ $maintenance->type }}\nDate : {{ \Carbon\Carbon::parse($maintenance->date_prevue)->format('d/m/Y') }}\nCoût : {{ number_format($maintenance->cout, 2) }} Franc CFA\n\nCette action est irréversible.')"
+                                    onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette maintenance ?Véhicule : {{ $maintenance->vehicule?->immatriculation ?? 'N/A' }}Type : {{ $maintenance->type }}Date : {{ \Carbon\Carbon::parse($maintenance->date_prevue)->format('d/m/Y') }}Coût : {{ number_format($maintenance->cout, 2) }} Franc CFACette action est irréversible.')"
                                     class="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-lg shadow-lg transition-all duration-300 hover:scale-105">
                                 <div class="relative flex items-center justify-center gap-2">
                                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

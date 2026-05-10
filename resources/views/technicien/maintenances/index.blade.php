@@ -1,7 +1,37 @@
 @extends('layouts.technicien')
 
 @section('content')
-<div class="space-y-6">
+<style>
+    /* Désactiver le scroll global */
+    html, body { overflow: hidden !important; height: 100vh !important; }
+    
+    /* Scrollbar minimaliste */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+    
+    /* Wrapper Layout */
+    .module-index-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: calc(100vh - 100px);
+        overflow: hidden;
+        padding-bottom: 0.5rem;
+    }
+    
+    .module-index-wrapper > * {
+        flex-shrink: 0;
+    }
+    
+    .module-index-wrapper > .list-scroll-container {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding-right: 0.25rem;
+    }
+</style>
+<div class="module-index-wrapper custom-scrollbar">
 
     {{-- HEADER --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
@@ -15,12 +45,11 @@
     </div>
 
     {{-- TABLEAU DES MAINTENANCES --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div class="overflow-x-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container">
+        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
                     <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
-                        <th class="p-4 font-medium w-16 text-center">ID</th>
                         <th class="p-4 font-medium">Véhicule</th>
                         <th class="p-4 font-medium">Type</th>
                         <th class="p-4 font-medium">Date Prévue</th>
@@ -32,7 +61,6 @@
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
                     @forelse($maintenances as $m)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                        <td class="p-4 text-center text-gray-500 font-mono">#{{ $m->id }}</td>
                         <td class="p-4">
                             <a href="{{ route('technicien.vehicules.show', $m->vehicule_id) }}" class="font-semibold text-gray-900 dark:text-white hover:text-blue-600 transition">
                                 {{ $m->vehicule->immatriculation ?? 'N/A' }}
@@ -78,7 +106,7 @@
             </table>
         </div>
         @if($maintenances->hasPages())
-        <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+        <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 shrink-0">
             {{ $maintenances->links() }}
         </div>
         @endif

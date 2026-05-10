@@ -21,7 +21,14 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with('roles')->orderBy('created_at', 'desc')->paginate(10);
+        $search = request('search');
+        $users = User::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('name', 'like', "%{$search}%")
+                   ->orWhere('email', 'like', "%{$search}%")
+                ;
+            });
+        })->with('roles')->orderBy('created_at', 'desc')->paginate(10)->appends(request()->query());
 
         return view('admin.users.index', compact('users'));
     }

@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 
 class ChauffeurController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $chauffeurs = Chauffeur::latest()->paginate(10);
+        $search = request('search');
+        $chauffeurs = Chauffeur::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('nom', 'like', "%{$search}%")
+                   ->orWhere('prenom', 'like', "%{$search}%")
+                   ->orWhere('permis', 'like', "%{$search}%")
+                ;
+            });
+        })->latest()->paginate(10)->appends(request()->query());
         return view('admin.chauffeur.index', compact('chauffeurs'));
     }
 

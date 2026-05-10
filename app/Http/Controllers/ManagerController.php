@@ -36,9 +36,17 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  VEHICULES
     // ─────────────────────────────────────────
-    public function vehiculesIndex()
+    public function vehiculesIndex(\Illuminate\Http\Request $request)
     {
-        $vehicules = Vehicule::orderBy('immatriculation')->paginate(12);
+        $search = request('search');
+        $vehicules = Vehicule::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('immatriculation', 'like', "%{$search}%")
+                   ->orWhere('marque', 'like', "%{$search}%")
+                   ->orWhere('modele', 'like', "%{$search}%")
+                ;
+            });
+        })->orderBy('immatriculation')->paginate(12)->appends(request()->query());
         return view('manager.vehicules.index', compact('vehicules'));
     }
 
@@ -51,9 +59,17 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  CHAUFFEURS
     // ─────────────────────────────────────────
-    public function chauffeursIndex()
+    public function chauffeursIndex(\Illuminate\Http\Request $request)
     {
-        $chauffeurs = Chauffeur::orderBy('nom')->paginate(12);
+        $search = request('search');
+        $chauffeurs = Chauffeur::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('nom', 'like', "%{$search}%")
+                   ->orWhere('prenom', 'like', "%{$search}%")
+                   ->orWhere('permis', 'like', "%{$search}%")
+                ;
+            });
+        })->orderBy('nom')->paginate(12)->appends(request()->query());
         return view('manager.chauffeurs.index', compact('chauffeurs'));
     }
 
@@ -66,9 +82,16 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  VOYAGES
     // ─────────────────────────────────────────
-    public function voyagesIndex()
+    public function voyagesIndex(\Illuminate\Http\Request $request)
     {
-        $voyages = Voyage::with(['vehicule', 'chauffeur'])->orderByDesc('date_depart')->paginate(15);
+        $search = request('search');
+        $voyages = Voyage::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('destination', 'like', "%{$search}%")
+                   ->orWhere('statut', 'like', "%{$search}%")
+                ;
+            });
+        })->with(['vehicule', 'chauffeur'])->orderByDesc('date_depart')->paginate(15)->appends(request()->query());
         return view('manager.voyages.index', compact('voyages'));
     }
 
@@ -81,9 +104,16 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  MAINTENANCES
     // ─────────────────────────────────────────
-    public function maintenancesIndex()
+    public function maintenancesIndex(\Illuminate\Http\Request $request)
     {
-        $maintenances = Maintenance::with('vehicule')->orderByDesc('date_prevue')->paginate(15);
+        $search = request('search');
+        $maintenances = Maintenance::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('type', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->orderByDesc('date_prevue')->paginate(15)->appends(request()->query());
         return view('manager.maintenances.index', compact('maintenances'));
     }
 
@@ -96,9 +126,16 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  DOCUMENTS
     // ─────────────────────────────────────────
-    public function documentsIndex()
+    public function documentsIndex(\Illuminate\Http\Request $request)
     {
-        $documents = Document::with('vehicule')->orderByDesc('date_expiration')->paginate(15);
+        $search = request('search');
+        $documents = Document::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('type', 'like', "%{$search}%")
+                   ->orWhere('reference', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->orderByDesc('date_expiration')->paginate(15)->appends(request()->query());
         return view('manager.documents.index', compact('documents'));
     }
 
@@ -111,9 +148,15 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  FINANCES / RECETTES
     // ─────────────────────────────────────────
-    public function recettesIndex()
+    public function recettesIndex(\Illuminate\Http\Request $request)
     {
-        $recettes = RecetteMensuelle::with('vehicule')->orderByDesc('date')->paginate(15);
+        $search = request('search');
+        $recettes = RecetteMensuelle::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('montant', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->orderByDesc('date')->paginate(15)->appends(request()->query());
         return view('manager.recettes.index', compact('recettes'));
     }
 
@@ -126,9 +169,15 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  RAPPORTS
     // ─────────────────────────────────────────
-    public function rapportsIndex()
+    public function rapportsIndex(\Illuminate\Http\Request $request)
     {
-        $rapports = Rapport::with('user')->orderByDesc('created_at')->paginate(15);
+        $search = request('search');
+        $rapports = Rapport::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('titre', 'like', "%{$search}%")
+                ;
+            });
+        })->with('user')->orderByDesc('created_at')->paginate(15)->appends(request()->query());
         return view('manager.rapports.index', compact('rapports'));
     }
 
@@ -141,9 +190,16 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  AUDITS
     // ─────────────────────────────────────────
-    public function auditsIndex()
+    public function auditsIndex(\Illuminate\Http\Request $request)
     {
-        $audits = \App\Models\Audit::with('user')->latest()->paginate(20);
+        $search = request('search');
+        $audits = \App\Models\Audit::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('action', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%")
+                ;
+            });
+        })->with('user')->latest()->paginate(20)->appends(request()->query());
         return view('manager.audits.index', compact('audits'));
     }
 
@@ -156,9 +212,16 @@ class ManagerController extends Controller
     // ─────────────────────────────────────────
     //  UTILISATEURS
     // ─────────────────────────────────────────
-    public function usersIndex()
+    public function usersIndex(\Illuminate\Http\Request $request)
     {
-        $users = \App\Models\User::orderBy('name')->paginate(15);
+        $search = request('search');
+        $users = \App\Models\User::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('name', 'like', "%{$search}%")
+                   ->orWhere('email', 'like', "%{$search}%")
+                ;
+            });
+        })->orderBy('name')->paginate(15)->appends(request()->query());
         return view('manager.users.index', compact('users'));
     }
 

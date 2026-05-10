@@ -392,7 +392,7 @@ events: "{{ route('admin.voyages.events') }}",
             }
 
             // Ajouter un tooltip
-            info.el.setAttribute('title', `${info.event.title}\nDépart: ${info.event.start.toLocaleString()}`);
+            info.el.setAttribute('title', `${info.event.title}Départ: ${info.event.start.toLocaleString()}`);
         },
         eventDrop: function(info) {
             fetch('/admin/voyages/' + info.event.id + '/move', {
@@ -422,7 +422,7 @@ events: "{{ route('admin.voyages.events') }}",
             });
         },
         eventClick: function(info){
-            if(confirm("⚠️ Supprimer ce voyage ?\n\n" + info.event.title + "\n\nCette action est irréversible.")){
+            if(confirm("⚠️ Supprimer ce voyage ?" + info.event.title + "Cette action est irréversible.")){
                 fetch('/admin/voyages/' + info.event.id, {
                     method: 'DELETE',
                     headers: {

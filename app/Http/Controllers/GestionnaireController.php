@@ -34,9 +34,17 @@ class GestionnaireController extends Controller
     // ─────────────────────────────────────────
     //  CHAUFFEURS (CRUD)
     // ─────────────────────────────────────────
-    public function chauffeursIndex()
+    public function chauffeursIndex(\Illuminate\Http\Request $request)
     {
-        $chauffeurs = Chauffeur::latest()->paginate(10);
+        $search = request('search');
+        $chauffeurs = Chauffeur::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('nom', 'like', "%{$search}%")
+                   ->orWhere('prenom', 'like', "%{$search}%")
+                   ->orWhere('permis', 'like', "%{$search}%")
+                ;
+            });
+        })->latest()->paginate(10)->appends(request()->query());
         return view('gestionnaire.chauffeurs.index', compact('chauffeurs'));
     }
 
@@ -114,9 +122,16 @@ class GestionnaireController extends Controller
     // ─────────────────────────────────────────
     //  DOCUMENTS (CRUD)
     // ─────────────────────────────────────────
-    public function documentsIndex()
+    public function documentsIndex(\Illuminate\Http\Request $request)
     {
-        $documents = Document::with('vehicule')->latest()->paginate(10);
+        $search = request('search');
+        $documents = Document::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('type', 'like', "%{$search}%")
+                   ->orWhere('reference', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->latest()->paginate(10)->appends(request()->query());
         return view('gestionnaire.documents.index', compact('documents'));
     }
 
@@ -192,9 +207,17 @@ class GestionnaireController extends Controller
     // ─────────────────────────────────────────
     //  VEHICULES (CRUD)
     // ─────────────────────────────────────────
-    public function vehiculesIndex()
+    public function vehiculesIndex(\Illuminate\Http\Request $request)
     {
-        $vehicules = Vehicule::latest()->paginate(10);
+        $search = request('search');
+        $vehicules = Vehicule::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('immatriculation', 'like', "%{$search}%")
+                   ->orWhere('marque', 'like', "%{$search}%")
+                   ->orWhere('modele', 'like', "%{$search}%")
+                ;
+            });
+        })->latest()->paginate(10)->appends(request()->query());
         return view('gestionnaire.vehicules.index', compact('vehicules'));
     }
 
@@ -257,9 +280,16 @@ class GestionnaireController extends Controller
     // ─────────────────────────────────────────
     //  MAINTENANCES (READ-ONLY)
     // ─────────────────────────────────────────
-    public function maintenancesIndex()
+    public function maintenancesIndex(\Illuminate\Http\Request $request)
     {
-        $maintenances = Maintenance::with('vehicule')->latest()->paginate(10);
+        $search = request('search');
+        $maintenances = Maintenance::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('type', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->latest()->paginate(10)->appends(request()->query());
         return view('gestionnaire.maintenances.index', compact('maintenances'));
     }
 

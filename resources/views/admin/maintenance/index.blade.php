@@ -50,7 +50,13 @@
                            value="{{ request('search') }}"
                            class="w-full p-3 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none">
                 </form>
-@if(request('search'))\n                <a href="{{ route('admin.maintenances.index') }}" class="pr-4">\n                    <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">\n                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>\n                    </svg>\n                </a>\n                @endif
+                @if(request('search'))
+                <a href="{{ route('admin.maintenances.index') }}" class="pr-4">
+                    <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </a>
+                @endif
             </div>
         </div>
     </div>
@@ -213,7 +219,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                            onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette maintenance ?\n\nVéhicule : {{ $m->vehicule?->immatriculation ?? 'N/A' }}\nType : {{ $m->type }}\nDate : {{ \Carbon\Carbon::parse($m->date_prevue)->format('d/m/Y') }}\n\nCette action est irréversible.')"
+                                            onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette maintenance ?Véhicule : {{ $m->vehicule?->immatriculation ?? 'N/A' }}Type : {{ $m->type }}Date : {{ \Carbon\Carbon::parse($m->date_prevue)->format('d/m/Y') }}Cette action est irréversible.')"
                                             class="p-2 rounded-lg bg-red-50 hover:bg-red-100 transition-all duration-300 hover:scale-110"
                                             title="Supprimer la maintenance">
                                         <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

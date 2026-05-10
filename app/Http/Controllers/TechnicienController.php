@@ -40,9 +40,17 @@ class TechnicienController extends Controller
     // ─────────────────────────────────────────
     //  VEHICULES — READ-ONLY POUR LE TECHNICIEN
     // ─────────────────────────────────────────
-    public function vehiculesIndex()
+    public function vehiculesIndex(\Illuminate\Http\Request $request)
     {
-        $vehicules = Vehicule::orderBy('immatriculation')->paginate(12);
+        $search = request('search');
+        $vehicules = Vehicule::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('immatriculation', 'like', "%{$search}%")
+                   ->orWhere('marque', 'like', "%{$search}%")
+                   ->orWhere('modele', 'like', "%{$search}%")
+                ;
+            });
+        })->orderBy('immatriculation')->paginate(12)->appends(request()->query());
         return view('technicien.vehicules.index', compact('vehicules'));
     }
 
@@ -57,9 +65,16 @@ class TechnicienController extends Controller
     // ─────────────────────────────────────────
     //  MAINTENANCES — CRUD COMPLET
     // ─────────────────────────────────────────
-    public function maintenancesIndex()
+    public function maintenancesIndex(\Illuminate\Http\Request $request)
     {
-        $maintenances = Maintenance::with('vehicule')->orderByDesc('date_prevue')->paginate(15);
+        $search = request('search');
+        $maintenances = Maintenance::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('type', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%")
+                ;
+            });
+        })->with('vehicule')->orderByDesc('date_prevue')->paginate(15)->appends(request()->query());
         return view('technicien.maintenances.index', compact('maintenances'));
     }
 
