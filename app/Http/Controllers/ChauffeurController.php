@@ -17,18 +17,40 @@ class ChauffeurController extends Controller
                    ->orWhere('permis', 'like', "%{$search}%")
                 ;
             });
-        })->latest()->paginate(10)->appends(request()->query());
-        return view('admin.chauffeur.index', compact('chauffeurs'));
+        })->latest()->paginate(12)->appends(request()->query());
+
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        // Dynamic view resolution
+        $view = "{$role}.chauffeurs.index";
+        if ($role === 'admin') $view = 'admin.chauffeur.index';
+        if (!view()->exists($view)) $view = 'admin.chauffeur.index';
+
+        return view($view, compact('chauffeurs', 'rolePrefix'));
     }
 
     public function show(Chauffeur $chauffeur)
     {
-        return view('admin.chauffeur.show', compact('chauffeur'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.chauffeurs.show";
+        if ($role === 'admin') $view = 'admin.chauffeur.show';
+        if (!view()->exists($view)) $view = 'admin.chauffeur.show';
+        
+        return view($view, compact('chauffeur', 'rolePrefix'));
     }
 
     public function create()
     {
-        return view('admin.chauffeur.create');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.chauffeurs.create";
+        if ($role === 'admin') $view = 'admin.chauffeur.create';
+        if (!view()->exists($view)) $view = 'admin.chauffeur.create';
+        
+        return view($view);
     }
 
     public function store(Request $request)
@@ -53,14 +75,20 @@ class ChauffeurController extends Controller
 
         Chauffeur::create($data);
 
-        return redirect()->route('admin.chauffeurs.index')
-            ->with('success','Chauffeur ajouté avec succès');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.chauffeurs.index')->with('success','Chauffeur ajouté avec succès');
     }
 
     public function edit($id)
     {
         $chauffeur = Chauffeur::findOrFail($id);
-        return view('admin.chauffeur.edit', compact('chauffeur'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.chauffeurs.edit";
+        if ($role === 'admin') $view = 'admin.chauffeur.edit';
+        if (!view()->exists($view)) $view = 'admin.chauffeur.edit';
+        
+        return view($view, compact('chauffeur'));
     }
 
     public function update(Request $request, $id)
@@ -87,16 +115,15 @@ class ChauffeurController extends Controller
 
         $chauffeur->update($data);
 
-        return redirect()->route('admin.chauffeurs.index')
-            ->with('success','Modifié avec succès');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.chauffeurs.index')->with('success','Modifié avec succès');
     }
 
     public function destroy($id)
     {
         Chauffeur::destroy($id);
-
-        return redirect()->route('admin.chauffeurs.index')
-            ->with('success','Supprimé avec succès');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.chauffeurs.index')->with('success','Supprimé avec succès');
     }
 }
 

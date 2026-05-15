@@ -32,6 +32,20 @@ class Rapport extends Model
         'nb_chauffeurs'  => 'integer',
     ];
 
+    /** Calcule et met à jour les statistiques du rapport selon la période */
+    public function calculateStatistics(): self
+    {
+        $debut = \Carbon\Carbon::parse($this->periode_debut)->startOfDay();
+        $fin   = \Carbon\Carbon::parse($this->periode_fin)->endOfDay();
+
+        $this->recettes_total = RecetteMensuelle::whereBetween('date', [$debut, $fin])->sum('montant');
+        $this->nb_voyages     = Voyage::whereBetween('date_depart', [$debut, $fin])->count();
+        $this->nb_vehicules   = Vehicule::count();
+        $this->nb_chauffeurs  = Chauffeur::count();
+
+        return $this;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -71,10 +71,10 @@
                     </label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">CFA</span>
-                        <input type="number" name="montant" step="0.01" min="0" required
+                        <input type="number" name="montant" min="0" required
                                value="{{ old('montant') }}"
                                class="w-full pl-14 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition"
-                               placeholder="0.00">
+                               placeholder="0">
                     </div>
                     @error('montant') <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>

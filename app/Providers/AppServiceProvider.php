@@ -34,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Maintenance::observe(\App\Observers\GlobalObserver::class);
         \App\Models\Document::observe(\App\Observers\GlobalObserver::class);
         \App\Models\User::observe(\App\Observers\GlobalObserver::class);
+        \App\Models\Rapport::observe(\App\Observers\GlobalObserver::class);
+        \App\Models\RecetteMensuelle::observe(\App\Observers\GlobalObserver::class);
     }
 }

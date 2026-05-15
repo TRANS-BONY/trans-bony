@@ -1,235 +1,160 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    /* Désactiver le scroll global */
-    html, body { overflow: hidden !important; height: 100vh !important; }
-    
-    /* Scrollbar minimaliste */
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-    
-    /* Wrapper Layout */
-    .module-index-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        height: calc(100vh - 100px);
-        overflow: hidden;
-        padding-bottom: 0.5rem;
-    }
-    
-    /* By default, all direct children shouldn't shrink (Headers, Stats, Pagination) */
-    .module-index-wrapper > * {
-        flex-shrink: 0;
-    }
-    
-    /* The main list container gets flex-1 and scroll */
-    .module-index-wrapper > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Match grids except the stats grid */
-    .module-index-wrapper > .animate-fade-in-up > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Nested grid */
-    .module-index-wrapper > .list-scroll-container {
-        flex: 1 1 0% !important;
-        min-height: 0 !important;
-        overflow-y: auto !important;
-        padding-right: 0.25rem;
-    }
-    
-    /* Fix for nested list containers in some views */
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) {
-        flex: 1 1 0% !important;
-        min-height: 0 !important;
-        display: flex;
-        flex-direction: column;
-    }
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .grid,
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .hidden.lg\:block {
-        flex: 1 1 0% !important;
-        overflow-y: auto !important;
-        min-height: 0 !important;
-    }
-</style>
-<div class="module-index-wrapper custom-scrollbar">
-
-    {{-- HEADER --}}
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 p-6 animate-slide-down shadow-xl">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="relative flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-4">
-                <div class="p-3 bg-white/20 rounded-2xl shadow-lg backdrop-blur-sm">
-                    <i class="fas fa-chart-bar text-white text-2xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-white">Rapports & Statistiques</h1>
-                    <p class="text-indigo-100 text-sm mt-1">{{ now()->isoFormat('MMMM YYYY') }} — {{ $nb_rapports }} rapport(s) enregistré(s)</p>
-                </div>
+<div class="h-full flex flex-col space-y-4">
+    <!-- En-tête Dynamique -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-5 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 shrink-0">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-indigo-500/10 flex items-center justify-center rounded-2xl border border-indigo-500/20 shadow-inner">
+                <i class="fas fa-chart-pie text-indigo-500 text-xl"></i>
             </div>
-            <div class="flex gap-2">
-                <a href="{{ route('admin.rapports.create') }}"
-                   class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-indigo-700 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-                    <i class="fas fa-plus"></i> Nouveau rapport
-                </a>
-                <a href="{{ route('admin.rapports.pdf') }}"
-                   class="inline-flex items-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
-                    <i class="fas fa-file-pdf"></i> PDF
-                </a>
-                <a href="{{ route('admin.rapports.excel') }}"
-                   class="inline-flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
-                    <i class="fas fa-file-excel"></i> Excel
-                </a>
+            <div>
+                <h1 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">Rapports & Statistiques</h1>
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">Analyse de performance • {{ $nb_rapports }} rapports</p>
             </div>
         </div>
-    </div>
-
-    {{-- STAT CARDS --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 animate-fade-in-up" style="animation-delay:0.1s">
-        <div class="group rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-blue-100 uppercase tracking-wider font-semibold">Véhicules</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $vehicules }}</p>
-                </div>
-                <div class="p-3 rounded-xl bg-white/20 group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-truck text-white text-xl"></i>
-                </div>
-            </div>
-        </div>
-        <div class="group rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-emerald-100 uppercase tracking-wider font-semibold">Voyages</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $voyages }}</p>
-                </div>
-                <div class="p-3 rounded-xl bg-white/20 group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-route text-white text-xl"></i>
-                </div>
-            </div>
-        </div>
-        <div class="group rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 p-6 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-violet-100 uppercase tracking-wider font-semibold">Chauffeurs</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $chauffeurs }}</p>
-                </div>
-                <div class="p-3 rounded-xl bg-white/20 group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-user-tie text-white text-xl"></i>
-                </div>
-            </div>
-        </div>
-        <div class="group rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 p-6 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-amber-100 uppercase tracking-wider font-semibold">Recettes Total</p>
-                    <p class="text-2xl font-bold text-white mt-1">{{ number_format($recettes_total ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-amber-200">Franc CFA</p>
-                </div>
-                <div class="p-3 rounded-xl bg-white/20 group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-coins text-white text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- LISTE DES RAPPORTS --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 animate-fade-in-up" style="animation-delay:0.2s">
-        <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl">
-                    <i class="fas fa-list text-indigo-600 dark:text-indigo-400"></i>
-                </div>
-                <div>
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-white">Rapports enregistrés</h2>
-                    <p class="text-xs text-gray-400">Gérez vos rapports comptables</p>
-                </div>
-            </div>
-            <a href="{{ route('admin.rapports.create') }}"
-               class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
-                <i class="fas fa-plus"></i> Créer
+        
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <form method="GET" class="relative flex-1 md:flex-initial">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                <input type="text" name="search" placeholder="Rechercher un rapport..." value="{{ request('search') }}"
+                       class="w-full md:w-64 pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-900/50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all shadow-inner">
+            </form>
+            <a href="{{ route('admin.rapports.create') }}" class="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-2xl shadow-lg shadow-indigo-600/20 transition-all hover:scale-105 active:scale-95">
+                <i class="fas fa-plus text-xs"></i>
+                <span>Nouveau</span>
             </a>
         </div>
-
-        
-    <!-- Barre de recherche injectée -->
-    <div class="mb-4">
-        <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
-                   class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
-        </form>
     </div>
-<div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750">
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Titre</th>
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Type</th>
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Période</th>
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-right">Recettes</th>
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-center">Statut</th>
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-center">Actions</th>
+
+    <!-- Grille de Stats Premium -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
+        <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600">
+                    <i class="fas fa-bus text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Véhicules</p>
+                    <p class="text-xl font-black text-gray-900 dark:text-white">{{ $vehicules }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-orange-500/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center text-orange-600">
+                    <i class="fas fa-route text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Voyages</p>
+                    <p class="text-xl font-black text-gray-900 dark:text-white">{{ $voyages }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-amber-500/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center text-amber-600">
+                    <i class="fas fa-user-tie text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Chauffeurs</p>
+                    <p class="text-xl font-black text-gray-900 dark:text-white">{{ $chauffeurs }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded-3xl border-none shadow-lg shadow-indigo-600/20 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-bl-full transition-transform group-hover:scale-110"></div>
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-white">
+                    <i class="fas fa-coins text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-indigo-100 font-bold">Total Recettes</p>
+                    <p class="text-xl font-black text-white leading-tight">{{ number_format($recettes_total ?? 0, 0, ',', ' ') }} <span class="text-[10px] font-medium opacity-70">CFA</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des Rapports (Scrollable) -->
+    <div class="flex-1 bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col min-h-0 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-50 dark:border-gray-700/50 flex justify-between items-center bg-gray-50/30 dark:bg-gray-900/20 shrink-0">
+            <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                Historique des rapports
+            </h3>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('admin.rapports.pdf') }}" class="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Export PDF">
+                    <i class="fas fa-file-pdf text-sm"></i>
+                </a>
+                <a href="{{ route('admin.rapports.excel') }}" class="w-8 h-8 flex items-center justify-center text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition-colors" title="Export Excel">
+                    <i class="fas fa-file-excel text-sm"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar">
+            <table class="w-full text-left">
+                <thead class="sticky top-0 bg-white dark:bg-gray-800 z-10">
+                    <tr class="text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-50 dark:border-gray-700">
+                        <th class="px-6 py-4">Rapport / Période</th>
+                        <th class="px-6 py-4">Type & Statut</th>
+                        <th class="px-6 py-4 text-right">Recettes</th>
+                        <th class="px-6 py-4 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
+                <tbody class="divide-y divide-gray-50 dark:divide-gray-700/50">
                     @forelse($rapports as $rapport)
-                    <tr class="hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-all duration-200">
+                    <tr class="group hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-all">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-file-alt text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                                <div class="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <i class="fas fa-file-alt"></i>
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-gray-800 dark:text-white">{{ Str::limit($rapport->titre, 40) }}</p>
-                                    <p class="text-xs text-gray-400">Créé le {{ $rapport->created_at->format('d/m/Y') }}</p>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white leading-none">{{ Str::limit($rapport->titre, 40) }}</p>
+                                    <p class="text-[10px] text-gray-400 mt-2 flex items-center gap-1.5 uppercase font-semibold">
+                                        <i class="far fa-calendar-alt text-indigo-400"></i>
+                                        {{ $rapport->periode_debut->format('d/m/Y') }} → {{ $rapport->periode_fin->format('d/m/Y') }}
+                                    </p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold
-                                {{ $rapport->type === 'mensuel'      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : '' }}
-                                {{ $rapport->type === 'trimestriel'  ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' : '' }}
-                                {{ $rapport->type === 'annuel'       ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' : '' }}
-                                {{ $rapport->type === 'personnalisé' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : '' }}">
-                                {{ ucfirst($rapport->type) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                {{ $rapport->periode_debut->format('d/m/Y') }}
-                                <span class="text-gray-300 mx-1">→</span>
-                                {{ $rapport->periode_fin->format('d/m/Y') }}
-                            </p>
-                            <p class="text-xs text-gray-400">{{ $rapport->duree }} jours</p>
+                            <div class="flex flex-col gap-2">
+                                <span class="w-fit px-2 py-0.5 rounded bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 text-[9px] font-black uppercase tracking-tighter">
+                                    {{ $rapport->type }}
+                                </span>
+                                <span class="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest {{ $rapport->statut === 'publié' ? 'text-emerald-500' : 'text-amber-500' }}">
+                                    <span class="w-1 h-1 rounded-full bg-current animate-pulse"></span>
+                                    {{ $rapport->statut }}
+                                </span>
+                            </div>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <span class="text-base font-bold text-emerald-600 dark:text-emerald-400">
-                                {{ number_format($rapport->recettes_total, 0, ',', ' ') }} Franc CFA
-                            </span>
+                            <p class="text-sm font-black text-gray-900 dark:text-white leading-none">
+                                {{ number_format($rapport->recettes_total, 0, ',', ' ') }}
+                            </p>
+                            <p class="text-[9px] text-gray-400 uppercase font-bold mt-1 tracking-tighter">FCFA</p>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold
-                                {{ $rapport->statut === 'publié'    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : '' }}
-                                {{ $rapport->statut === 'brouillon' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' : '' }}">
-                                <span class="w-1.5 h-1.5 rounded-full
-                                    {{ $rapport->statut === 'publié' ? 'bg-emerald-500' : 'bg-amber-500' }}"></span>
-                                {{ ucfirst($rapport->statut) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center justify-center gap-1.5">
-                                <a href="{{ route('admin.rapports.show', $rapport) }}"
-                                   class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 transition hover:scale-110" title="Voir">
+                            <div class="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <a href="{{ route('admin.rapports.show', $rapport) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" title="Voir">
                                     <i class="fas fa-eye text-xs"></i>
                                 </a>
-                                <a href="{{ route('admin.rapports.edit', $rapport) }}"
-                                   class="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-800/40 text-blue-600 dark:text-blue-400 transition hover:scale-110" title="Modifier">
+                                <a href="{{ route('admin.rapports.edit', $rapport) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all" title="Modifier">
                                     <i class="fas fa-edit text-xs"></i>
                                 </a>
                                 <form method="POST" action="{{ route('admin.rapports.destroy', $rapport) }}" class="inline">
                                     @csrf @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Supprimer « {{ $rapport->titre }} » ?')"
-                                            class="p-2 rounded-lg bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 transition hover:scale-110" title="Supprimer">
-                                        <i class="fas fa-trash text-xs"></i>
+                                    <button type="submit" onclick="return confirm('Confirmer la suppression ?')" class="w-8 h-8 flex items-center justify-center rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all" title="Supprimer">
+                                        <i class="fas fa-trash-alt text-xs"></i>
                                     </button>
                                 </form>
                             </div>
@@ -237,17 +162,12 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-16 text-center">
-                            <div class="flex flex-col items-center gap-3 text-gray-400">
-                                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                    <i class="fas fa-chart-bar text-3xl text-gray-300 dark:text-gray-600"></i>
+                        <td colspan="4" class="px-6 py-12 text-center">
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="w-16 h-16 bg-gray-50 dark:bg-gray-900/50 rounded-2xl flex items-center justify-center text-gray-200 dark:text-gray-700 shadow-inner">
+                                    <i class="fas fa-folder-open text-2xl"></i>
                                 </div>
-                                <p class="text-base font-semibold text-gray-500 dark:text-gray-400">Aucun rapport créé</p>
-                                <p class="text-sm">Créez votre premier rapport comptable</p>
-                                <a href="{{ route('admin.rapports.create') }}"
-                                   class="mt-2 inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
-                                    <i class="fas fa-plus"></i> Créer un rapport
-                                </a>
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Aucun rapport trouvé</p>
                             </div>
                         </td>
                     </tr>
@@ -257,119 +177,84 @@
         </div>
 
         @if($rapports->hasPages())
-        <div class="border-t border-gray-100 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750">
+        <div class="px-6 py-3 border-t border-gray-50 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/30 shrink-0">
             {{ $rapports->links() }}
         </div>
         @endif
     </div>
 
-    {{-- EXPORTS --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in-up" style="animation-delay:0.3s">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
-            <div class="h-1.5 bg-gradient-to-r from-red-500 to-pink-500"></div>
-            <div class="p-5 flex items-center gap-4">
-                <div class="p-3 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl shadow-md flex-shrink-0">
-                    <i class="fas fa-file-pdf text-white text-xl"></i>
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-gray-800 dark:text-white">Export PDF</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Rapport complet avec statistiques</p>
-                </div>
-                <a href="{{ route('admin.rapports.pdf') }}"
-                   class="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl shadow transition hover:scale-105">
-                    <i class="fas fa-download"></i> Télécharger
-                </a>
-            </div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
-            <div class="h-1.5 bg-gradient-to-r from-green-500 to-emerald-600"></div>
-            <div class="p-5 flex items-center gap-4">
-                <div class="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-md flex-shrink-0">
-                    <i class="fas fa-file-excel text-white text-xl"></i>
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-gray-800 dark:text-white">Export Excel</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Données tabulaires analysables</p>
-                </div>
-                <a href="{{ route('admin.rapports.excel') }}"
-                   class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl shadow transition hover:scale-105">
-                    <i class="fas fa-download"></i> Télécharger
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {{-- GRAPHIQUE --}}
+    <!-- Chart Section (Compact) -->
     @if(count($chart_labels) > 0)
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 animate-fade-in-up" style="animation-delay:0.4s">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl">
-                <i class="fas fa-chart-area text-indigo-600 dark:text-indigo-400"></i>
-            </div>
-            <div>
-                <h2 class="text-lg font-bold text-gray-800 dark:text-white">Évolution des Recettes</h2>
-                <p class="text-xs text-gray-400">12 derniers mois</p>
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 shrink-0">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-chart-line text-indigo-500 text-xs"></i>
+                <h4 class="text-[10px] uppercase font-black tracking-[0.1em] text-gray-400">Évolution des recettes (12 derniers mois)</h4>
             </div>
         </div>
-        <canvas id="rapportChart" height="90"></canvas>
+        <div class="h-32">
+            <canvas id="rapportChart"></canvas>
+        </div>
     </div>
     @endif
-
 </div>
 
 <style>
-@keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
-.animate-slide-down  { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-.animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); }
 </style>
 
 @if(count($chart_labels) > 0)
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    new Chart(document.getElementById('rapportChart').getContext('2d'), {
+    const ctx = document.getElementById('rapportChart').getContext('2d');
+    new Chart(ctx, {
         type: 'line',
         data: {
             labels: @json($chart_labels),
             datasets: [{
-                label: 'Recettes (Franc CFA)',
+                label: 'Recettes',
                 data: @json($chart_data),
                 borderColor: '#6366f1',
-                backgroundColor: 'rgba(99,102,241,0.08)',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
                 borderWidth: 3,
-                pointBackgroundColor: '#6366f1',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 5,
-                pointHoverRadius: 7,
+                pointRadius: 0,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#6366f1',
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 2,
                 tension: 0.4,
-                fill: true,
+                fill: true
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
             plugins: {
-                legend: { labels: { color: '#6b7280', font: { size: 12, weight: '500' } } },
+                legend: { display: false },
                 tooltip: {
-                    backgroundColor: 'rgba(17,24,39,0.9)',
-                    titleColor: '#c7d2fe',
-                    bodyColor: '#e0e7ff',
-                    borderColor: '#6366f1',
-                    borderWidth: 1,
-                    callbacks: { label: ctx => ` ${ctx.raw.toLocaleString('fr-FR')} Franc CFA` }
+                    padding: 12,
+                    backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                    titleFont: { size: 10, weight: 'bold' },
+                    bodyFont: { size: 12, weight: 'bold' },
+                    cornerRadius: 12,
+                    callbacks: { label: (ctx) => `${ctx.raw.toLocaleString()} CFA` }
                 }
             },
             scales: {
-                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#9ca3af', callback: v => v.toLocaleString('fr-FR') } },
-                x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
-            },
-            animation: { duration: 1500, easing: 'easeOutQuart' }
+                y: { display: false },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 9, weight: 'bold' }, color: '#9ca3af' }
+                }
+            }
         }
     });
 });
 </script>
 @endif
 @endsection
-

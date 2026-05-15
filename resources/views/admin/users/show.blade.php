@@ -98,10 +98,11 @@
                 <i class="fas fa-edit text-3xl group-hover:scale-110 transition"></i>
                 <span class="font-semibold text-lg">Modifier</span>
             </a>
-            <div class="group bg-green-500 hover:bg-green-600 text-white p-8 rounded-2xl text-center transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-2 flex flex-col items-center gap-3 cursor-default opacity-60">
-                <i class="fas fa-eye text-3xl"></i>
-                <span class="font-semibold text-lg">Voir (actuel)</span>
-            </div>
+            <a href="{{ route('admin.audits.user', $user->id) }}"
+               class="group bg-indigo-500 hover:bg-indigo-600 text-white p-8 rounded-2xl text-center transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-2 flex flex-col items-center gap-3">
+                <i class="fas fa-history text-3xl group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-lg">Activité</span>
+            </a>
             <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="md:col-span-1" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
                 @csrf
                 @method('DELETE')

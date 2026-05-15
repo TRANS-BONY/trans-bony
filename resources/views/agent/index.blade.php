@@ -76,7 +76,7 @@
                 Accès rapide
             </div>
             <div class="p-4 flex-1 overflow-y-auto">
-                <a href="{{ route('agent.voyages') }}" class="group flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition cursor-pointer">
+                <a href="{{ route('agent.voyages.index') }}" class="group flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition cursor-pointer">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-white dark:bg-gray-600 rounded-full flex items-center justify-center shadow-sm text-blue-500 group-hover:scale-110 transition">
                             <i class="fas fa-route text-sm"></i>

@@ -21,6 +21,21 @@ class Maintenance extends Model
         'cout' => 'decimal:2',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($maintenance) {
+            if ($maintenance->vehicule) {
+                $maintenance->vehicule->update(['statut' => 'maintenance']);
+            }
+        });
+
+        static::updated(function ($maintenance) {
+            if ($maintenance->wasChanged('statut') && $maintenance->statut === 'terminee') {
+                $maintenance->vehicule->update(['statut' => 'disponible']);
+            }
+        });
+    }
+
     public function vehicule()
     {
         return $this->belongsTo(Vehicule::class);

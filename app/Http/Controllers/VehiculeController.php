@@ -9,8 +9,6 @@ class VehiculeController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Vehicule::class);
-
         $query = Vehicule::query();
 
         if ($request->search) {
@@ -19,90 +17,98 @@ class VehiculeController extends Controller
                   ->orWhere('modele', 'like', "%{$request->search}%");
         }
 
-        $vehicules = $query->latest()->paginate(10)->appends($request->query());
+        $vehicules = $query->latest()->paginate(12)->appends($request->query());
 
-        return view('admin.vehicule.index', compact('vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.vehicules.index";
+        if ($role === 'admin') $view = 'admin.vehicule.index';
+        if (!view()->exists($view)) $view = 'admin.vehicule.index';
+
+        return view($view, compact('vehicules', 'rolePrefix'));
     }
 
     public function show(Vehicule $vehicule)
     {
-        $this->authorize('view', $vehicule);
-
         $vehicule->loadCount(['voyages', 'maintenances']);
 
-        return view('admin.vehicule.show', compact('vehicule'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.vehicules.show";
+        if ($role === 'admin') $view = 'admin.vehicule.show';
+        if (!view()->exists($view)) $view = 'admin.vehicule.show';
+
+        return view($view, compact('vehicule', 'rolePrefix'));
     }
 
     public function create()
     {
-        $this->authorize('create', Vehicule::class);
-        return view('admin.vehicule.create');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.vehicules.create";
+        if ($role === 'admin') $view = 'admin.vehicule.create';
+        if (!view()->exists($view)) $view = 'admin.vehicule.create';
+        
+        return view($view, compact('rolePrefix'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'immatriculation' => [
-                'required',
-                'unique:vehicules',
-                'regex:/^(?!000)\d{3}\s[a-zA-Z]{2}\s\d$/'
-            ],
+            'immatriculation' => ['required', 'unique:vehicules', 'regex:/^\d{3} [A-Z]{2} \d{1}$/'],
             'marque' => 'required',
             'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
-            'capacite' => 'required|integer|between:1,52',
+            'capacite' => 'required|integer|between:1,100',
             'statut' => 'required|in:disponible,maintenance,mission'
+        ], [
+            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre).'
         ]);
 
-        $this->authorize('create', Vehicule::class);
-
         $data['immatriculation'] = strtoupper($data['immatriculation']);
-        $data['marque'] = strtoupper($data['marque']);
-        $data['modele'] = strtoupper($data['modele']);
-
         $vehicule = Vehicule::create($data);
 
-        return redirect()->route('admin.vehicules.show', $vehicule)
-            ->with('success', 'Véhicule ajouté avec succès!');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.vehicules.index')->with('success', 'Véhicule ajouté avec succès!');
     }
 
     public function edit(Vehicule $vehicule)
     {
-        $this->authorize('view', $vehicule);
-        return view('admin.vehicule.edit', compact('vehicule'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.vehicules.edit";
+        if ($role === 'admin') $view = 'admin.vehicule.edit';
+        if (!view()->exists($view)) $view = 'admin.vehicule.edit';
+        
+        return view($view, compact('vehicule', 'rolePrefix'));
     }
 
     public function update(Request $request, Vehicule $vehicule)
     {
-        $this->authorize('update', $vehicule);
-
         $data = $request->validate([
-            'immatriculation' => [
-                'required',
-                'regex:/^(?!000)\d{3}\s[a-zA-Z]{2}\s\d$/',
-                'unique:vehicules,immatriculation,' . $vehicule->id
-            ],
+            'immatriculation' => ['required', 'unique:vehicules,immatriculation,' . $vehicule->id, 'regex:/^\d{3} [A-Z]{2} \d{1}$/'],
             'marque' => 'required',
             'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
-            'capacite' => 'required|integer|between:0,52',
+            'capacite' => 'required|integer|between:0,100',
             'statut' => 'required|in:disponible,maintenance,mission'
+        ], [
+            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre).'
         ]);
 
         $data['immatriculation'] = strtoupper($data['immatriculation']);
-        $data['marque'] = strtoupper($data['marque']);
-        $data['modele'] = strtoupper($data['modele']);
-
         $vehicule->update($data);
 
-        return redirect()->route('admin.vehicules.index')
-            ->with('success', 'Véhicule modifié avec succès.');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.vehicules.index')->with('success', 'Véhicule modifié avec succès.');
     }
 
     public function destroy(Vehicule $vehicule)
     {
-        $this->authorize('delete', $vehicule);
-
         $vehicule->delete();
 
         return back()->with('success', 'Véhicule supprimé.');

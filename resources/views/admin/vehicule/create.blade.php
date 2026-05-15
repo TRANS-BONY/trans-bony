@@ -70,6 +70,8 @@
                                placeholder="EX: 001 XP 4"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('immatriculation') border-red-500 @enderror"
                                oninput="this.value = this.value.toUpperCase()"
+                               pattern="\d{3} [A-Z]{2} \d{1}"
+                               title="Format requis : 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre)"
                                required>
                         @error('immatriculation')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -275,7 +277,7 @@
                 </div>
                 <div>
                     <p class="text-xs text-sky-600 uppercase tracking-wider">Format</p>
-                    <p class="text-sm text-sky-900 font-medium">Immatriculation: AB-123-CD ou AB-1234-CD</p>
+                    <p class="text-sm text-sky-900 font-medium">Immatriculation: 001 XP 4</p>
                 </div>
             </div>
         </div>

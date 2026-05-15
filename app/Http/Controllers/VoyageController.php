@@ -11,10 +11,43 @@ class VoyageController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
     {
-        $vehicules = Vehicule::all();
-        $chauffeurs = Chauffeur::all();
+        $search = request('search');
+        $voyages = Voyage::with(['vehicule', 'chauffeur'])
+            ->when($search, function($q) use ($search) {
+                return $q->where(function($q2) use ($search) {
+                    $q2->where('destination', 'like', "%{$search}%")
+                       ->orWhere('statut', 'like', "%{$search}%")
+                    ;
+                });
+            })
+            ->orderByDesc('date_depart')
+            ->paginate(15)
+            ->appends(request()->query());
 
-return view('admin.voyage.index', compact('vehicules','chauffeurs'));
+        $vehicules = Vehicule::where('statut', 'disponible')->get();
+        $chauffeurs = Chauffeur::where('actif', 1)->get();
+
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.voyages.index";
+        if ($role === 'admin' || $role === 'agent') $view = "{$role}.voyage.index";
+        if (!view()->exists($view)) $view = 'admin.voyage.index';
+
+        return view($view, compact('vehicules','chauffeurs','voyages', 'rolePrefix'));
+    }
+
+    public function show($id)
+    {
+        $voyage = Voyage::with(['vehicule', 'chauffeur'])->findOrFail($id);
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.voyages.show";
+        if ($role === 'admin' || $role === 'agent') $view = "{$role}.voyage.show";
+        if (!view()->exists($view)) $view = 'admin.voyage.show';
+        
+        return view($view, compact('voyage', 'rolePrefix'));
     }
 
     // 📅 EVENTS POUR FULLCALENDAR
@@ -27,7 +60,7 @@ return view('admin.voyage.index', compact('vehicules','chauffeurs'));
         foreach ($voyages as $v) {
             $events[] = [
                 'id' => $v->id,
-                'title' => $v->destination . ' - ' . $v->chauffeur->nom,
+                'title' => $v->destination . ' - ' . ($v->chauffeur->nom ?? 'N/A'),
                 'start' => $v->date_depart,
                 'color' => $v->type == 'maintenance' ? 'red' : 'blue'
             ];

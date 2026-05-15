@@ -16,7 +16,7 @@
             @method('PUT')
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Véhicule concerné</label>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Véhicule concerné <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-bus text-gray-400"></i>
@@ -34,7 +34,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Type de maintenance</label>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Type de maintenance <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-wrench text-gray-400"></i>
@@ -47,7 +47,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Statut</label>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Statut <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-info-circle text-gray-400"></i>
@@ -63,7 +63,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Date prévue / réalisée</label>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Date prévue / réalisée <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-calendar text-gray-400"></i>
@@ -73,12 +73,12 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Coût (Optionnel)</label>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Coût <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-money-bill-wave text-gray-400"></i>
                         </div>
-                        <input type="number" step="0.01" name="cout" value="{{ old('cout', $maintenance->cout) }}" placeholder="Ex: 50000" class="pl-10 w-full rounded-xl border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white shadow-sm focus:border-orange-500 focus:ring-orange-500 transition py-2.5">
+                        <input type="number" name="cout" value="{{ old('cout', $maintenance->cout) }}" min="5000" max="65000" placeholder="Ex: 50000" class="pl-10 w-full rounded-xl border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white shadow-sm focus:border-orange-500 focus:ring-orange-500 transition py-2.5" required>
                     </div>
                 </div>
             </div>

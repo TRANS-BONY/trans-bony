@@ -13,25 +13,20 @@ class AuditController extends Controller
      */
     public function index(Request $request)
     {
-        $audits = Audit::with('user')
-            ->latest()
-            ->paginate(20);
-
-        $query = \App\Models\Maintenance::with('vehicule');
-
-        if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('type', 'like', '%'.$request->search.'%')
-                  ->orWhereHas('vehicule', function($sub) use ($request) {
-                      $sub->where('immatriculation', 'like', '%'.$request->search.'%')
-                          ->orWhere('marque', 'like', '%'.$request->search.'%');
-                  });
+        $search = request('search');
+        $audits = Audit::when($search, function($q) use ($search) {
+            return $q->where(function($q2) use ($search) {
+                $q2->where('action', 'like', "%{$search}%")
+                   ->orWhere('description', 'like', "%{$search}%")
+                ;
             });
-        }
+        })->with('user')->latest()->paginate(20)->appends(request()->query());
 
-        $maintenances = $query->paginate(15)->appends($request->query());
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $view = 'admin.audits.index';
+        if ($role === 'manager') $view = 'manager.audits.index';
 
-        return view('audits.index', compact('audits', 'maintenances'));
+        return view($view, compact('audits'));
     }
 
     /**
@@ -42,10 +37,12 @@ class AuditController extends Controller
         $user = User::findOrFail($id);
 
         $audits = Audit::where('user_id', $id)
+            ->with('user')
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->appends(request()->query());
 
-        return view('audits.user', compact('audits','user'));
+        return view('admin.audits.index', compact('audits','user'));
     }
 
     /**
@@ -54,8 +51,11 @@ class AuditController extends Controller
     public function show($id)
     {
         $audit = Audit::with('user')->findOrFail($id);
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $view = 'admin.audits.show';
+        if ($role === 'manager') $view = 'manager.audits.show';
 
-        return view('audits.show', compact('audit'));
+        return view($view, compact('audit'));
     }
 
     /**

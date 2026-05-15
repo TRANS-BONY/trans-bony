@@ -69,7 +69,7 @@
                 {{-- Période début --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Période du <span class="text-red-500">*</span></label>
-                    <input type="date" name="periode_debut" required
+                    <input type="date" name="periode_debut" required id="periodeDebut"
                            value="{{ old('periode_debut', $rapport->periode_debut->format('Y-m-d')) }}"
                            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
                     @error('periode_debut') <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p> @enderror
@@ -78,9 +78,8 @@
                 {{-- Période fin --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">au <span class="text-red-500">*</span></label>
-                    <input type="date" name="periode_fin" required
+                    <input type="date" name="periode_fin" required id="periodeFin"
                            value="{{ old('periode_fin', $rapport->periode_fin->format('Y-m-d')) }}"
-                           max="{{ now()->format('Y-m-d') }}"
                            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
                     @error('periode_fin') <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
@@ -139,4 +138,23 @@
 .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards; }
 </style>
 @endsection
+
+@push('scripts')
+<script>
+// Synchronisation des dates pour éviter debut > fin
+document.getElementById('periodeDebut')?.addEventListener('change', function() {
+    const fin = document.getElementById('periodeFin');
+    if (fin.value && this.value > fin.value) {
+        fin.value = this.value;
+    }
+});
+
+document.getElementById('periodeFin')?.addEventListener('change', function() {
+    const debut = document.getElementById('periodeDebut');
+    if (debut.value && this.value < debut.value) {
+        debut.value = this.value;
+    }
+});
+</script>
+@endpush
 

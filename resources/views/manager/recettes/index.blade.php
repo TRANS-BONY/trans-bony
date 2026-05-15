@@ -1,7 +1,6 @@
 @extends('layouts.manager')
 
 @section('content')
-
 <style>
     /* Désactiver le scroll global */
     html, body { overflow: hidden !important; height: 100vh !important; }
@@ -15,7 +14,7 @@
     .module-index-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
         height: calc(100vh - 100px);
         overflow: hidden;
         padding-bottom: 0.5rem;
@@ -31,57 +30,85 @@
         overflow-y: auto !important;
         padding-right: 0.25rem;
     }
+
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-down  { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 </style>
+
 <div class="module-index-wrapper custom-scrollbar">
-    <div class="flex items-center justify-between bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Finances & Recettes</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Suivi financier des opérations</p>
+    <!-- Header avec dégradé plein -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 p-6 animate-slide-down shadow-xl">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+
+        <div class="relative flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-white/20 rounded-xl shadow-lg backdrop-blur-sm">
+                    <i class="fas fa-wallet text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">Flux Financiers</h1>
+                    <p class="text-emerald-100 text-sm mt-1">Suivi des recettes et revenus globaux</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <form method="GET" class="relative group">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors"></i>
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
+                           class="w-64 pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none backdrop-blur-sm transition-all">
+                </form>
+            </div>
         </div>
     </div>
-    <!-- Barre de recherche injectée -->
-    <div class="mb-4">
-        <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
-                   class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
-        </form>
-    </div>
-<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container">
-        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container animate-fade-in-up" style="animation-delay: 0.2s">
+        <div class="overflow-x-auto flex-1 custom-scrollbar">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 text-xs uppercase tracking-wider">
-                        <th class="p-4 font-medium">Date</th>
-                        <th class="p-4 font-medium">Véhicule</th>
-                        <th class="p-4 font-medium">Montant</th>
-                        <th class="p-4 font-medium">Type</th>
-                        <th class="p-4 font-medium text-right">Actions</th>
+                    <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider sticky top-0 z-10 backdrop-blur-md">
+                        <th class="p-4 font-bold">Date</th>
+                        <th class="p-4 font-bold">Véhicule</th>
+                        <th class="p-4 font-bold">Type de Recette</th>
+                        <th class="p-4 font-bold text-right">Montant</th>
+                        <th class="p-4 font-bold text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
                     @forelse($recettes as $r)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                    <tr class="hover:bg-emerald-50/30 dark:hover:bg-emerald-900/10 transition-colors">
                         <td class="p-4">
                             <p class="font-bold text-gray-900 dark:text-white">{{ $r->date->format('d/m/Y') }}</p>
                         </td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ $r->vehicule->immatriculation ?? 'N/A' }}</td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ number_format($r->montant, 0, ',', ' ') }} Franc CFA</td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ $r->type }}</td>
+                        <td class="p-4">
+                            <div class="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-bus text-xs text-blue-500"></i>
+                                {{ $r->vehicule->immatriculation ?? 'N/A' }}
+                            </div>
+                        </td>
+                        <td class="p-4 font-medium text-gray-600 dark:text-gray-300">{{ ucfirst($r->type) }}</td>
                         <td class="p-4 text-right">
-                            <a href="{{ route('manager.recettes.show', $r) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition" title="Voir">
+                            <span class="text-base font-bold text-emerald-600 dark:text-emerald-400">
+                                {{ number_format($r->montant, 0, ',', ' ') }} <small class="text-[10px]">FCFA</small>
+                            </span>
+                        </td>
+                        <td class="p-4 text-right">
+                            <a href="{{ route('manager.recettes.show', $r) }}" class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-50 hover:bg-emerald-100 text-gray-400 hover:text-emerald-600 transition-all duration-300">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-gray-500">Aucune recette enregistrée.</td></tr>
+                    <tr><td colspan="5" class="p-12 text-center text-gray-400">Aucune transaction enregistrée.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
         @if($recettes->hasPages())
-        <div class="p-4 bg-gray-50 shrink-0">{{ $recettes->links() }}</div>
+        <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 shrink-0">
+            {{ $recettes->links() }}
+        </div>
         @endif
     </div>
 </div>

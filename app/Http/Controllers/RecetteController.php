@@ -20,7 +20,7 @@ class RecetteController extends Controller
             });
         })->with('vehicule')->orderByDesc('date')->paginate(15)->appends(request()->query());
 
-        // Agrégats globaux (sur toute la table, pas seulement la page courante)
+        // Agrégats globaux
         $recettes_total      = RecetteMensuelle::sum('montant');
         $recettes_mois_total = RecetteMensuelle::whereMonth('date', now()->month)
                                                 ->whereYear('date', now()->year)
@@ -28,49 +28,81 @@ class RecetteController extends Controller
         $recettes_avg        = RecetteMensuelle::avg('montant') ?? 0;
         $recettes_count      = RecetteMensuelle::count();
 
-        return view('admin.finances.index', compact(
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+
+        $view = "{$role}.recettes.index";
+        if ($role === 'admin') $view = 'admin.finances.index';
+        if (!view()->exists($view)) $view = 'admin.finances.index';
+
+        return view($view, compact(
             'recettes',
             'recettes_total',
             'recettes_mois_total',
             'recettes_avg',
-            'recettes_count'
+            'recettes_count',
+            'rolePrefix'
         ));
     }
 
     public function create()
     {
         $vehicules = \App\Models\Vehicule::all();
-        return view('admin.finances.create', compact('vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.recettes.create";
+        if ($role === 'admin') $view = 'admin.finances.create';
+        if (!view()->exists($view)) $view = 'admin.finances.create';
+        
+        return view($view, compact('vehicules'));
     }
 
     public function store(StoreRecetteRequest $request)
     {
         RecetteMensuelle::create($request->validated());
-        return redirect()->route('admin.recettes.index')->with('success', 'Recette créée avec succès.');
+        
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.recettes.index')->with('success', 'Recette créée avec succès.');
     }
 
     public function show(RecetteMensuelle $recette)
     {
         $recette->load('vehicule.voyages', 'vehicule.maintenances', 'vehicule.documents');
-        return view('admin.finances.show', compact('recette'));
+        
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.recettes.show";
+        if ($role === 'admin') $view = 'admin.finances.show';
+        if (!view()->exists($view)) $view = 'admin.finances.show';
+        
+        return view($view, compact('recette', 'rolePrefix'));
     }
 
     public function edit(RecetteMensuelle $recette)
     {
         $vehicules = \App\Models\Vehicule::all();
-        return view('admin.finances.edit', compact('recette', 'vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.recettes.edit";
+        if ($role === 'admin') $view = 'admin.finances.edit';
+        if (!view()->exists($view)) $view = 'admin.finances.edit';
+        
+        return view($view, compact('recette', 'vehicules'));
     }
 
     public function update(UpdateRecetteRequest $request, RecetteMensuelle $recette)
     {
         $recette->update($request->validated());
-        return redirect()->route('admin.recettes.index')->with('success', 'Recette modifiée avec succès.');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.recettes.index')->with('success', 'Recette modifiée avec succès.');
     }
 
     public function destroy(RecetteMensuelle $recette)
     {
         $recette->delete();
-        return redirect()->route('admin.recettes.index')->with('success', 'Recette supprimée avec succès.');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.recettes.index')->with('success', 'Recette supprimée avec succès.');
     }
 }
 

@@ -14,92 +14,98 @@
     .module-index-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
         height: calc(100vh - 100px);
         overflow: hidden;
         padding-bottom: 0.5rem;
     }
     
-    /* By default, all direct children shouldn't shrink (Headers, Stats, Pagination) */
     .module-index-wrapper > * {
         flex-shrink: 0;
     }
     
-    /* The main list container gets flex-1 and scroll */
-    .module-index-wrapper > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Match grids except the stats grid */
-    .module-index-wrapper > .animate-fade-in-up > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Nested grid */
     .module-index-wrapper > .list-scroll-container {
         flex: 1 1 0% !important;
         min-height: 0 !important;
         overflow-y: auto !important;
         padding-right: 0.25rem;
     }
-    
-    /* Fix for nested list containers in some views */
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) {
-        flex: 1 1 0% !important;
-        min-height: 0 !important;
-        display: flex;
-        flex-direction: column;
-    }
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .grid,
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .hidden.lg\:block {
-        flex: 1 1 0% !important;
-        overflow-y: auto !important;
-        min-height: 0 !important;
-    }
+
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-down  { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 </style>
+
 <div class="module-index-wrapper custom-scrollbar">
-    <div class="flex items-center justify-between bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Rapports d'Activité</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Analyse des performances</p>
+    <!-- Header avec dégradé plein -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-6 animate-slide-down shadow-xl">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+
+        <div class="relative flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-white/20 rounded-xl shadow-lg backdrop-blur-sm">
+                    <i class="fas fa-chart-pie text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">Rapports d'Activité</h1>
+                    <p class="text-indigo-100 text-sm mt-1">Analyse des performances et bilans périodiques</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <form method="GET" class="relative group">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors"></i>
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
+                           class="w-64 pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none backdrop-blur-sm transition-all">
+                </form>
+            </div>
         </div>
     </div>
-    <!-- Barre de recherche injectée -->
-    <div class="mb-4">
-        <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
-                   class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
-        </form>
-    </div>
-<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container">
-        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
-            <table class="w-full text-left border-collapse whitespace-nowrap">
-                <thead>
-                    <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 text-xs uppercase tracking-wider">
-                        <th class="p-4 font-medium">Titre</th>
-                        <th class="p-4 font-medium">Type</th>
-                        <th class="p-4 font-medium">Période</th>
-                        <th class="p-4 font-medium">Auteur</th>
-                        <th class="p-4 font-medium text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
-                    @forelse($rapports as $r)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                        <td class="p-4">
-                            <p class="font-bold text-gray-900 dark:text-white">{{ $r->titre }}</p>
-                        </td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ ucfirst($r->type) }}</td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ $r->periode_debut->format('d/m/Y') }} - {{ $r->periode_fin->format('d/m/Y') }}</td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ $r->user->name ?? 'N/A' }}</td>
-                        <td class="p-4 text-right">
-                            <a href="{{ route('manager.rapports.show', $r) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition" title="Voir">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="5" class="p-8 text-center text-gray-500">Aucun rapport enregistré.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
+
+    <div class="list-scroll-container custom-scrollbar grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in-up" style="animation-delay: 0.2s">
+        @forelse($rapports as $r)
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 hover:shadow-md hover:scale-[1.02] transition-all duration-300 group">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                    {{ $r->type }}
+                </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ $r->titre }}</h3>
+            <p class="text-xs text-gray-400 mb-4 italic">Par {{ $r->user->name }} • {{ $r->created_at->format('d/m/Y') }}</p>
+            
+            <div class="flex items-center gap-4 text-xs text-gray-500 mb-6 border-y border-gray-50 dark:border-gray-700 py-3">
+                <div class="flex flex-col gap-1 flex-1">
+                    <span class="text-gray-400 uppercase text-[9px] font-bold">Période</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">{{ $r->periode_debut->format('d/m') }} - {{ $r->periode_fin->format('d/m/Y') }}</span>
+                </div>
+                <div class="flex flex-col gap-1 text-right">
+                    <span class="text-gray-400 uppercase text-[9px] font-bold">Recettes</span>
+                    <span class="font-bold text-emerald-600">{{ number_format($r->total_recettes, 0, ',', ' ') }} FCFA</span>
+                </div>
+            </div>
+
+            <a href="{{ route('manager.rapports.show', $r) }}" class="flex items-center justify-center gap-2 w-full py-3 bg-gray-50 dark:bg-gray-700/50 hover:bg-indigo-600 hover:text-white text-sm font-bold text-gray-700 dark:text-gray-300 rounded-xl transition-all duration-300">
+                <i class="fas fa-eye text-xs"></i> Consulter le rapport
+            </a>
         </div>
-        @if($rapports->hasPages())
-        <div class="p-4 bg-gray-50 shrink-0">{{ $rapports->links() }}</div>
-        @endif
+        @empty
+        <div class="col-span-full py-20 text-center">
+            <div class="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-chart-pie text-3xl text-gray-300"></i>
+            </div>
+            <p class="text-gray-500">Aucun rapport disponible.</p>
+        </div>
+        @endforelse
     </div>
+    
+    @if($rapports->hasPages())
+    <div class="shrink-0 bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+        {{ $rapports->links() }}
+    </div>
+    @endif
 </div>
 @endsection

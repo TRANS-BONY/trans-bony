@@ -199,7 +199,7 @@
                 <td>
                     <div class="signature-box">
                         Cachet et Signature de la Direction<br><br><br><br>
-                        <strong>Fait à Abidjan, le {{ now()->format('d/m/Y') }}</strong>
+                        <strong>Fait à Brazzaville, le {{ now()->format('d/m/Y') }}</strong>
                     </div>
                 </td>
             </tr>

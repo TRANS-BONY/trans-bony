@@ -1,116 +1,117 @@
 @extends('layouts.manager')
 
 @section('content')
-<style>
-    /* Désactiver le scroll global */
-    html, body { overflow: hidden !important; height: 100vh !important; }
-    
-    /* Scrollbar minimaliste */
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-    
-    /* Wrapper Layout */
-    .module-index-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        height: calc(100vh - 100px);
-        overflow: hidden;
-        padding-bottom: 0.5rem;
-    }
-    
-    /* By default, all direct children shouldn't shrink (Headers, Stats, Pagination) */
-    .module-index-wrapper > * {
-        flex-shrink: 0;
-    }
-    
-    /* The main list container gets flex-1 and scroll */
-    .module-index-wrapper > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Match grids except the stats grid */
-    .module-index-wrapper > .animate-fade-in-up > .grid:not(.grid-cols-2.md\:grid-cols-4), /* Nested grid */
-    .module-index-wrapper > .list-scroll-container {
-        flex: 1 1 0% !important;
-        min-height: 0 !important;
-        overflow-y: auto !important;
-        padding-right: 0.25rem;
-    }
-    
-    /* Fix for nested list containers in some views */
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) {
-        flex: 1 1 0% !important;
-        min-height: 0 !important;
-        display: flex;
-        flex-direction: column;
-    }
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .grid,
-    .module-index-wrapper > .animate-fade-in-up:nth-last-child(2) > .hidden.lg\:block {
-        flex: 1 1 0% !important;
-        overflow-y: auto !important;
-        min-height: 0 !important;
-    }
-</style>
-<div class="module-index-wrapper custom-scrollbar">
-    <div class="flex items-center justify-between bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Opérations / Voyages</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Consultation globale des voyages</p>
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+<div class="space-y-6">
+    <!-- Header avec dégradé plein -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-600 p-6 animate-slide-down shadow-xl">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+
+        <div class="relative flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-white/20 rounded-xl shadow-lg backdrop-blur-sm">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 12h.01M12 16h.01" stroke="currentColor"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">
+                        Planning des Voyages
+                    </h1>
+                    <p class="text-orange-100 text-sm mt-1">Consultez et planifiez les missions et maintenances</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                    <span class="text-xs text-white">En direct</span>
+                </div>
+            </div>
         </div>
-    </div>
-    <!-- Barre de recherche injectée -->
-    <div class="mb-4">
-        <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
-                   class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
-        </form>
-    </div>
-<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container">
-        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
-            <table class="w-full text-left border-collapse whitespace-nowrap">
-                <thead>
-                    <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 text-xs uppercase tracking-wider">
-                        <th class="p-4 font-medium">Destination</th>
-                        <th class="p-4 font-medium">Date de départ</th>
-                        <th class="p-4 font-medium">Véhicule & Chauffeur</th>
-                        <th class="p-4 font-medium">Type</th>
-                        <th class="p-4 font-medium text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
-                    @forelse($voyages as $v)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                        <td class="p-4">
-                            <p class="font-bold text-gray-900 dark:text-white">{{ $v->destination }}</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{ $v->nb_passagers }} passager(s)</p>
-                        </td>
-                        <td class="p-4 text-gray-700 dark:text-gray-300">
-                            {{ $v->date_depart->format('d/m/Y H:i') }}
-                        </td>
-                        <td class="p-4">
-                            <p class="text-gray-900 dark:text-gray-300"><i class="fas fa-bus text-gray-400 text-xs mr-1"></i> {{ $v->vehicule->immatriculation ?? 'N/A' }}</p>
-                            <p class="text-xs text-gray-500"><i class="fas fa-user text-gray-400 text-xs mr-1"></i> {{ $v->chauffeur->nom ?? 'N/A' }}</p>
-                        </td>
-                        <td class="p-4">
-                            <span class="px-2 py-1 text-xs font-semibold rounded-lg
-                                {{ $v->type === 'voyage' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700' }}">
-                                {{ ucfirst($v->type) }}
-                            </span>
-                        </td>
-                        <td class="p-4 text-right">
-                            <a href="{{ route('manager.voyages.show', $v) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition" title="Voir">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="5" class="p-8 text-center text-gray-500">Aucun voyage enregistré.</td></tr>
-                    @endforelse
-                </tbody>
-            </table>
+    </div>    <!-- Contenu principal -->
+    <div class="flex flex-col gap-6">
+        <!-- 📅 CALENDRIER -->
+        <div class="w-full animate-fade-in-up" style="animation-delay: 0.1s">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-orange-100 rounded-lg">
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800">Calendrier des événements</h2>
+                            <p class="text-sm text-gray-500 mt-0.5">Consultez le planning des missions et maintenances</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id='calendar' class="fullcalendar-custom"></div>
+                </div>
+            </div>
         </div>
-        @if($voyages->hasPages())
-        <div class="p-4 bg-gray-50 shrink-0">{{ $voyages->links() }}</div>
-        @endif
     </div>
 </div>
+
+<style>
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-down { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animate-fade-in-up { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .fullcalendar-custom { font-family: inherit; }
+    .fc { background: white; border-radius: 0.5rem; }
+    .fc .fc-toolbar-title { font-size: 1.25rem; font-weight: 600; color: #1f2937; }
+    .fc .fc-button-primary { background-color: #f97316; border-color: #f97316; transition: all 0.3s ease; }
+    .fc .fc-button-primary:hover { background-color: #ea580c; border-color: #ea580c; transform: scale(1.05); }
+    .fc .fc-button-primary:not(:disabled):active { background-color: #ea580c; border-color: #ea580c; }
+    .fc .fc-daygrid-day { transition: background-color 0.2s ease; }
+    .fc .fc-daygrid-day:hover { background-color: #fff7ed; }
+    .fc-event { cursor: default; transition: transform 0.2s ease, box-shadow 0.2s ease; border: none; padding: 2px 4px; font-size: 0.8rem; }
+    .fc-event:hover { transform: scale(1.02); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); }
+    .fc-event.voyage-event { background-color: #3b82f6; border-left: 3px solid #1e40af; }
+    .fc-event.maintenance-event { background-color: #f59e0b; border-left: 3px solid #b45309; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let calendarEl = document.getElementById('calendar');
+
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: false,
+        selectable: false,
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+            today: 'Aujourd\'hui',
+            month: 'Mois',
+            week: 'Semaine',
+            day: 'Jour'
+        },
+        events: "{{ route($rolePrefix . '.voyages.events') }}",
+        eventDidMount: function(info) {
+            if (info.event.extendedProps.type === 'maintenance') {
+                info.el.classList.add('maintenance-event');
+            } else {
+                info.el.classList.add('voyage-event');
+            }
+            info.el.setAttribute('title', `${info.event.title} - Départ: ${info.event.start.toLocaleString()}`);
+        },
+        locale: 'fr',
+        firstDay: 1,
+        height: 'auto',
+        contentHeight: 'auto'
+    });
+
+    calendar.render();
+});
+</script>
 @endsection

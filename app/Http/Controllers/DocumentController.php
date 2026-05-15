@@ -15,7 +15,6 @@ class DocumentController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
     {
-        $this->authorize('viewAny', Document::class);
         $search = request('search');
         $documents = Document::when($search, function($q) use ($search) {
             return $q->where(function($q2) use ($search) {
@@ -26,37 +25,38 @@ class DocumentController extends Controller
         })->with('vehicule')->paginate(10)->appends(request()->query());
         $vehicules = Vehicule::all();
 
-        // 🔔 Vérification expiration (Note: Devrait idéalement être dans un Job planifié)
-        // Désactivé temporairement pour performance si trop de documents
-        /*
-        foreach ($documents->where('date_expiration', '<', now()) as $doc) {
-            try {
-                if (app()->environment('production')) {
-                    $admins = User::role('admin')->get();
-                    foreach ($admins as $admin) {
-                        $admin->notify(new DocumentExpireNotification($doc));
-                    }
-                }
-            } catch (\Exception $e) {
-                Log::error("Document notification failed: " . $e->getMessage());
-            }
-        }
-        */
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.documents.index";
+        if ($role === 'admin') $view = 'admin.document.index';
+        if (!view()->exists($view)) $view = 'admin.document.index';
 
-        return view('admin.document.index', compact('documents','vehicules'));
+        return view($view, compact('documents','vehicules', 'rolePrefix'));
+    }
+
+    public function show(Document $document)
+    {
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.documents.show";
+        if ($role === 'admin') $view = 'admin.document.show';
+        if (!view()->exists($view)) $view = 'admin.document.show';
+
+        return view($view, compact('document', 'rolePrefix'));
     }
 
     public function create()
     {
-        $this->authorize('create', Document::class);
         $vehicules = Vehicule::all();
-        return view('admin.document.create', compact('vehicules'));
-    }
-
-    public function adminCreate()
-    {
-        $vehicules = Vehicule::all();
-        return view('admin.document.create', compact('vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.documents.create";
+        if ($role === 'admin') $view = 'admin.document.create';
+        if (!view()->exists($view)) $view = 'admin.document.create';
+        
+        return view($view, compact('vehicules'));
     }
 
     public function store(Request $request)
@@ -65,12 +65,23 @@ class DocumentController extends Controller
 
         Log::info('Document store attempt', $request->all());
 
-        // ✅ VALIDATION LOOSE
+        // ✅ VALIDATION
         $request->validate([
             'vehicule_id' => 'required|exists:vehicules,id',
             'type' => 'required|string|max:255',
-            'date_emission' => 'required|date|before_or_equal:date_expiration',
-            'date_expiration' => 'required|date|after_or_equal:date_emission',
+            'date_emission' => 'required|date',
+            'date_expiration' => [
+                'required',
+                'date',
+                'after:date_emission',
+                function ($attribute, $value, $fail) use ($request) {
+                    $emission = Carbon::parse($request->date_emission);
+                    $expiration = Carbon::parse($value);
+                    if ($emission->addYears(5)->format('Y-m-d') !== $expiration->format('Y-m-d')) {
+                        $fail('La durée de validité doit être exactement de 5 ans.');
+                    }
+                },
+            ],
             'fichier' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
 
@@ -89,7 +100,7 @@ class DocumentController extends Controller
 
             Log::info('Document created', ['id' => $document->id]);
 
-            return back()->with('success','Document ajouté avec succès');
+            return redirect()->route(auth()->user()->getRoleNames()->first() . '.documents.index')->with('success','Document ajouté avec succès');
         } catch (\Exception $e) {
             Log::error('Document create failed', ['error' => $e->getMessage()]);
             return back()->with('error', 'Erreur DB : ' . $e->getMessage())->withInput();
@@ -106,7 +117,13 @@ class DocumentController extends Controller
     {
         $document = Document::findOrFail($id);
         $vehicules = Vehicule::all();
-        return view('admin.document.edit', compact('document', 'vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.documents.edit";
+        if ($role === 'admin') $view = 'admin.document.edit';
+        if (!view()->exists($view)) $view = 'admin.document.edit';
+        
+        return view($view, compact('document', 'vehicules'));
     }
 
     public function update(Request $request, Document $document)
@@ -116,9 +133,21 @@ class DocumentController extends Controller
         Log::info('Document update attempt', $request->all());
 
         $request->validate([
+            'vehicule_id' => 'required|exists:vehicules,id',
             'type' => 'required|string|max:255',
-            'date_emission' => 'required|date|before_or_equal:date_expiration',
-            'date_expiration' => 'required|date|after_or_equal:date_emission',
+            'date_emission' => 'required|date',
+            'date_expiration' => [
+                'required',
+                'date',
+                'after:date_emission',
+                function ($attribute, $value, $fail) use ($request) {
+                    $emission = Carbon::parse($request->date_emission);
+                    $expiration = Carbon::parse($value);
+                    if ($emission->addYears(5)->format('Y-m-d') !== $expiration->format('Y-m-d')) {
+                        $fail('La durée de validité doit être exactement de 5 ans.');
+                    }
+                },
+            ],
             'fichier' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
 
@@ -137,7 +166,8 @@ class DocumentController extends Controller
 
             Log::info('Document updated', ['id' => $document->id]);
 
-            return redirect()->route('admin.documents.index')->with('success', 'Document mis à jour avec succès');
+            $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+            return redirect()->route($role . '.documents.index')->with('success', 'Document mis à jour avec succès');
         } catch (\Exception $e) {
             Log::error('Document update failed', ['error' => $e->getMessage()]);
             return back()->with('error', 'Erreur : ' . $e->getMessage())->withInput();

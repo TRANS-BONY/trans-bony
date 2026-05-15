@@ -136,232 +136,239 @@
 </head>
 
 <body x-data="app()" :class="{'dark': isDarkMode}" class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
-    <!-- Structure simple : flex sur desktop, overlay sur mobile -->
-    <div class="flex">
-        <!-- SIDEBAR - Toujours visible sur desktop, overlay sur mobile -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- SIDEBAR -->
         <div
-            class="fixed inset-y-0 left-0 z-30 w-72 bg-gradient-to-br from-blue-900 to-indigo-900 dark:from-gray-800 dark:to-gray-900 shadow-2xl transform transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 overflow-y-auto lg:h-screen lg:sticky lg:top-0"
+            class="fixed inset-y-0 left-0 z-30 w-72 bg-gradient-to-br from-blue-900 to-indigo-900 dark:from-gray-800 dark:to-gray-900 shadow-2xl transform transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 overflow-y-auto"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center space-x-3">
-                        <i class="fas fa-truck-fast text-2xl text-blue-400 animate-pulse"></i>
+                        <i class="fas fa-bus text-2xl text-blue-400 animate-pulse"></i>
                         <div>
                             <h2 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">TRANS BONY</h2>
                             <p class="text-xs text-blue-300 dark:text-gray-400 mt-1">Gestion de flotte</p>
                         </div>
                     </div>
-                    <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gray-300 transition" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
+                    <button @click="sidebarOpen = false" class="lg:hidden text-white hover:text-gray-300 transition">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
 
-                <div class="space-y-1">
+                <div class="space-y-2">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4 font-bold px-1">Menu Principal</p>
 
-                <p class="text-xs uppercase tracking-widest text-purple-400/70 mb-4 font-semibold px-1">
-                    Vue d'ensemble
-                </p>
-
-                <!-- Dashboard -->
-                <a href="{{ route('manager.dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-tachometer-alt text-sm text-purple-300"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Tableau de bord</span>
-                </a>
-
-                <!-- Séparateur -->
-                <div class="pt-4 pb-2">
-                    <p class="text-xs uppercase tracking-widest text-purple-400/60 font-semibold px-1">Consultation Modules</p>
-                </div>
-
-                <a href="{{ route('manager.voyages.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-route text-sm text-orange-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Voyages</span>
-                </a>
-                
-                <a href="{{ route('manager.vehicules.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-bus text-sm text-blue-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Véhicules</span>
-                </a>
-
-                <a href="{{ route('manager.chauffeurs.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-id-card text-sm text-yellow-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Chauffeurs</span>
-                </a>
-
-                <a href="{{ route('manager.maintenances.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-tools text-sm text-amber-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Maintenances</span>
-                </a>
-
-                <a href="{{ route('manager.recettes.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-coins text-sm text-green-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Finances & Recettes</span>
-                </a>
-
-                <a href="{{ route('manager.documents.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-file-alt text-sm text-red-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Documents</span>
-                </a>
-
-                <a href="{{ route('manager.rapports.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-chart-line text-sm text-emerald-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Rapports</span>
-                </a>
-
-                <a href="{{ route('manager.audits.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-history text-sm text-cyan-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Audits</span>
-                </a>
-
-                <a href="{{ route('manager.users.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group nav-fluid-hover" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-white/10 scale-[1.02] floating-fast' : ''">
-                    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 group-hover:bg-purple-500/30 transition-all">
-                        <i class="fas fa-users text-sm text-indigo-400"></i>
-                    </div>
-                    <span class="flex-1 text-sm font-medium">Utilisateurs</span>
-                </a>
-
-            </div>
-
-                
-                <!-- Déconnexion -->
-                <div class="pt-4 mt-4 border-t border-white/20 dark:border-gray-700">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group nav-fluid-hover transition" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false" :class="hover ? 'shadow-lg -translate-y-1 bg-red-500/10 scale-[1.02] floating-fast' : ''">
-                            <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 group-hover:bg-red-500/30 transition-all">
-                                <i class="fas fa-sign-out-alt text-sm"></i>
-                            </div>
-                            <span class="flex-1 text-sm font-medium text-left">Déconnexion</span>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Info utilisateur dans sidebar (visible sur mobile) -->
-                <div class="lg:hidden mt-8 pt-6 border-t border-white/20 dark:border-gray-700">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full overflow-hidden shadow-lg">
-                            <img src="{{ auth()->user()->profile_photo_url }}" alt="" class="w-full h-full object-cover">
+                    <a href="{{ route('manager.dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Tableau de bord' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-500/20 transition-all duration-300">
+                            <i class="fas fa-th-large text-sm"></i>
                         </div>
-                        <div>
-                            <p class="text-sm font-semibold text-white dark:text-gray-200">{{ auth()->user()->name }}</p>
-                            <p class="text-xs text-blue-300 dark:text-gray-400">{{ ucfirst(auth()->user()->getRoleNames()->first() ?? 'User') }}</p>
+                        <span class="flex-1 text-sm font-semibold tracking-wide">Tableau de bord</span>
+                    </a>
+
+                    <div class="pt-6 pb-2">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold px-1">Exploitation</p>
+                    </div>
+
+                    <a href="{{ route('manager.voyages.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Voyages' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 group-hover:bg-orange-500/20 transition-all duration-300">
+                            <i class="fas fa-route text-sm"></i>
                         </div>
+                        <span class="flex-1 text-sm font-medium">Voyages & Trajets</span>
+                    </a>
+
+                    <a href="{{ route('manager.vehicules.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Véhicules' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-500/20 transition-all duration-300">
+                            <i class="fas fa-bus text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Parc Automobile</span>
+                    </a>
+
+                    <a href="{{ route('manager.chauffeurs.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Chauffeurs' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 group-hover:bg-yellow-500/20 transition-all duration-300">
+                            <i class="fas fa-user-tie text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Conducteurs</span>
+                    </a>
+
+                    <a href="{{ route('manager.maintenances.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Maintenances' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 group-hover:bg-amber-500/20 transition-all duration-300">
+                            <i class="fas fa-tools text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Maintenance</span>
+                    </a>
+
+                    <div class="pt-6 pb-2">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold px-1">Analyse & Finance</p>
+                    </div>
+
+                    <a href="{{ route('manager.recettes.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Finances & Recettes' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all duration-300">
+                            <i class="fas fa-wallet text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Recettes & Finances</span>
+                    </a>
+
+                    <a href="{{ route('manager.rapports.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Rapports' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:bg-indigo-500/20 transition-all duration-300 shadow-sm">
+                            <i class="fas fa-chart-pie text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Rapports d'Activité</span>
+                    </a>
+
+                    <div class="pt-6 pb-2">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold px-1">Administration</p>
+                    </div>
+
+                    <a href="{{ route('manager.documents.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Documents' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 group-hover:bg-red-500/20 transition-all duration-300">
+                            <i class="fas fa-file-invoice text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Documents</span>
+                    </a>
+
+                    <a href="{{ route('manager.audits.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Audits' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group-hover:bg-cyan-500/20 transition-all duration-300 shadow-sm">
+                            <i class="fas fa-clipboard-check text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Audits & Logs</span>
+                    </a>
+
+                    <a href="{{ route('manager.users.index') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Utilisateurs' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:bg-indigo-500/20 transition-all duration-300 shadow-sm">
+                            <i class="fas fa-users-cog text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Utilisateurs</span>
+                    </a>
+
+                    <!-- Déconnexion -->
+                    <div class="pt-8 mt-4 border-t border-white/10">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group transition">
+                                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 group-hover:bg-red-500/30 transition-all border border-red-500/20">
+                                    <i class="fas fa-power-off text-sm"></i>
+                                </div>
+                                <span class="flex-1 text-sm font-medium text-left">Déconnexion</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Overlay pour mobile -->
-        <div
-            x-show="sidebarOpen"
-            @click="sidebarOpen = false"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 z-20 lg:hidden">
-        </div>
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/50 z-20 lg:hidden" x-transition></div>
 
         <!-- CONTENT PRINCIPAL -->
-        <div class="flex-1 min-h-screen">
+        <div class="flex-1 flex flex-col min-w-0 bg-gray-100 dark:bg-gray-900">
             <!-- NAVBAR -->
-            <div class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-10 transition-colors duration-300">
-                <div class="px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
+            <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-100 dark:border-gray-700 z-10 shrink-0">
+                <div class="px-4 sm:px-6 py-3 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 hover:text-blue-600 transition p-2">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
                         <div>
-                            <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent" x-text="currentPageTitle">Tableau de bord</h1>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 hidden sm:block">Bienvenue, {{ auth()->user()->name }}</p>
+                            <h1 class="text-xl font-bold text-gray-900 dark:text-white" x-text="currentPageTitle">Tableau de bord</h1>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 hidden sm:block">Espace Manager • {{ auth()->user()->name }}</p>
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-2 sm:space-x-4">
-                        <!-- NOTIFICATIONS -->
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
-                                <i class="fas fa-bell text-lg sm:text-xl text-gray-600 dark:text-gray-300"></i>
-                                <span x-show="notificationCount > 0" x-text="notificationCount" class="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold"></span>
+                    <div class="flex items-center space-x-3">
+                        <!-- Theme Toggle -->
+                        <button @click="toggleTheme" class="p-2 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-gray-100 transition shadow-sm border border-gray-100 dark:border-gray-600">
+                            <i x-show="!isDarkMode" class="fas fa-moon"></i>
+                            <i x-show="isDarkMode" class="fas fa-sun text-yellow-400"></i>
+                        </button>
+
+                        <!-- Notifications Dropdown -->
+                        <div class="relative" x-data="{ open: false, notifications: [], count: 0 }" x-init="
+                            const fetchNotifications = () => {
+                                fetch('/notifications')
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        notifications = data.items;
+                                        count = data.count;
+                                    });
+                            };
+                            fetchNotifications();
+                            setInterval(fetchNotifications, 30000);
+                        ">
+                            <button @click="open = !open" class="p-2 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-gray-100 transition shadow-sm border border-gray-100 dark:border-gray-600 relative">
+                                <i class="fas fa-bell"></i>
+                                <template x-if="count > 0">
+                                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white dark:border-gray-800" x-text="count"></span>
+                                </template>
                             </button>
 
-                            <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50">
-                                <div class="p-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                                    <span class="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:text-blue-800 dark:hover:text-blue-300" @click="markAllAsRead">Tout marquer comme lu</span>
+                            <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50">
+                                <div class="p-4 border-b border-gray-50 dark:border-gray-700 flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/20">
+                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
+                                    <template x-if="count > 0">
+                                        <button @click="
+                                            fetch('/notifications/mark-as-read', {
+                                                method: 'POST',
+                                                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                                            }).then(() => {
+                                                notifications = [];
+                                                count = 0;
+                                            })
+                                        " class="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline">Tout marquer comme lu</button>
+                                    </template>
                                 </div>
                                 <div class="max-h-96 overflow-y-auto">
-                                    <template x-for="notif in notifications" :key="notif.id">
-                                        <a :href="notif.url" class="block p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition border-b border-gray-100 dark:border-gray-700">
-                                            <div class="flex items-start space-x-2">
-                                                <i :class="notif.icon" class="mt-1 text-blue-500 dark:text-blue-400"></i>
-                                                <div class="flex-1">
-                                                    <p class="text-sm text-gray-900 dark:text-white" x-text="notif.message"></p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="notif.time"></p>
+                                    <template x-if="notifications.length === 0">
+                                        <div class="p-8 text-center">
+                                            <div class="w-12 h-12 bg-gray-50 dark:bg-gray-900/50 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-300 dark:text-gray-600">
+                                                <i class="fas fa-bell-slash"></i>
+                                            </div>
+                                            <p class="text-xs text-gray-400 font-medium">Aucune nouvelle notification</p>
+                                        </div>
+                                    </template>
+                                    <template x-for="n in notifications" :key="n.id">
+                                        <a :href="'/notifications/' + n.id + '/read'" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors border-b border-gray-50 dark:border-gray-700 last:border-0">
+                                            <div class="flex gap-3">
+                                                <div :class="{
+                                                    'w-8 h-8 rounded-lg flex items-center justify-center shrink-0': true,
+                                                    'bg-blue-100 text-blue-600': n.type === 'info',
+                                                    'bg-amber-100 text-amber-600': n.type === 'warning',
+                                                    'bg-red-100 text-red-600': n.type === 'error'
+                                                }">
+                                                    <i :class="n.icon || 'fas fa-info-circle'" class="text-xs"></i>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-xs text-gray-600 dark:text-gray-300 line-clamp-2" x-text="n.message"></p>
+                                                    <p class="text-[10px] text-gray-400 mt-1 font-medium" x-text="n.time"></p>
                                                 </div>
                                             </div>
                                         </a>
                                     </template>
-                                    <div x-show="notifications.length === 0" class="p-8 text-center text-gray-500 dark:text-gray-400">
-                                        <i class="fas fa-bell-slash text-3xl mb-2"></i>
-                                        <p class="text-sm">Aucune notification</p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- DARK MODE TOGGLE -->
-                        <button @click="toggleTheme" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition relative" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
-                            <i x-show="!isDarkMode" class="fas fa-moon text-lg sm:text-xl text-gray-600 dark:text-gray-300"></i>
-                            <i x-show="isDarkMode" class="fas fa-sun text-lg sm:text-xl text-yellow-400"></i>
-                        </button>
-
-                        <!-- USER MENU -->
+                        <!-- User Profile -->
                         <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center space-x-2 sm:space-x-3 hover:opacity-80 transition p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" @mouseenter="$el.classList.add('floating-fast', 'scale-105')" @mouseleave="$el.classList.remove('floating-fast', 'scale-105')">
-                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-lg">
+                            <button @click="open = !open" class="flex items-center gap-3 p-1 pr-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 hover:bg-gray-100 transition shadow-sm">
+                                <div class="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-gray-600 shadow-sm">
                                     <img src="{{ auth()->user()->profile_photo_url }}" alt="" class="w-full h-full object-cover">
                                 </div>
                                 <div class="hidden md:block text-left">
-                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ auth()->user()->name }}</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ ucfirst(auth()->user()->getRoleNames()->first() ?? 'User') }}</p>
+                                    <p class="text-xs font-bold text-gray-900 dark:text-white leading-tight">{{ auth()->user()->name }}</p>
+                                    <p class="text-[10px] text-gray-500 dark:text-gray-400">{{ ucfirst(auth()->user()->getRoleNames()->first() ?? 'User') }}</p>
                                 </div>
-                                <i class="fas fa-chevron-down text-xs hidden md:block text-gray-500 dark:text-gray-400"></i>
+                                <i class="fas fa-chevron-down text-[10px] text-gray-400"></i>
                             </button>
-
-                            <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50">
-                                <div class="py-2">
-                                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                        <i class="fas fa-user-circle mr-2 w-4"></i> Mon profil
+                            <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50">
+                                <div class="p-2">
+                                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 rounded-xl transition">
+                                        <i class="fas fa-user-circle opacity-50"></i> Mon profil
                                     </a>
-                                    <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                        <i class="fas fa-cog mr-2 w-4"></i> Paramètres
-                                    </a>
-                                    <hr class="my-1 border-gray-200 dark:border-gray-700">
+                                    <hr class="my-1 border-gray-100 dark:border-gray-700">
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                            <i class="fas fa-sign-out-alt mr-2 w-4"></i> Déconnexion
+                                        <button type="submit" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition">
+                                            <i class="fas fa-sign-out-alt"></i> Déconnexion
                                         </button>
                                     </form>
                                 </div>
@@ -369,64 +376,45 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </header>
 
             <!-- MAIN CONTENT -->
-            <div class="p-4 sm:p-6">
-                @if(session('success'))
-                    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show" style="display:block">
-                        <div class="flex items-center justify-between">
-                            <span class="font-semibold">{{ session('success') }}</span>
-                            <button @click="show = false" class="text-green-700 hover:text-green-900 text-xl font-bold">&times;</button>
+            <main class="flex-1 overflow-hidden">
+                <div class="h-full p-4 sm:p-6 overflow-y-auto custom-scrollbar-main">
+                    @if(session('success'))
+                        <div class="mb-4 p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-between shadow-sm" x-data="{ show: true }" x-show="show">
+                            <span class="text-sm font-medium">{{ session('success') }}</span>
+                            <button @click="show = false" class="text-emerald-500 hover:text-emerald-700">&times;</button>
                         </div>
-                    </div>
-                @endif
-                @if(session('error'))
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show" style="display:block">
-                        <div class="flex items-center justify-between">
-                            <span class="font-semibold">{{ session('error') }}</span>
-                            <button @click="show = false" class="text-red-700 hover:text-red-900 text-xl font-bold">&times;</button>
-                        </div>
-                    </div>
-                @endif
-                @if($errors->any())
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition duration-500 ease-in-out" x-data="{ show: true }" x-show="show" style="display:block">
-                        <div class="flex items-start justify-between">
-                            <ul class="list-disc pl-5">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button @click="show = false" class="text-red-700 hover:text-red-900 ml-4 text-xl font-bold">&times;</button>
-                        </div>
-                    </div>
-                @endif
-
-                @yield('content')
-                {{ $slot ?? '' }}
-            </div>
+                    @endif
+                    
+                    @yield('content')
+                </div>
+            </main>
         </div>
     </div>
+
+    <style>
+        .custom-scrollbar-main::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar-main::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar-main::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
+        .dark .custom-scrollbar-main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); }
+    </style>
 
     <script>
         function app() {
             return {
                 sidebarOpen: false,
                 isDarkMode: false,
-                notificationCount: 0,
-                notifications: [],
                 currentPageTitle: 'Tableau de bord',
 
                 init() {
-                    // Update active menu and title based on URL
                     const currentPath = window.location.pathname;
                     const navItems = document.querySelectorAll('.nav-item');
                     
                     navItems.forEach(item => {
                         const itemHref = item.getAttribute('href');
-                        if ((itemHref === '/dashboard' && currentPath === '/dashboard') || 
-                            (itemHref !== '/dashboard' && currentPath.startsWith(itemHref))) {
-                            item.classList.add('active');
+                        if (itemHref && (currentPath === itemHref || (itemHref !== '/' && currentPath.startsWith(itemHref)))) {
                             const titleSpan = item.querySelector('span.flex-1');
                             if (titleSpan) {
                                 this.currentPageTitle = titleSpan.innerText;
@@ -435,93 +423,20 @@
                         }
                     });
 
-                    // Initialiser le mode sombre depuis localStorage
                     const savedTheme = localStorage.getItem('theme');
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-                    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                         this.isDarkMode = true;
                         document.documentElement.classList.add('dark');
-                    } else {
-                        this.isDarkMode = false;
-                        document.documentElement.classList.remove('dark');
                     }
-
-                    this.loadNotifications();
-                    this.startNotificationPolling();
-
-                    // Fermer le sidebar sur mobile après clic sur un lien
-                    document.querySelectorAll('.nav-item').forEach(link => {
-                        link.addEventListener('click', () => {
-                            if (window.innerWidth < 1024) {
-                                this.sidebarOpen = false;
-                            }
-                        });
-                    });
                 },
 
                 toggleTheme() {
                     this.isDarkMode = !this.isDarkMode;
-                    if (this.isDarkMode) {
-                        document.documentElement.classList.add('dark');
-                        localStorage.setItem('theme', 'dark');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.setItem('theme', 'light');
-                    }
-                },
-
-                loadNotifications() {
-                    fetch('/notifications')
-                        .then(res => res.json())
-                        .then(data => {
-                            this.notificationCount = data.count;
-                            this.notifications = data.items || [];
-                        })
-                        .catch(() => {
-                            // Données de démonstration
-                            this.notificationCount = 3;
-                            this.notifications = [
-                                { id: 1, message: '🚛 Nouveau voyage programmé pour demain', time: 'Il y a 5 min', icon: 'fas fa-truck', url: '/admin/voyages' },
-                                { id: 2, message: '🔧 Maintenance prévue pour le véhicule #1234', time: 'Il y a 1 heure', icon: 'fas fa-tools', url: '/admin/maintenances' },
-                                { id: 3, message: '📄 Document d\'assurance expirant dans 3 jours', time: 'Il y a 2 heures', icon: 'fas fa-file-alt', url: '/admin/documents' }
-                            ];
-                        });
-                },
-
-                startNotificationPolling() {
-                    setInterval(() => {
-                        this.loadNotifications();
-                    }, 30000);
-                },
-
-                markAllAsRead() {
-                    fetch('/notifications/mark-as-read', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            this.notificationCount = 0;
-                            this.notifications = [];
-                        }
-                    });
+                    document.documentElement.classList.toggle('dark');
+                    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
                 }
             }
         }
-
-        // Animation des cartes
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.card-hover');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.classList.add('animate-fadeInUp');
-            });
-        });
     </script>
 </body>
 </html>

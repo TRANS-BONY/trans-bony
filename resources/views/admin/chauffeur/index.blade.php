@@ -21,7 +21,7 @@
                     <p class="text-emerald-100 text-sm mt-1">Gérez votre personnel de conduite en toute sécurité</p>
                 </div>
             </div>
-            <a href="{{ route('admin.chauffeurs.create') }}"
+            <a href="{{ route($rolePrefix . '.chauffeurs.create') }}"
                class="group relative overflow-hidden px-6 py-3 bg-white text-emerald-600 rounded-xl shadow-lg hover:bg-emerald-50 transition-all duration-300 hover:scale-105">
                 <div class="relative flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,7 +50,7 @@
                            class="w-full p-3 bg-transparent text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none">
                 </form>
                 @if(request('search'))
-                <a href="{{ route('admin.chauffeurs.index') }}" class="pr-4">
+                <a href="{{ route($rolePrefix . '.chauffeurs.index') }}" class="pr-4">
                     <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -146,13 +146,13 @@
             </div>
 
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 flex justify-between items-center gap-2">
-                <a href="{{ route('admin.chauffeurs.show', $c->id) }}" class="flex-1 text-center py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl transition-colors font-medium text-sm">
+                <a href="{{ route($rolePrefix . '.chauffeurs.show', $c->id) }}" class="flex-1 text-center py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl transition-colors font-medium text-sm">
                     <i class="fas fa-eye mr-1"></i> Voir
                 </a>
-                <a href="{{ route('admin.chauffeurs.edit', $c->id) }}" class="flex-1 text-center py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl transition-colors font-medium text-sm">
+                <a href="{{ route($rolePrefix . '.chauffeurs.edit', $c->id) }}" class="flex-1 text-center py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl transition-colors font-medium text-sm">
                     <i class="fas fa-edit mr-1"></i> Éditer
                 </a>
-                <form method="POST" action="{{ route('admin.chauffeurs.destroy', $c->id) }}" class="flex-1" onsubmit="return confirm('Attention: Confirmer la suppression ?');">
+                <form method="POST" action="{{ route($rolePrefix . '.chauffeurs.destroy', $c->id) }}" class="flex-1" onsubmit="return confirm('Attention: Confirmer la suppression ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="w-full text-center py-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-xl transition-colors font-medium text-sm">
@@ -171,7 +171,7 @@
                 </div>
                 <p class="text-lg font-bold text-gray-700 dark:text-white">Aucun chauffeur trouvé</p>
                 <p class="text-gray-500 dark:text-gray-400 mt-1 mb-6 text-center max-w-md">Ajoutez des chauffeurs à votre flotte pour commencer à gérer vos conducteurs efficacement.</p>
-                <a href="{{ route('admin.chauffeurs.create') }}" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full transition-colors font-bold shadow-lg">
+                <a href="{{ route($rolePrefix . '.chauffeurs.create') }}" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full transition-colors font-bold shadow-lg">
                     <i class="fas fa-plus mr-2"></i> Ajouter un chauffeur
                 </a>
             </div>

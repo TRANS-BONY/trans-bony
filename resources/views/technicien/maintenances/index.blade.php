@@ -14,7 +14,7 @@
     .module-index-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem;
         height: calc(100vh - 100px);
         overflow: hidden;
         padding-bottom: 0.5rem;
@@ -30,83 +30,98 @@
         overflow-y: auto !important;
         padding-right: 0.25rem;
     }
-</style>
-<div class="module-index-wrapper custom-scrollbar">
 
-    {{-- HEADER --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Gestion des Maintenances</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Liste complète des interventions sur le parc</p>
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-down  { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+</style>
+
+<div class="module-index-wrapper custom-scrollbar">
+    <!-- Header avec dégradé plein -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 p-6 animate-slide-down shadow-xl">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+
+        <div class="relative flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-white/20 rounded-xl shadow-lg backdrop-blur-sm">
+                    <i class="fas fa-tools text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">Atelier Maintenance</h1>
+                    <p class="text-amber-100 text-sm mt-1">Gestion technique et réparations du parc</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('technicien.maintenances.create') }}" class="px-5 py-2.5 bg-white text-amber-600 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Nouvelle Maintenance
+                </a>
+                <form method="GET" class="relative group">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors"></i>
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
+                           class="w-64 pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none backdrop-blur-sm transition-all">
+                </form>
+            </div>
         </div>
-        <a href="{{ route('technicien.maintenances.create') }}" class="flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition shadow-sm">
-            <i class="fas fa-plus"></i> Nouvelle Maintenance
-        </a>
     </div>
 
-    {{-- TABLEAU DES MAINTENANCES --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container">
-        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col list-scroll-container animate-fade-in-up" style="animation-delay: 0.2s">
+        <div class="overflow-x-auto flex-1 custom-scrollbar">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
-                        <th class="p-4 font-medium">Véhicule</th>
-                        <th class="p-4 font-medium">Type</th>
-                        <th class="p-4 font-medium">Date Prévue</th>
-                        <th class="p-4 font-medium">Statut</th>
-                        <th class="p-4 font-medium">Coût</th>
-                        <th class="p-4 font-medium text-right">Actions</th>
+                    <tr class="bg-gray-50 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider sticky top-0 z-10 backdrop-blur-md">
+                        <th class="p-4 font-bold">Véhicule</th>
+                        <th class="p-4 font-bold">Type</th>
+                        <th class="p-4 font-bold">Date Prévue</th>
+                        <th class="p-4 font-bold text-center">Statut</th>
+                        <th class="p-4 font-bold text-right">Coût</th>
+                        <th class="p-4 font-bold text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-700 text-sm">
                     @forelse($maintenances as $m)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                    <tr class="hover:bg-amber-50/30 dark:hover:bg-amber-900/10 transition-colors">
                         <td class="p-4">
-                            <a href="{{ route('technicien.vehicules.show', $m->vehicule_id) }}" class="font-semibold text-gray-900 dark:text-white hover:text-blue-600 transition">
-                                {{ $m->vehicule->immatriculation ?? 'N/A' }}
-                            </a>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-[10px]">
+                                    {{ substr($m->vehicule->immatriculation ?? '?', -4) }}
+                                </div>
+                                <span class="font-bold text-gray-900 dark:text-white">{{ $m->vehicule->immatriculation ?? 'N/A' }}</span>
+                            </div>
                         </td>
-                        <td class="p-4 text-gray-500 dark:text-gray-400">{{ ucfirst($m->type) }}</td>
-                        <td class="p-4 font-medium text-gray-700 dark:text-gray-300">{{ $m->date_prevue->format('d/m/Y') }}</td>
-                        <td class="p-4">
-                            <span class="px-2 py-1 text-xs font-semibold rounded-lg
-                                {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-700' : '' }}
+                        <td class="p-4 text-gray-600 dark:text-gray-300 font-medium">{{ ucfirst($m->type) }}</td>
+                        <td class="p-4 text-gray-700 dark:text-gray-300">{{ $m->date_prevue->format('d/m/Y') }}</td>
+                        <td class="p-4 text-center">
+                            <span class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-lg
+                                {{ $m->statut == 'terminee' ? 'bg-emerald-100 text-emerald-700' : '' }}
                                 {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-700' : '' }}
                                 {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-700' : '' }}">
-                                {{ ucfirst($m->statut) }}
+                                {{ $m->statut }}
                             </span>
                         </td>
-                        <td class="p-4 text-gray-500 dark:text-gray-400">
-                            {{ $m->cout ? number_format($m->cout, 0, ',', ' ') . ' Franc CFA' : '-' }}
+                        <td class="p-4 text-right font-bold text-amber-600 dark:text-amber-400">
+                            {{ $m->cout ? number_format($m->cout, 0, ',', ' ') . ' FCFA' : '—' }}
                         </td>
-                        <td class="p-4 text-right space-x-2">
-                            <a href="{{ route('technicien.maintenances.show', $m) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition" title="Voir">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('technicien.maintenances.edit', $m) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-orange-600 hover:bg-orange-50 transition" title="Modifier">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('technicien.maintenances.destroy', $m) }}" method="POST" class="inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette maintenance ?');">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition" title="Supprimer">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
+                        <td class="p-4 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('technicien.maintenances.show', $m) }}" class="p-2 bg-gray-50 hover:bg-blue-100 text-gray-400 hover:text-blue-600 rounded-lg transition"><i class="fas fa-eye text-xs"></i></a>
+                                <a href="{{ route('technicien.maintenances.edit', $m) }}" class="p-2 bg-gray-50 hover:bg-orange-100 text-gray-400 hover:text-orange-600 rounded-lg transition"><i class="fas fa-edit text-xs"></i></a>
+                                <form action="{{ route('technicien.maintenances.destroy', $m) }}" method="POST" class="inline" onsubmit="return confirm('Supprimer cette maintenance ?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="p-2 bg-gray-50 hover:bg-red-100 text-gray-400 hover:text-red-600 rounded-lg transition"><i class="fas fa-trash text-xs"></i></button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="7" class="p-8 text-center text-gray-500 dark:text-gray-400">
-                            <i class="fas fa-tools text-3xl mb-3 opacity-50"></i>
-                            <p>Aucune maintenance n'est enregistrée.</p>
-                        </td>
-                    </tr>
+                    <tr><td colspan="6" class="p-12 text-center text-gray-400">Aucune maintenance en attente.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
         @if($maintenances->hasPages())
-        <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 shrink-0">
+        <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 shrink-0">
             {{ $maintenances->links() }}
         </div>
         @endif

@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:admin');
+        // Supprimé pour permettre l'accès au manager via web.php
     }
 
     /**
@@ -30,7 +30,11 @@ class UserController extends Controller
             });
         })->with('roles')->orderBy('created_at', 'desc')->paginate(10)->appends(request()->query());
 
-        return view('admin.users.index', compact('users'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $view = 'admin.users.index';
+        if ($role === 'manager') $view = 'manager.users.index';
+
+        return view($view, compact('users'));
     }
 
     /**
@@ -83,8 +87,11 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load('roles');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $view = 'admin.users.show';
+        if ($role === 'manager') $view = 'manager.users.show';
 
-        return view('admin.users.show', compact('user'));
+        return view($view, compact('user'));
     }
 
     /**

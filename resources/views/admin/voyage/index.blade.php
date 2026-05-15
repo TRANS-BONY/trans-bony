@@ -101,7 +101,7 @@
                         </div>
                     @endif
 
-<form method="POST" action="{{ route('admin.voyages.store') }}" class="space-y-4">
+<form method="POST" action="{{ route($rolePrefix . '.voyages.store') }}" class="space-y-4">
                         @csrf
 
                         <!-- Date et heure de départ -->
@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function () {
             week: 'Semaine',
             day: 'Jour'
         },
-events: "{{ route('admin.voyages.events') }}",
+events: "{{ route($rolePrefix . '.voyages.events') }}",
         eventDidMount: function(info) {
             // Ajouter une classe CSS selon le type d'événement
             if (info.event.extendedProps.type === 'maintenance') {
@@ -395,7 +395,7 @@ events: "{{ route('admin.voyages.events') }}",
             info.el.setAttribute('title', `${info.event.title}Départ: ${info.event.start.toLocaleString()}`);
         },
         eventDrop: function(info) {
-            fetch('/admin/voyages/' + info.event.id + '/move', {
+            fetch('/' + '{{ $rolePrefix }}' + '/voyages/' + info.event.id + '/move', {
                 method: 'PUT',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -423,7 +423,7 @@ events: "{{ route('admin.voyages.events') }}",
         },
         eventClick: function(info){
             if(confirm("⚠️ Supprimer ce voyage ?" + info.event.title + "Cette action est irréversible.")){
-                fetch('/admin/voyages/' + info.event.id, {
+                fetch('/' + '{{ $rolePrefix }}' + '/voyages/' + info.event.id, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',

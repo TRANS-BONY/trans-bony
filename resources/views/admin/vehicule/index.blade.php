@@ -69,7 +69,7 @@
                     <p class="text-indigo-100 text-sm mt-1">Gérez votre flotte automobile en toute simplicité</p>
                 </div>
             </div>
-            <a href="{{ route('admin.vehicules.create') }}"
+            <a href="{{ route($rolePrefix . '.vehicules.create') }}"
                class="group relative overflow-hidden px-6 py-3 bg-emerald-500 rounded-xl shadow-lg hover:bg-emerald-600 transition-all duration-300 hover:scale-105">
                 <div class="relative flex items-center gap-2">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +98,7 @@
                            class="w-full p-3 bg-transparent text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none">
                 </form>
                 @if(request('search'))
-                <a href="{{ route('admin.vehicules.index') }}" class="pr-4">
+                <a href="{{ route($rolePrefix . '.vehicules.index') }}" class="pr-4">
                     <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -217,13 +217,13 @@
                         </div>
 
                         <div class="flex items-center justify-end gap-2 mt-2">
-                            <a href="{{ route('admin.vehicules.show', $v->id) }}" class="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-emerald-50 hover:text-emerald-600 transition-colors">
+                            <a href="{{ route($rolePrefix . '.vehicules.show', $v->id) }}" class="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-emerald-50 hover:text-emerald-600 transition-colors">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('admin.vehicules.edit', $v->id) }}" class="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                            <a href="{{ route($rolePrefix . '.vehicules.edit', $v->id) }}" class="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form method="POST" action="{{ route('admin.vehicules.destroy', $v->id) }}" class="inline">
+                            <form method="POST" action="{{ route($rolePrefix . '.vehicules.destroy', $v->id) }}" class="inline">
                                 @csrf @method('DELETE')
                                 <button type="submit" onclick="return confirm('Supprimer ce véhicule ?')" class="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors">
                                     <i class="fas fa-trash"></i>
@@ -286,13 +286,13 @@
                             </td>
                             <td class="p-4">
                                 <div class="flex items-center justify-center gap-1">
-                                    <a href="{{ route('admin.vehicules.show', $v->id) }}" class="p-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-gray-400 hover:text-emerald-600 transition-all">
+                                    <a href="{{ route($rolePrefix . '.vehicules.show', $v->id) }}" class="p-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-gray-400 hover:text-emerald-600 transition-all">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.vehicules.edit', $v->id) }}" class="p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-400 hover:text-indigo-600 transition-all">
+                                    <a href="{{ route($rolePrefix . '.vehicules.edit', $v->id) }}" class="p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-400 hover:text-indigo-600 transition-all">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="POST" action="{{ route('admin.vehicules.destroy', $v->id) }}" class="inline">
+                                    <form method="POST" action="{{ route($rolePrefix . '.vehicules.destroy', $v->id) }}" class="inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" onclick="return confirm('Supprimer ce véhicule ?')" class="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-600 transition-all">
                                             <i class="fas fa-trash"></i>

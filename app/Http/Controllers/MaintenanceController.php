@@ -24,15 +24,24 @@ class MaintenanceController extends Controller
             });
         }
 
-        $maintenances = $query->paginate(5)->appends($request->query());
-        return view('admin.maintenance.index', compact('maintenances'));
+        $maintenances = $query->paginate(10)->appends($request->query());
+
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.maintenances.index";
+        if ($role === 'admin') $view = 'admin.maintenance.index';
+        if (!view()->exists($view)) $view = 'admin.maintenance.index';
+
+        return view($view, compact('maintenances', 'rolePrefix'));
     }
 
     public function store(MaintenanceRequest $request)
     {
         try {
             Maintenance::create($request->validated());
-            return redirect()->route('admin.maintenances.index')->with('success','Maintenance enregistrée');
+            $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+            return redirect()->route($role . '.maintenances.index')->with('success','Maintenance enregistrée');
         } catch (\Exception $e) {
             Log::error('Maintenance create failed: ' . $e->getMessage());
             return back()->with('error','Erreur lors de l\'enregistrement: ' . $e->getMessage());
@@ -41,40 +50,56 @@ class MaintenanceController extends Controller
 
     public function create()
     {
-        $this->authorize('create', Maintenance::class);
         $vehicules = Vehicule::all();
         if ($vehicules->isEmpty()) {
             session()->flash('warning', 'Aucun véhicule disponible. Créer d\'abord des véhicules.');
         }
-        return view('admin.maintenance.create', compact('vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.maintenances.create";
+        if ($role === 'admin') $view = 'admin.maintenance.create';
+        if (!view()->exists($view)) $view = 'admin.maintenance.create';
+        
+        return view($view, compact('vehicules'));
     }
 
     public function show(Maintenance $maintenance)
     {
-        $this->authorize('view', $maintenance);
         $maintenance->load('vehicule');
-        return view('admin.maintenance.show', compact('maintenance'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.maintenances.show";
+        if ($role === 'admin') $view = 'admin.maintenance.show';
+        if (!view()->exists($view)) $view = 'admin.maintenance.show';
+        
+        return view($view, compact('maintenance', 'rolePrefix'));
     }
 
     public function edit(Maintenance $maintenance)
     {
-        $this->authorize('update', $maintenance);
         $vehicules = Vehicule::all();
-        return view('admin.maintenance.edit', compact('maintenance','vehicules'));
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        
+        $view = "{$role}.maintenances.edit";
+        if ($role === 'admin') $view = 'admin.maintenance.edit';
+        if (!view()->exists($view)) $view = 'admin.maintenance.edit';
+        
+        return view($view, compact('maintenance','vehicules'));
     }
 
     public function update(MaintenanceRequest $request, Maintenance $maintenance)
     {
         $maintenance->update($request->validated());
-
-        return redirect()->route('admin.maintenances.index')->with('success', 'Maintenance mise à jour');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.maintenances.index')->with('success', 'Maintenance mise à jour');
     }
 
     public function destroy(Maintenance $maintenance)
     {
         $maintenance->delete();
-
-        return redirect()->route('admin.maintenances.index')->with('success', 'Maintenance supprimée');
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        return redirect()->route($role . '.maintenances.index')->with('success', 'Maintenance supprimée');
     }
 }
 

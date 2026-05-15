@@ -20,38 +20,19 @@ class DashboardController extends Controller
         $roles = $user->getRoleNames();
         $role  = strtolower($roles->first() ?? 'agent');
 
-        // Redirection dédiée pour le rôle comptable
-        if ($role === 'comptable') {
-            return redirect()->route('comptable.dashboard');
-        }
-
-        // Redirection dédiée pour le rôle manager
-        if ($role === 'manager') {
-            return redirect()->route('manager.dashboard');
-        }
-
-        // Redirection dédiée pour le rôle agent
-        if ($role === 'agent') {
-            return redirect()->route('agent.dashboard');
-        }
-
-        // Redirection dédiée pour le rôle technicien
-        if ($role === 'technicien') {
-            return redirect()->route('technicien.dashboard');
-        }
-
-        // Redirection dédiée pour le rôle gestionnaire
-        if ($role === 'gestionnaire') {
-            return redirect()->route('gestionnaire.dashboard');
-        }
         // ── Véhicules ──────────────────────────────────────────
         $vehicules              = Vehicule::count();
         $vehicules_disponibles  = Vehicule::where('statut', 'disponible')->count();
         $vehicules_mission      = Vehicule::where('statut', 'mission')->count();
         $vehicules_maintenance  = Vehicule::where('statut', 'maintenance')->count();
+        $nb_vehicules           = $vehicules; // Alias pour technicien
 
         // ── Chauffeurs ─────────────────────────────────────────
         $chauffeurs = Chauffeur::count();
+        $chauffeurs_actifs = Chauffeur::where('actif', 1)->count();
+        $chauffeurs_disponibles = $chauffeurs_actifs; // Hypothèse : actifs = disponibles
+        $chauffeurs_mission     = 0;
+        $chauffeurs_conge       = 0;
 
         // ── Voyages ────────────────────────────────────────────
         $voyages       = Voyage::count();
@@ -61,11 +42,12 @@ class DashboardController extends Controller
         $voyages_today = Voyage::whereDate('date_depart', today())->count();
 
         // ── Maintenances ───────────────────────────────────────
-        $maintenances         = Maintenance::count();
-        $maintenances_encours = Maintenance::where('statut', 'en cours')->count();
-        $maintenances_planif  = Maintenance::where('statut', 'planifiee')
-                                           ->count();
+        $maintenances           = Maintenance::count();
+        $maintenances_en_cours  = Maintenance::where('statut', 'en cours')->count();
+        $maintenances_planifiees = Maintenance::where('statut', 'planifiee')->count();
+        $maintenances_terminees  = Maintenance::where('statut', 'terminee')->count();
         $maintenance_cout_total = Maintenance::sum('cout');
+        $dernieres_maintenances = Maintenance::with('vehicule')->latest()->take(5)->get();
 
         // ── Documents ──────────────────────────────────────────
         $documents      = Document::count();
@@ -75,13 +57,19 @@ class DashboardController extends Controller
             Carbon::now()->addDays(30),
         ])->count();
 
-        // ── Alertes (docs expirant dans 7 jours) ───────────────
+        // ── Alertes ────────────────────────────────────────────
         $alertes = Document::where('date_expiration', '<=', Carbon::now()->addDays(7))->count();
+        $alertes_critiques = Document::where('date_expiration', '<', Carbon::now())->count();
+        $alertes_mineures  = Document::whereBetween('date_expiration', [
+            Carbon::now(),
+            Carbon::now()->addDays(7),
+        ])->count();
 
         // ── Recettes ───────────────────────────────────────────
         $recettes       = RecetteMensuelle::whereMonth('date', now()->month)
                                           ->whereYear('date', now()->year)
                                           ->sum('montant');
+        $recettes_mois  = $recettes; // Alias pour comptable
         $recettes_total = RecetteMensuelle::sum('montant');
         $recettes_mois_prec = RecetteMensuelle::whereMonth('date', now()->subMonth()->month)
                                                ->whereYear('date', now()->subMonth()->year)
@@ -92,7 +80,7 @@ class DashboardController extends Controller
             ? round((($recettes - $recettes_mois_prec) / $recettes_mois_prec) * 100, 1)
             : 0;
 
-        // Barre de progression recette (par rapport au maximum mensuel connu)
+        // Barre de progression recette
         $recettes_max  = RecetteMensuelle::selectRaw('SUM(montant) as total, YEAR(date) as y, MONTH(date) as m')
                                          ->groupBy('y', 'm')
                                          ->orderBy('total', 'desc')
@@ -106,41 +94,75 @@ class DashboardController extends Controller
         $total_parc  = $vehicules_disponibles + $vehicules_mission + $vehicules_maintenance;
         $occupation  = $total_parc > 0 ? round(($vehicules_mission / $total_parc) * 100, 1) : 0;
 
+        // ── Graphique (12 derniers mois) ──────────────────────
+        $chart_labels = [];
+        $chart_data   = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $d = now()->subMonths($i);
+            $chart_labels[] = $d->isoFormat('MMM YY');
+            $chart_data[]   = (float) RecetteMensuelle::whereMonth('date', $d->month)
+                                                        ->whereYear('date', $d->year)
+                                                        ->sum('montant');
+        }
+
+        // ── Dernières données ──────────────────────────────────
+        $dernieres_recettes = RecetteMensuelle::with('vehicule')->orderByDesc('date')->take(5)->get();
+        $derniers_voyages   = Voyage::with(['vehicule', 'chauffeur'])->orderByDesc('date_depart')->take(5)->get();
+        $derniers_vehicules = Vehicule::latest()->take(5)->get();
+        $derniers_chauffeurs = Chauffeur::latest()->take(5)->get();
+
+        // ── Rapports ──────────────────────────────────────────
+        $nb_rapports = \App\Models\Rapport::count();
+        $nb_recettes = RecetteMensuelle::count();
+        $nb_recettes_mois = RecetteMensuelle::whereMonth('date', now()->month)
+                                           ->whereYear('date', now()->year)
+                                           ->count();
+
+        // ── Tableau $stats pour la compatibilité (Gestionnaire, etc.)
+        $stats = [
+            'vehicules'              => $vehicules,
+            'vehicules_disponibles'  => $vehicules_disponibles,
+            'vehicules_mission'      => $vehicules_mission,
+            'vehicules_maintenance'  => $vehicules_maintenance,
+            'chauffeurs'             => $chauffeurs,
+            'chauffeurs_actifs'      => $chauffeurs_actifs,
+            'chauffeurs_disponibles' => $chauffeurs_disponibles,
+            'chauffeurs_mission'     => $chauffeurs_mission,
+            'chauffeurs_conge'       => $chauffeurs_conge,
+            'voyages'                => $voyages,
+            'voyages_mois'           => $voyages_mois,
+            'voyages_today'          => $voyages_today,
+            'maintenances'           => $maintenances,
+            'maintenances_en_cours'  => $maintenances_en_cours,
+            'maintenances_planifiees' => $maintenances_planifiees,
+            'documents'              => $documents,
+            'documents_expirant'     => $alertes,
+            'recettes_mois'          => $recettes,
+            'recettes_total'         => $recettes_total,
+            'occupation'             => $occupation,
+        ];
+
         // ── Vue selon le rôle ──────────────────────────────────
-        $view = view()->exists("{$role}.index") ? "{$role}.index" : 'admin.dashboard';
+        $view = 'admin.index';
+        if ($role === 'comptable')    $view = 'comptable.index';
+        if ($role === 'manager')      $view = 'manager.dashboard';
+        if ($role === 'agent')        $view = 'agent.index';
+        if ($role === 'technicien')   $view = 'technicien.dashboard';
+        if ($role === 'gestionnaire') $view = 'gestionnaire.dashboard';
 
         return view($view, compact(
             'role',
-            // Véhicules
-            'vehicules',
-            'vehicules_disponibles',
-            'vehicules_mission',
-            'vehicules_maintenance',
-            // Chauffeurs
-            'chauffeurs',
-            // Voyages
-            'voyages',
-            'voyages_mois',
-            'voyages_today',
-            // Maintenances
-            'maintenances',
-            'maintenances_encours',
-            'maintenances_planif',
-            'maintenance_cout_total',
-            // Documents
-            'documents',
-            'docs_expire',
-            'docs_bientot',
-            'alertes',
-            // Recettes
-            'recettes',
-            'recettes_total',
-            'recettes_evolution',
-            'recettes_pct',
-            // Users
+            'stats',
+            'vehicules', 'vehicules_disponibles', 'vehicules_mission', 'vehicules_maintenance', 'derniers_vehicules', 'nb_vehicules',
+            'chauffeurs', 'chauffeurs_actifs', 'chauffeurs_disponibles', 'chauffeurs_mission', 'chauffeurs_conge', 'derniers_chauffeurs',
+            'voyages', 'voyages_mois', 'voyages_today', 'derniers_voyages',
+            'maintenances', 'maintenances_en_cours', 'maintenances_planifiees', 'maintenances_terminees', 'maintenance_cout_total', 'dernieres_maintenances',
+            'documents', 'docs_expire', 'docs_bientot', 'alertes', 'alertes_critiques', 'alertes_mineures',
+            'recettes', 'recettes_mois', 'recettes_total', 'recettes_evolution', 'recettes_pct', 'dernieres_recettes',
+            'chart_labels', 'chart_data',
             'users',
-            // Taux
-            'occupation'
+            'occupation',
+            'nb_rapports', 'nb_recettes', 'nb_recettes_mois'
         ));
     }
 }

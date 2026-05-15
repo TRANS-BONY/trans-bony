@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Vehicule;
 use App\Models\Maintenance;
 use Illuminate\Http\Request;
-use App\Http\Requests\MaintenanceRequest;
 
 class TechnicienController extends Controller
 {
-    // ─────────────────────────────────────────
-    //  DASHBOARD
-    // ─────────────────────────────────────────
+    /**
+     * Dashboard Technicien
+     */
     public function dashboard()
     {
         $nb_vehicules = Vehicule::count();
@@ -35,88 +34,5 @@ class TechnicienController extends Controller
             'maintenances_planifiees',
             'dernieres_maintenances'
         ));
-    }
-
-    // ─────────────────────────────────────────
-    //  VEHICULES — READ-ONLY POUR LE TECHNICIEN
-    // ─────────────────────────────────────────
-    public function vehiculesIndex(\Illuminate\Http\Request $request)
-    {
-        $search = request('search');
-        $vehicules = Vehicule::when($search, function($q) use ($search) {
-            return $q->where(function($q2) use ($search) {
-                $q2->where('immatriculation', 'like', "%{$search}%")
-                   ->orWhere('marque', 'like', "%{$search}%")
-                   ->orWhere('modele', 'like', "%{$search}%")
-                ;
-            });
-        })->orderBy('immatriculation')->paginate(12)->appends(request()->query());
-        return view('technicien.vehicules.index', compact('vehicules'));
-    }
-
-    public function vehiculesShow(Vehicule $vehicule)
-    {
-        $vehicule->load(['maintenances' => function($q) {
-            $q->orderByDesc('date_prevue');
-        }]);
-        return view('technicien.vehicules.show', compact('vehicule'));
-    }
-
-    // ─────────────────────────────────────────
-    //  MAINTENANCES — CRUD COMPLET
-    // ─────────────────────────────────────────
-    public function maintenancesIndex(\Illuminate\Http\Request $request)
-    {
-        $search = request('search');
-        $maintenances = Maintenance::when($search, function($q) use ($search) {
-            return $q->where(function($q2) use ($search) {
-                $q2->where('type', 'like', "%{$search}%")
-                   ->orWhere('description', 'like', "%{$search}%")
-                ;
-            });
-        })->with('vehicule')->orderByDesc('date_prevue')->paginate(15)->appends(request()->query());
-        return view('technicien.maintenances.index', compact('maintenances'));
-    }
-
-    public function maintenancesCreate()
-    {
-        $vehicules = Vehicule::orderBy('immatriculation')->get();
-        return view('technicien.maintenances.create', compact('vehicules'));
-    }
-
-    public function maintenancesStore(MaintenanceRequest $request)
-    {
-        Maintenance::create($request->validated());
-
-        return redirect()->route('technicien.maintenances.index')
-                         ->with('success', 'Maintenance ajoutée avec succès.');
-    }
-
-    public function maintenancesShow(Maintenance $maintenance)
-    {
-        $maintenance->load('vehicule');
-        return view('technicien.maintenances.show', compact('maintenance'));
-    }
-
-    public function maintenancesEdit(Maintenance $maintenance)
-    {
-        $vehicules = Vehicule::orderBy('immatriculation')->get();
-        return view('technicien.maintenances.edit', compact('maintenance', 'vehicules'));
-    }
-
-    public function maintenancesUpdate(MaintenanceRequest $request, Maintenance $maintenance)
-    {
-        $maintenance->update($request->validated());
-
-        return redirect()->route('technicien.maintenances.index')
-                         ->with('success', 'Maintenance mise à jour avec succès.');
-    }
-
-    public function maintenancesDestroy(Maintenance $maintenance)
-    {
-        $maintenance->delete();
-
-        return redirect()->route('technicien.maintenances.index')
-                         ->with('success', 'Maintenance supprimée avec succès.');
     }
 }

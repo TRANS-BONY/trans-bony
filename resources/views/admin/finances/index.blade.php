@@ -1,9 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6">
+<style>
+    /* Désactiver le scroll global */
+    html, body { overflow: hidden !important; height: 100vh !important; }
+    
+    /* Scrollbar minimaliste */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+    
+    /* Wrapper Layout */
+    .module-index-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        height: calc(100vh - 100px);
+        overflow: hidden;
+        padding-bottom: 0.5rem;
+    }
+    
+    .module-index-wrapper > * {
+        flex-shrink: 0;
+    }
+    
+    .module-index-wrapper > .list-scroll-container {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        padding-right: 0.25rem;
+    }
 
-    {{-- HEADER --}}
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-slide-down  { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+</style>
+
+<div class="module-index-wrapper custom-scrollbar">
+    <!-- Header avec dégradé plein -->
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 p-6 animate-slide-down shadow-xl">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
@@ -17,10 +52,17 @@
                     <p class="text-emerald-100 text-sm mt-1">Gestion des revenus de la flotte</p>
                 </div>
             </div>
-            <a href="{{ route('admin.recettes.create') }}"
-               class="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 font-bold rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-                <i class="fas fa-plus"></i> Nouvelle recette
-            </a>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('admin.recettes.create') }}"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 font-bold rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                    <i class="fas fa-plus"></i> Nouvelle recette
+                </a>
+                <form method="GET" class="relative group">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors"></i>
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
+                           class="w-64 pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none backdrop-blur-sm transition-all">
+                </form>
+            </div>
         </div>
     </div>
 
@@ -69,36 +111,11 @@
     </div>
 
     {{-- TABLE --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 animate-fade-in-up" style="animation-delay:0.2s">
-        <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-white dark:from-gray-750 dark:to-gray-800 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl">
-                    <i class="fas fa-list text-emerald-600 dark:text-emerald-400"></i>
-                </div>
-                <div>
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-white">Historique des recettes</h2>
-                    <p class="text-xs text-gray-400 dark:text-gray-500">Liste détaillée des revenus</p>
-                </div>
-            </div>
-            <a href="{{ route('admin.recettes.create') }}"
-               class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-sm font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all duration-300">
-                <i class="fas fa-plus"></i> Ajouter
-            </a>
-        </div>
-
-        
-    <!-- Barre de recherche injectée -->
-    <div class="mb-4">
-        <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
-                   class="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
-        </form>
-    </div>
-<div class="overflow-x-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 animate-fade-in-up flex flex-col list-scroll-container" style="animation-delay:0.2s">
+        <div class="overflow-x-auto flex-1 custom-scrollbar">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750">
+                    <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750 sticky top-0 z-10">
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Mois / Date</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Type</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Véhicule</th>
@@ -162,39 +179,16 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-16 text-center">
-                            <div class="flex flex-col items-center gap-3 text-gray-400">
-                                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                    <i class="fas fa-coins text-3xl text-gray-300 dark:text-gray-600"></i>
-                                </div>
-                                <p class="text-base font-semibold text-gray-500 dark:text-gray-400">Aucune recette enregistrée</p>
-                                <p class="text-sm">Commencez par ajouter la première recette</p>
-                                <a href="{{ route('admin.recettes.create') }}"
-                                   class="mt-2 inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl shadow hover:shadow-md hover:scale-105 transition-all">
-                                    <i class="fas fa-plus"></i> Ajouter une recette
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    <tr><td colspan="5" class="p-12 text-center text-gray-400">Aucune recette enregistrée.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
         @if($recettes->hasPages())
-        <div class="border-t border-gray-100 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750">
+        <div class="border-t border-gray-100 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750 shrink-0">
             {{ $recettes->links() }}
         </div>
         @endif
     </div>
 </div>
-
-<style>
-@keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.animate-slide-down  { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-.animate-fade-in-up  { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-</style>
 @endsection
-
