@@ -90,6 +90,7 @@ Route::middleware('permission:voir rapports')->group(function () {
     // Notifications
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/mark-as-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::get('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'readAndRedirect'])->name('notifications.read');
 
     // Admin only - Audits
 Route::middleware('role:admin')->group(function () {

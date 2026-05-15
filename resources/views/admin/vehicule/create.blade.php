@@ -67,13 +67,14 @@
                         <input type="text"
                                name="immatriculation"
                                value="{{ old('immatriculation') }}"
-                               placeholder="EX: AB-123-CD"
+                               placeholder="EX: 001 XP 4"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('immatriculation') border-red-500 @enderror"
+                               oninput="this.value = this.value.toUpperCase()"
                                required>
                         @error('immatriculation')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Format: XX-123-XX ou XX-1234-XX</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Format: 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre, séparés par des espaces)</p>
                     </div>
 
                     <!-- Marque -->
@@ -84,12 +85,25 @@
                             </svg>
                             Marque <span class="text-red-500">*</span>
                         </label>
-                        <input type="text"
-                               name="marque"
-                               value="{{ old('marque') }}"
-                               placeholder="Ex: Toyota, Renault, Peugeot, Mercedes..."
-                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('marque') border-red-500 @enderror"
-                               required>
+                        <div class="relative">
+                            <select name="marque"
+                                    class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white appearance-none cursor-pointer @error('marque') border-red-500 @enderror"
+                                    required>
+                                <option value="" disabled {{ old('marque') ? '' : 'selected' }}>-- Sélectionnez une marque --</option>
+                                <option value="TOYOTA" {{ old('marque') == 'TOYOTA' ? 'selected' : '' }}>Toyota</option>
+                                <option value="RENAULT" {{ old('marque') == 'RENAULT' ? 'selected' : '' }}>Renault</option>
+                                <option value="PEUGEOT" {{ old('marque') == 'PEUGEOT' ? 'selected' : '' }}>Peugeot</option>
+                                <option value="MERCEDES" {{ old('marque') == 'MERCEDES' ? 'selected' : '' }}>Mercedes</option>
+                                <option value="FORD" {{ old('marque') == 'FORD' ? 'selected' : '' }}>Ford</option>
+                                <option value="HYUNDAI" {{ old('marque') == 'HYUNDAI' ? 'selected' : '' }}>Hyundai</option>
+                                <option value="MITSUBISHI" {{ old('marque') == 'MITSUBISHI' ? 'selected' : '' }}>Mitsubishi</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
                         @error('marque')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
@@ -103,12 +117,28 @@
                             </svg>
                             Modèle <span class="text-red-500">*</span>
                         </label>
-                        <input type="text"
-                               name="modele"
-                               value="{{ old('modele') }}"
-                               placeholder="Ex: Clio, 208, C3, Serie 3..."
-                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('modele') border-red-500 @enderror"
-                               required>
+                        <div class="relative">
+                            <select name="modele"
+                                    class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white appearance-none cursor-pointer @error('modele') border-red-500 @enderror"
+                                    required>
+                                <option value="" disabled {{ old('modele') ? '' : 'selected' }}>-- Sélectionnez un modèle --</option>
+                                <option value="YARIS" {{ old('modele') == 'YARIS' ? 'selected' : '' }}>Yaris</option>
+                                <option value="COROLLA" {{ old('modele') == 'COROLLA' ? 'selected' : '' }}>Corolla</option>
+                                <option value="CLIO" {{ old('modele') == 'CLIO' ? 'selected' : '' }}>Clio</option>
+                                <option value="208" {{ old('modele') == '208' ? 'selected' : '' }}>208</option>
+                                <option value="308" {{ old('modele') == '308' ? 'selected' : '' }}>308</option>
+                                <option value="CLASSE A" {{ old('modele') == 'CLASSE A' ? 'selected' : '' }}>Classe A</option>
+                                <option value="SPRINTER" {{ old('modele') == 'SPRINTER' ? 'selected' : '' }}>Sprinter</option>
+                                <option value="TRANSIT" {{ old('modele') == 'TRANSIT' ? 'selected' : '' }}>Transit</option>
+                                <option value="HIACE" {{ old('modele') == 'HIACE' ? 'selected' : '' }}>Hiace</option>
+                                <option value="COASTER" {{ old('modele') == 'COASTER' ? 'selected' : '' }}>Coaster</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
                         @error('modele')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror

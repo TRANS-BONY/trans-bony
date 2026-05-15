@@ -28,8 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Middleware globaux (optionnel)
         $middleware->append([
-            // Exemple :
-            // \App\Http\Middleware\LogActivity::class,
+            \App\Http\Middleware\UpdateRoleActivity::class,
         ]);
 
         // Alias middleware IMPORTANT

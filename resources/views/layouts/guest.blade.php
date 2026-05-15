@@ -6,6 +6,7 @@
     <meta name="description" content="Trans Bony - Plateforme professionnelle de gestion de flotte de transport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Trans Bony — Connexion</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%233b82f6' d='M488 128h-8V80c0-44.18-35.82-80-80-80H112c-44.18 0-80 35.82-80 80v48h-8c-13.25 0-24 10.75-24 24v80c0 13.25 10.75 24 24 24v120c0 13.25 10.75 24 24 24h24v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h192v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h24c13.25 0 24-10.75 24-24V256c13.25 0 24-10.75 24-24v-80c0-13.25-10.75-24-24-24zM160 384c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm256-192H96V80c0-8.84 7.16-16 16-16h288c8.84 0 16 7.16 16 16v112zm-64 192c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z'/></svg>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,8 +69,8 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: url('/images/bg-truck.jpg') center center / cover no-repeat;
-            opacity: 0.25;
+            background: url('{{ asset('images/bg-bus.jpg') }}') center center / cover no-repeat;
+            opacity: 0.35;
             animation: bgZoom 20s ease-in-out infinite alternate;
         }
 
@@ -654,13 +655,13 @@
 
         <div class="hero-content">
             <div class="hero-badge">
-                <i class="fas fa-truck-fast"></i>
+                <i class="fas fa-bus"></i>
                 Plateforme de gestion de flotte
             </div>
 
             <div class="hero-logo">
                 <div class="hero-logo-icon">
-                    <i class="fas fa-truck-fast"></i>
+                    <i class="fas fa-bus"></i>
                 </div>
             </div>
 

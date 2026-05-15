@@ -45,10 +45,10 @@ class VehiculeController extends Controller
             'immatriculation' => [
                 'required',
                 'unique:vehicules',
-                'regex:/^[A-Za-z0-9-]+$/'
+                'regex:/^(?!000)\d{3}\s[a-zA-Z]{2}\s\d$/'
             ],
-            'marque' => 'required|regex:/^[A-Za-z0-9 ]+$/',
-            'modele' => 'required|regex:/^[A-Za-z0-9 ]+$/',
+            'marque' => 'required',
+            'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
             'capacite' => 'required|integer|between:1,52',
             'statut' => 'required|in:disponible,maintenance,mission'
@@ -79,11 +79,11 @@ class VehiculeController extends Controller
         $data = $request->validate([
             'immatriculation' => [
                 'required',
-                'regex:/^[A-Za-z0-9-]+$/',
+                'regex:/^(?!000)\d{3}\s[a-zA-Z]{2}\s\d$/',
                 'unique:vehicules,immatriculation,' . $vehicule->id
             ],
-            'marque' => 'required|regex:/^[A-Za-z0-9 ]+$/',
-            'modele' => 'required|regex:/^[A-Za-z0-9 ]+$/',
+            'marque' => 'required',
+            'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
             'capacite' => 'required|integer|between:0,52',
             'statut' => 'required|in:disponible,maintenance,mission'

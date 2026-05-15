@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TRANS BONY - Tableau de bord Professionnel</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%233b82f6' d='M488 128h-8V80c0-44.18-35.82-80-80-80H112c-44.18 0-80 35.82-80 80v48h-8c-13.25 0-24 10.75-24 24v80c0 13.25 10.75 24 24 24v120c0 13.25 10.75 24 24 24h24v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h192v32c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32v-32h24c13.25 0 24-10.75 24-24V256c13.25 0 24-10.75 24-24v-80c0-13.25-10.75-24-24-24zM160 384c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm256-192H96V80c0-8.84 7.16-16 16-16h288c8.84 0 16 7.16 16 16v112zm-64 192c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z'/></svg>">
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -145,7 +146,7 @@
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center space-x-3">
-                        <i class="fas fa-truck-fast text-2xl text-blue-400 animate-pulse"></i>
+                        <i class="fas fa-bus text-2xl text-blue-400 animate-pulse"></i>
                         <div>
                             <h2 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">TRANS BONY</h2>
                             <p class="text-xs text-blue-300 dark:text-gray-400 mt-1">Gestion de flotte</p>
@@ -289,7 +290,7 @@
                     @endrole
                 </div>
 
-                
+
                 <!-- Déconnexion -->
                 <div class="pt-4 mt-4 border-t border-white/20 dark:border-gray-700">
                     <form method="POST" action="{{ route('logout') }}">
@@ -361,7 +362,7 @@
                                 </div>
                                 <div class="max-h-96 overflow-y-auto">
                                     <template x-for="notif in notifications" :key="notif.id">
-                                        <a :href="notif.url" class="block p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition border-b border-gray-100 dark:border-gray-700">
+                                        <a :href="'/notifications/' + notif.id + '/read'" class="block p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition border-b border-gray-100 dark:border-gray-700">
                                             <div class="flex items-start space-x-2">
                                                 <i :class="notif.icon" class="mt-1 text-blue-500 dark:text-blue-400"></i>
                                                 <div class="flex-1">

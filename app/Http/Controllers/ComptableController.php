@@ -232,7 +232,7 @@ class ComptableController extends Controller
         $validated = $request->validate([
             'titre'        => 'required|string|max:255',
             'type'         => 'required|in:mensuel,trimestriel,annuel,personnalisé',
-            'periode_debut'=> 'required|date',
+            'periode_debut'=> 'required|date|after_or_equal:today',
             'periode_fin'  => 'required|date|after_or_equal:periode_debut',
             'statut'       => 'required|in:brouillon,publié',
             'notes'        => 'nullable|string|max:2000',
@@ -271,7 +271,7 @@ class ComptableController extends Controller
         $validated = $request->validate([
             'titre'        => 'required|string|max:255',
             'type'         => 'required|in:mensuel,trimestriel,annuel,personnalisé',
-            'periode_debut'=> 'required|date',
+            'periode_debut'=> 'required|date|after_or_equal:today',
             'periode_fin'  => 'required|date|after_or_equal:periode_debut',
             'statut'       => 'required|in:brouillon,publié',
             'notes'        => 'nullable|string|max:2000',

@@ -32,4 +32,13 @@ class NotificationController extends Controller
         Auth::user()->unreadNotifications->markAsRead();
         return response()->json(['success' => true]);
     }
+
+    public function readAndRedirect($id)
+    {
+        $notification = Auth::user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        
+        $url = $notification->data['url'] ?? '/dashboard';
+        return redirect($url);
+    }
 }

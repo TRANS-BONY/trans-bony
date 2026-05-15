@@ -34,7 +34,23 @@ class AuthenticatedSessionController extends Controller
         // 🔥 REDIRECTION SELON ROLE
         $user = Auth::user();
 
-        if ($user->roles->isEmpty()) {
+        $role = $user->roles->first();
+        if ($role) {
+            $activeUserId = \Illuminate\Support\Facades\Cache::get('active_role_' . $role->name);
+            
+            if ($activeUserId && $activeUserId != $user->id) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors([
+                    'login_error' => "Un autre utilisateur avec le rôle " . ucfirst($role->name) . " est déjà connecté. Veuillez patienter jusqu'à sa déconnexion.",
+                ]);
+            }
+            
+            \Illuminate\Support\Facades\Cache::put('active_role_' . $role->name, $user->id, now()->addMinutes(2));
+        }
+
+        if (!$role) {
             return redirect()->route('waiting.room');
         }
 
@@ -64,6 +80,14 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request)
     {
+        $user = Auth::user();
+        if ($user) {
+            $role = $user->roles->first();
+            if ($role) {
+                \Illuminate\Support\Facades\Cache::forget('active_role_' . $role->name);
+            }
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();

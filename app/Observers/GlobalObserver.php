@@ -51,14 +51,19 @@ class GlobalObserver
     public function deleted_chauffeur(Chauffeur $c) { $this->notifyAdmins("Chauffeur supprimé : {$c->nom} {$c->prenom}", 'warning', 'fas fa-user-circle', "/chauffeurs"); }
 
     // VOYAGE
-    public function created_voyage(Voyage $v) { $this->notifyAdmins("Nouveau voyage vers {$v->destination}", 'success', 'fas fa-route', "/voyages"); }
-    public function updated_voyage(Voyage $v) { $this->notifyAdmins("Voyage modifié (ID: {$v->id})", 'info', 'fas fa-route', "/voyages"); }
+    public function created_voyage(Voyage $v) { $this->notifyAdmins("Nouveau voyage vers {$v->destination}", 'success', 'fas fa-route', "/voyages/{$v->id}"); }
+    public function updated_voyage(Voyage $v) { $this->notifyAdmins("Voyage modifié (ID: {$v->id})", 'info', 'fas fa-route', "/voyages/{$v->id}"); }
     public function deleted_voyage(Voyage $v) { $this->notifyAdmins("Voyage annulé/supprimé vers {$v->destination}", 'warning', 'fas fa-route', "/voyages"); }
 
     // DOCUMENT
     public function created_document(Document $d) { $this->notifyAdmins("Document {$d->type} ajouté pour {$d->vehicule?->immatriculation}", 'success', 'fas fa-file-alt', "/documents"); }
     public function updated_document(Document $d) { $this->notifyAdmins("Document {$d->type} modifié pour {$d->vehicule?->immatriculation}", 'info', 'fas fa-file-alt', "/documents"); }
     public function deleted_document(Document $d) { $this->notifyAdmins("Document {$d->type} supprimé pour {$d->vehicule?->immatriculation}", 'warning', 'fas fa-file-alt', "/documents"); }
+    
+    // MAINTENANCE
+    public function created_maintenance(Maintenance $m) { $this->notifyAdmins("Nouvelle maintenance pour {$m->vehicule?->immatriculation}", 'success', 'fas fa-tools', "/maintenances/{$m->id}"); }
+    public function updated_maintenance(Maintenance $m) { $this->notifyAdmins("Maintenance modifiée pour {$m->vehicule?->immatriculation}", 'info', 'fas fa-tools', "/maintenances/{$m->id}"); }
+    public function deleted_maintenance(Maintenance $m) { $this->notifyAdmins("Maintenance supprimée pour {$m->vehicule?->immatriculation}", 'warning', 'fas fa-tools', "/maintenances"); }
     
     // Generic methods that will be called by Model::observe
     public function created($model) {

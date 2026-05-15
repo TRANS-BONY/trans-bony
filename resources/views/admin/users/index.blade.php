@@ -102,26 +102,27 @@
                                 </div>
                             </div>
 
-                            <!-- Actions -->
-                            <div class="flex flex-col sm:flex-row gap-3 mt-8 pt-6 border-t border-indigo-200 dark:border-indigo-700">
-                                <a href="{{ route('admin.users.show', $user->id) }}"
-                                   class="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
-                                    <i class="fas fa-eye"></i>
-                                    Voir détails
-                                </a>
-                                <a href="{{ route('admin.users.edit', $user->id) }}"
-                                   class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
-                                    <i class="fas fa-edit"></i>
-                                    Modifier
-                                </a>
-                                <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" class="flex-1" onsubmit="return confirm('Supprimer {{ $user->name }} ?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
-                                        <i class="fas fa-trash"></i>
-                                        Supprimer
-                                    </button>
-                                </form>
-                            </div>
+                        </div>
+
+                        <!-- Actions (Always visible) -->
+                        <div class="flex flex-col sm:flex-row gap-3 p-6 border-t border-indigo-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                            <a href="{{ route('admin.users.show', $user->id) }}"
+                               class="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="fas fa-eye"></i>
+                                Voir
+                            </a>
+                            <a href="{{ route('admin.users.edit', $user->id) }}"
+                               class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="fas fa-edit"></i>
+                                Modifier
+                            </a>
+                            <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" class="flex-1" onsubmit="return confirm('Supprimer {{ $user->name }} ?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                    <i class="fas fa-trash"></i>
+                                    Supprimer
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @empty

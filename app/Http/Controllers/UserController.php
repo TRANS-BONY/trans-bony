@@ -49,11 +49,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z]/',
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users', 'regex:/^[a-zA-Z][a-zA-Z0-9._%+-]*@(gmail\.com|transbony\.com)$/i'],
+            'password' => ['required', 'string', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'role_id' => 'required|exists:roles,id',
             'is_active' => 'boolean',
+        ], [
+            'name.regex' => 'Le nom doit commencer par une lettre.',
+            'email.lowercase' => 'L\'adresse e-mail doit être en minuscules.',
+            'email.regex' => 'L\'adresse e-mail doit commencer par une lettre, sans espaces, et se terminer par @gmail.com ou @transbony.com.',
+            'password.mixed' => 'Le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule.',
+            'password.letters' => 'Le mot de passe doit contenir au moins une lettre.',
+            'password.symbols' => 'Le mot de passe doit contenir au moins un symbole.',
+            'password.numbers' => 'Le mot de passe doit contenir au moins un chiffre.',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
         ]);
 
         $user = User::create([
@@ -95,33 +104,17 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
             'role_id' => 'required|exists:roles,id',
-            'is_active' => 'boolean',
-            'password' => 'nullable|string|min:8|confirmed',
+            'is_active' => 'required|boolean',
         ]);
 
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->is_active,
         ]);
-
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-        }
 
         $user->roles()->sync([$request->role_id]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+        return redirect()->route('admin.users.index')->with('success', 'Utilisateur (Rôle & Statut) mis à jour avec succès.');
     }
 
     /**

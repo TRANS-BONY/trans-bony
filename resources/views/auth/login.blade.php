@@ -60,7 +60,7 @@
                     name="email"
                     class="auth-input @error('email') is-invalid @enderror"
                     placeholder="utilisateur@gmail.com ou @transbony.com"
-                    value="{{ old('email') }}"
+                    value="{{ $errors->any() ? '' : old('email') }}"
                     required
                     autocomplete="email"
                     autofocus

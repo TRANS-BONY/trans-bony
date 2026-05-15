@@ -54,7 +54,7 @@ class CheckAlerts extends Command
             $this->notifyUsers($adminUsers, [
                 'message' => $msg,
                 'type' => 'info',
-                'base_url' => '/voyages',
+                'base_url' => '/voyages/' . $voyage->id,
                 'icon' => 'fas fa-route'
             ]);
         }
@@ -66,7 +66,7 @@ class CheckAlerts extends Command
             $this->notifyUsers($adminUsers, [
                 'message' => $msg,
                 'type' => 'warning',
-                'base_url' => '/maintenances',
+                'base_url' => '/maintenances/' . $maint->id,
                 'icon' => 'fas fa-tools'
             ]);
         }
