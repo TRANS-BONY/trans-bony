@@ -5,7 +5,7 @@ echo "Attente de la base de données..."
 
 # Exécuter les migrations de la base de données
 echo "Exécution des migrations..."
-php artisan migrate --force
+php artisan migrate:fresh --seed --force
 
 # Vider et régénérer le cache
 echo "Nettoyage du cache..."
