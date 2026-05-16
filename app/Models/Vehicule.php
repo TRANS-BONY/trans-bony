@@ -14,12 +14,14 @@ class Vehicule extends Model
         'modele',
         'annee',
         'capacite',
+        'kilometrage',
         'statut'
     ];
 
     protected $casts = [
         'annee' => 'integer',
         'capacite' => 'integer',
+        'kilometrage' => 'integer',
     ];
 
     public function voyages()
@@ -40,5 +42,10 @@ class Vehicule extends Model
     public function recettes()
     {
         return $this->hasMany(RecetteMensuelle::class);
+    }
+
+    public function carburants()
+    {
+        return $this->hasMany(Carburant::class);
     }
 }

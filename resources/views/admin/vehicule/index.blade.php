@@ -214,6 +214,10 @@
                                 <p class="text-[10px] text-gray-400 uppercase font-semibold">Capacité</p>
                                 <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $v->capacite }} pers.</p>
                             </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase font-semibold">Kilométrage</p>
+                                <p class="text-sm font-bold text-indigo-600 dark:text-indigo-400">{{ number_format($v->kilometrage, 0, ',', ' ') }} km</p>
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-end gap-2 mt-2">
@@ -249,6 +253,7 @@
                             <th class="p-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Marque / Modèle</th>
                             <th class="p-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Année</th>
                             <th class="p-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Capacité</th>
+                            <th class="p-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider text-center">Kilométrage</th>
                             <th class="p-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Statut</th>
                             <th class="p-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider text-center">Actions</th>
                         </tr>
@@ -270,6 +275,9 @@
                             </td>
                             <td class="p-4 text-gray-700 dark:text-gray-300">{{ $v->annee }}</td>
                             <td class="p-4 text-gray-700 dark:text-gray-300">{{ $v->capacite }} pers.</td>
+                            <td class="p-4 text-center font-bold text-indigo-600 dark:text-indigo-400">
+                                {{ number_format($v->kilometrage, 0, ',', ' ') }} km
+                            </td>
                             <td class="p-4">
                                 @php
                                     $statusConfig = [

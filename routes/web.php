@@ -59,6 +59,8 @@ Route::middleware(['auth','active'])->group(function(){
     // MODULES - Role/Permission protected
 Route::middleware('permission:gerer vehicules')->group(function () {
         Route::resource('admin/vehicules', VehiculeController::class)->names('admin.vehicules');
+        Route::get('admin/carburants/pdf', [\App\Http\Controllers\CarburantController::class, 'generatePdf'])->name('admin.carburant.pdf');
+        Route::resource('admin/carburants', \App\Http\Controllers\CarburantController::class)->names('admin.carburant');
     });
 
 Route::middleware('permission:gerer chauffeurs')->group(function () {
@@ -194,6 +196,8 @@ Route::middleware('role:admin')->group(function () {
         Route::resource('documents', DocumentController::class)->names('documents');
         Route::resource('recettes', RecetteController::class)->names('recettes');
         Route::resource('rapports', RapportController::class)->names('rapports');
+        Route::get('/carburant/pdf', [\App\Http\Controllers\CarburantController::class, 'generatePdf'])->name('carburant.pdf');
+        Route::resource('carburant', \App\Http\Controllers\CarburantController::class)->names('carburant');
         
         // Audit & Utilisateurs
         Route::get('/audits', [AuditController::class, 'index'])->name('audits.index');
@@ -242,6 +246,10 @@ Route::middleware('role:admin')->group(function () {
         // Voyages (Read-only)
         Route::get('/voyages', [VoyageController::class, 'index'])->name('voyages.index');
         Route::get('/voyages/{id}', [VoyageController::class, 'show'])->name('voyages.show');
+
+        // Carburant (CRUD)
+        Route::get('/carburant/pdf', [\App\Http\Controllers\CarburantController::class, 'generatePdf'])->name('carburant.pdf');
+        Route::resource('carburant', \App\Http\Controllers\CarburantController::class)->names('carburant');
     });
 
     // Profile for all authenticated users

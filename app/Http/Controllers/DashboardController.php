@@ -140,6 +140,8 @@ class DashboardController extends Controller
             'recettes_mois'          => $recettes,
             'recettes_total'         => $recettes_total,
             'occupation'             => $occupation,
+            'carburant_mois'         => \App\Models\Carburant::whereMonth('date', now()->month)->sum('montant'),
+            'nb_pleins'              => \App\Models\Carburant::count(),
         ];
 
         // ── Vue selon le rôle ──────────────────────────────────
@@ -149,6 +151,30 @@ class DashboardController extends Controller
         if ($role === 'agent')        $view = 'agent.index';
         if ($role === 'technicien')   $view = 'technicien.dashboard';
         if ($role === 'gestionnaire') $view = 'gestionnaire.dashboard';
+
+        // ── Maintenances à prévoir (Alertes Kilométrage) ────────
+        $seuil_maintenance = 5000; // km
+        $vehicules_alerte_km = [];
+        $all_vehicules = Vehicule::all();
+        foreach ($all_vehicules as $v) {
+            $derniere_maintenance = Maintenance::where('vehicule_id', $v->id)
+                                             ->where('statut', 'terminee')
+                                             ->orderByDesc('updated_at')
+                                             ->first();
+            
+            $km_derniere = $derniere_maintenance ? $derniere_maintenance->compteur_km : 0;
+            $distance_parcourue = $v->kilometrage - $km_derniere;
+            
+            if ($distance_parcourue >= $seuil_maintenance) {
+                $vehicules_alerte_km[] = [
+                    'id' => $v->id,
+                    'immatriculation' => $v->immatriculation,
+                    'distance' => $distance_parcourue,
+                    'depassement' => $distance_parcourue - $seuil_maintenance
+                ];
+            }
+        }
+        $nb_alertes_maintenance_km = count($vehicules_alerte_km);
 
         return view($view, compact(
             'role',
@@ -162,7 +188,8 @@ class DashboardController extends Controller
             'chart_labels', 'chart_data',
             'users',
             'occupation',
-            'nb_rapports', 'nb_recettes', 'nb_recettes_mois'
+            'nb_rapports', 'nb_recettes', 'nb_recettes_mois',
+            'vehicules_alerte_km', 'nb_alertes_maintenance_km'
         ));
     }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends($rolePrefix === 'admin' ? 'layouts.app' : 'layouts.' . $rolePrefix)
 
 @section('content')
 <div class="space-y-6">
@@ -61,6 +61,7 @@
                             Nom <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="nom" value="{{ old('nom') }}" placeholder="Saisir le nom de famille"
+                               pattern="[a-zA-Z\s\-]+" title="Le nom ne doit contenir que des lettres."
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('nom') border-red-500 @enderror"
                                required>
                         @error('nom') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
@@ -72,6 +73,7 @@
                             Prénom <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="prenom" value="{{ old('prenom') }}" placeholder="Saisir le prénom"
+                               pattern="[a-zA-Z\s\-]+" title="Le prénom ne doit contenir que des lettres."
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('prenom') border-red-500 @enderror"
                                required>
                         @error('prenom') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
@@ -92,10 +94,12 @@
                     <!-- Téléphone -->
                     <div class="space-y-2">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Téléphone
+                            Téléphone <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="telephone" value="{{ old('telephone') }}" placeholder="Ex: 0102030405"
-                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('telephone') border-red-500 @enderror">
+                        <input type="text" name="telephone" value="{{ old('telephone') }}" placeholder="Ex: 061234567"
+                               pattern="(05|06)[0-9]{7}" title="Doit commencer par 05 ou 06 suivi de 7 chiffres (Ex: 061234567)"
+                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('telephone') border-red-500 @enderror"
+                               required>
                         @error('telephone') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 

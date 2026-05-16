@@ -85,9 +85,9 @@
                     <div class="relative">
                         <select name="vehicule_id" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer @error('vehicule_id') border-red-500 @enderror">
-                            <option value="" disabled {{ old('vehicule_id') ? '' : 'selected' }}>-- Sélectionnez un véhicule --</option>
+                            <option value="" disabled {{ request('vehicule_id') || old('vehicule_id') ? '' : 'selected' }}>-- Sélectionnez un véhicule --</option>
                             @foreach($vehicules as $v)
-                            <option value="{{ $v->id }}" {{ old('vehicule_id') == $v->id ? 'selected' : '' }}>
+                            <option value="{{ $v->id }}" {{ (request('vehicule_id') == $v->id || old('vehicule_id') == $v->id) ? 'selected' : '' }}>
                                 {{ $v->immatriculation }} - {{ $v->marque }} {{ $v->modele }}
                             </option>
                             @endforeach
@@ -104,81 +104,53 @@
                     <p class="text-xs text-gray-500 mt-1">Sélectionnez le véhicule concerné par cette maintenance</p>
                 </div>
 
-                <!-- Type de maintenance -->
-                <div class="mb-6">
-                    <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                        </svg>
-                        Type de maintenance <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <select name="type" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer @error('type') border-red-500 @enderror">
-                            <option value="" disabled {{ old('type') ? '' : 'selected' }}>-- Sélectionnez un type --</option>
-                            <option value="preventive" {{ old('type') == 'preventive' ? 'selected' : '' }}>🛡️ Préventive - Entretien régulier</option>
-                            <option value="curative" {{ old('type') == 'curative' ? 'selected' : '' }}>🔧 Curative - Réparation après panne</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Type de maintenance -->
+                    <div class="mb-6">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-tools text-amber-500"></i> Type <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <select name="type" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer">
+                                <option value="preventive" {{ old('type') == 'preventive' ? 'selected' : '' }}>🛡️ Préventive</option>
+                                <option value="curative" {{ old('type') == 'curative' ? 'selected' : '' }}>🔧 Curative</option>
+                            </select>
                         </div>
                     </div>
-                    @error('type')
-                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                    <div class="mt-2 flex gap-2">
-                        <span class="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">🛡️ Préventive: Vidange, révisions</span>
-                        <span class="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">🔧 Curative: Réparation moteur</span>
+
+                    <!-- Statut -->
+                    <div class="mb-6">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-info-circle text-amber-500"></i> Statut <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <select name="statut" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer">
+                                <option value="planifiee" {{ old('statut') == 'planifiee' ? 'selected' : '' }}>📅 Planifiée</option>
+                                <option value="en cours" {{ old('statut') == 'en cours' ? 'selected' : '' }}>⏳ En cours</option>
+                                <option value="terminee" {{ old('statut') == 'terminee' ? 'selected' : '' }}>✅ Terminée</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Statut -->
-                <div class="mb-6">
-                    <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Statut <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <select name="statut" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer @error('statut') border-red-500 @enderror">
-                            <option value="" disabled {{ old('statut') ? '' : 'selected' }}>-- Sélectionnez un statut --</option>
-                            <option value="planifiee" {{ old('statut') == 'planifiee' ? 'selected' : '' }}>📅 Planifiée</option>
-                            <option value="en cours" {{ old('statut') == 'en cours' ? 'selected' : '' }}>⏳ En cours</option>
-                            <option value="terminee" {{ old('statut') == 'terminee' ? 'selected' : '' }}>✅ Terminée</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Date prévue -->
+                    <div class="mb-6">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-calendar-alt text-amber-500"></i> Date prévue <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" name="date_prevue" value="{{ old('date_prevue', date('Y-m-d')) }}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                     </div>
-                    @error('statut')
-                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                <!-- Date prévue -->
-                <div class="mb-6">
-                    <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        Date prévue <span class="text-red-500">*</span>
-                    </label>
-                    <input type="date"
-                           name="date_prevue"
-                           value="{{ old('date_prevue') }}"
-                           min="{{ date('Y-m-d') }}"
-                           required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 @error('date_prevue') border-red-500 @enderror">
-                    @error('date_prevue')
-                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                    <p class="text-xs text-gray-500 mt-1">La date doit être aujourd'hui ou ultérieure</p>
+                    <!-- Compteur KM -->
+                    <div class="mb-6">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-tachometer-alt text-amber-500"></i> KM de maintenance
+                        </label>
+                        <input type="number" name="compteur_km" value="{{ old('compteur_km') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500" placeholder="Laissez vide pour auto">
+                    </div>
                 </div>
 
                 <!-- Coût -->

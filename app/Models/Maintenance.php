@@ -13,12 +13,14 @@ class Maintenance extends Model
         'type',
         'date_prevue',
         'statut',
+        'compteur_km',
         'cout'
     ];
 
     protected $casts = [
         'date_prevue' => 'datetime',
         'cout' => 'decimal:2',
+        'compteur_km' => 'integer',
     ];
 
     protected static function booted()
@@ -31,6 +33,8 @@ class Maintenance extends Model
 
         static::updated(function ($maintenance) {
             if ($maintenance->wasChanged('statut') && $maintenance->statut === 'terminee') {
+                // Si la maintenance est terminée, on enregistre le kilométrage actuel du véhicule
+                $maintenance->update(['compteur_km' => $maintenance->vehicule->kilometrage]);
                 $maintenance->vehicule->update(['statut' => 'disponible']);
             }
         });

@@ -14,12 +14,16 @@ class Voyage extends Model
         'date_depart',
         'destination',
         'nb_passagers',
+        'km_depart',
+        'km_arrivee',
         'type'
     ];
 
     protected $casts = [
         'date_depart' => 'datetime',
         'nb_passagers' => 'integer',
+        'km_depart' => 'integer',
+        'km_arrivee' => 'integer',
     ];
 
     protected static function booted()

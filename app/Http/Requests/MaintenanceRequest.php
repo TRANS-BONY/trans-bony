@@ -18,7 +18,8 @@ class MaintenanceRequest extends FormRequest
             'type'        => 'required|in:preventive,curative',
             'date_prevue' => 'required|date',
             'statut'      => 'required|in:planifiee,en cours,terminee',
-            'cout'        => 'required|numeric|between:5000,65000',
+            'compteur_km' => 'nullable|integer|min:0',
+            'cout'        => 'required|numeric|min:0',
         ];
     }
 

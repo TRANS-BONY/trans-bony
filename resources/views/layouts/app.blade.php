@@ -104,7 +104,7 @@
                 <div class="space-y-2">
                     <p class="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4 font-bold px-1">Menu Principal</p>
 
-                    <a href="/dashboard" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Tableau de bord' ? 'active' : ''">
+                    <a href="{{ route('dashboard') }}" class="nav-item flex items-center space-x-3 px-4 py-3 text-white/90 hover:text-white group" :class="currentPageTitle === 'Tableau de bord' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-500/20 transition-all duration-300">
                             <i class="fas fa-th-large text-sm"></i>
                         </div>
@@ -116,7 +116,7 @@
                     </div>
 
                     @can('gerer vehicules')
-                    <a href="/admin/vehicules" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Véhicules' ? 'active' : ''">
+                    <a href="{{ route('admin.vehicules.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Véhicules' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 group-hover:bg-blue-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-bus text-sm"></i>
                         </div>
@@ -125,7 +125,7 @@
                     @endcan
 
                     @can('gerer chauffeurs')
-                    <a href="/admin/chauffeurs" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Chauffeurs' ? 'active' : ''">
+                    <a href="{{ route('admin.chauffeurs.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Chauffeurs' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 group-hover:bg-yellow-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-user-tie text-sm"></i>
                         </div>
@@ -134,7 +134,7 @@
                     @endcan
 
                     @can('gerer voyages')
-                    <a href="/admin/voyages" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Voyages' ? 'active' : ''">
+                    <a href="{{ route('admin.voyages.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Voyages' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 group-hover:bg-orange-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-route text-sm"></i>
                         </div>
@@ -143,11 +143,20 @@
                     @endcan
 
                     @can('gerer maintenance')
-                    <a href="/admin/maintenances" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Maintenance' ? 'active' : ''">
+                    <a href="{{ route('admin.maintenances.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Maintenance' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 group-hover:bg-amber-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-tools text-sm"></i>
                         </div>
                         <span class="flex-1 text-sm font-medium">Maintenance</span>
+                    </a>
+                    @endcan
+
+                    @can('gerer vehicules')
+                    <a href="{{ route('admin.carburant.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Carburant' ? 'active' : ''">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-pink-500/10 text-pink-400 border border-pink-500/20 group-hover:bg-pink-500/20 transition-all duration-300 shadow-sm">
+                            <i class="fas fa-gas-pump text-sm"></i>
+                        </div>
+                        <span class="flex-1 text-sm font-medium">Suivi Carburant</span>
                     </a>
                     @endcan
 
@@ -156,7 +165,7 @@
                     </div>
 
                     @can('gerer documents')
-                    <a href="/admin/documents" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Documents' ? 'active' : ''">
+                    <a href="{{ route('admin.documents.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Documents' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 group-hover:bg-red-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-file-invoice text-sm"></i>
                         </div>
@@ -165,7 +174,7 @@
                     @endcan
 
                     @can('gerer finances')
-                    <a href="/admin/recettes" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Finances' ? 'active' : ''">
+                    <a href="{{ route('admin.recettes.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Finances' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-wallet text-sm"></i>
                         </div>
@@ -174,7 +183,7 @@
                     @endcan
 
                     @can('voir rapports')
-                    <a href="/admin/rapports" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Rapports' ? 'active' : ''">
+                    <a href="{{ route('admin.rapports.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Rapports' ? 'active' : ''">
                         <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:bg-indigo-500/20 transition-all duration-300 shadow-sm">
                             <i class="fas fa-chart-pie text-sm"></i>
                         </div>
@@ -185,13 +194,13 @@
                     @role('admin')
                     <div class="pt-6 mt-4 border-t border-white/10">
                         <p class="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4 font-bold px-1">Administration</p>
-                        <a href="/admin/users" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Utilisateurs' ? 'active' : ''">
+                        <a href="{{ route('admin.users.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Utilisateurs' ? 'active' : ''">
                             <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 group-hover:bg-indigo-500/20 transition-all duration-300 shadow-sm">
                                 <i class="fas fa-users-cog text-sm"></i>
                             </div>
                             <span class="flex-1 text-sm font-medium">Utilisateurs</span>
                         </a>
-                        <a href="/admin/audits" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Audits' ? 'active' : ''">
+                        <a href="{{ route('admin.audits.index') }}" class="nav-item flex items-center space-x-3 px-4 py-2.5 text-white/90 hover:text-white group" :class="currentPageTitle === 'Audits' ? 'active' : ''">
                             <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group-hover:bg-cyan-500/20 transition-all duration-300 shadow-sm">
                                 <i class="fas fa-clipboard-check text-sm"></i>
                             </div>
@@ -200,18 +209,17 @@
                     </div>
                     @endrole
 
-                    <!-- Déconnexion -->
                     <div class="pt-8 mt-4 border-t border-white/10">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group transition">
-                                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 group-hover:bg-red-500/30 transition-all border border-red-500/20">
-                                    <i class="fas fa-power-off text-sm"></i>
-                                </div>
-                                <span class="flex-1 text-sm font-medium text-left">Déconnexion</span>
-                            </button>
-                        </form>
-                    </div>
+                                <form method="POST" action="{{ route('logout') }}" id="logout-form-admin">
+                                    @csrf
+                                    <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group transition cursor-pointer">
+                                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 group-hover:bg-red-500/30 transition-all border border-red-500/20">
+                                            <i class="fas fa-power-off text-sm"></i>
+                                        </div>
+                                        <span class="flex-1 text-sm font-medium text-left">Déconnexion</span>
+                                    </button>
+                                </form>
+                            </div>
                 </div>
             </div>
         </div>
@@ -265,7 +273,7 @@
                                     <h3 class="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
                                     <template x-if="count > 0">
                                         <button @click="
-                                            fetch('/notifications/mark-as-read', {
+                                            fetch('{{ url('/notifications/mark-as-read') }}', {
                                                 method: 'POST',
                                                 headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                                             }).then(() => {
@@ -285,7 +293,7 @@
                                         </div>
                                     </template>
                                     <template x-for="n in notifications" :key="n.id">
-                                        <a :href="'/notifications/' + n.id + '/read'" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors border-b border-gray-50 dark:border-gray-700 last:border-0">
+                                        <a :href="'{{ url('/notifications') }}/' + n.id + '/read'" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors border-b border-gray-50 dark:border-gray-700 last:border-0">
                                             <div class="flex gap-3">
                                                 <div :class="{
                                                     'w-8 h-8 rounded-lg flex items-center justify-center shrink-0': true,

@@ -77,7 +77,9 @@ class VoyageController extends Controller
             'chauffeur_id' => 'required|exists:chauffeurs,id',
             'date_depart' => 'required|date',
             'destination' => 'required',
-            'nb_passagers' => 'required|integer',
+            'nb_passagers' => 'required|integer|min:1',
+            'km_depart' => 'nullable|integer|min:0',
+            'km_arrivee' => 'nullable|integer|min:0',
             'type' => 'required|in:voyage,maintenance'
         ]);
 
@@ -85,6 +87,10 @@ class VoyageController extends Controller
         $chauffeur = Chauffeur::find($data['chauffeur_id']);
 
         // 🚫 règles métier
+        if ($data['nb_passagers'] > $vehicule->capacite) {
+            return back()->withErrors(['nb_passagers' => "La capacité de ce véhicule est de {$vehicule->capacite} passagers maximum."])->withInput();
+        }
+
         if ($vehicule->statut == 'maintenance') {
             return back()->withErrors(['vehicule_id' => 'Véhicule en maintenance']);
         }
@@ -103,7 +109,14 @@ class VoyageController extends Controller
             return back()->withErrors(['chauffeur_id' => 'Chauffeur occupé']);
         }
 
-        Voyage::create($data);
+        $voyage = Voyage::create($data);
+
+        // Update vehicle mileage if arrival KM is provided
+        if ($data['km_arrivee'] && $data['km_arrivee'] > $vehicule->kilometrage) {
+            $vehicule->update(['kilometrage' => $data['km_arrivee']]);
+        } elseif ($data['km_depart'] && $data['km_depart'] > $vehicule->kilometrage) {
+            $vehicule->update(['kilometrage' => $data['km_depart']]);
+        }
 
         return back()->with('success','Voyage ajouté');
     }
@@ -114,18 +127,24 @@ class VoyageController extends Controller
         $voyage = Voyage::findOrFail($id);
 
         $data = $request->validate([
-            'vehicule_id' => 'required',
-            'chauffeur_id' => 'required',
+            'vehicule_id' => 'required|exists:vehicules,id',
+            'chauffeur_id' => 'required|exists:chauffeurs,id',
             'date_depart' => 'required|date',
             'destination' => 'required',
-            'nb_passagers' => 'required|integer|between:1,52',
+            'nb_passagers' => 'required|integer|min:1',
+            'km_depart' => 'nullable|integer|min:0',
+            'km_arrivee' => 'nullable|integer|min:0',
             'type' => 'required'
         ]);
 
         $vehicule = Vehicule::find($data['vehicule_id']);
         $chauffeur = Chauffeur::find($data['chauffeur_id']);
 
-        if ($vehicule->statut == 'maintenance') {
+        if ($data['nb_passagers'] > $vehicule->capacite) {
+            return back()->withErrors(['nb_passagers' => "La capacité de ce véhicule est de {$vehicule->capacite} passagers maximum."])->withInput();
+        }
+
+        if ($vehicule->statut == 'maintenance' && $voyage->vehicule_id != $data['vehicule_id']) {
             return back()->withErrors(['vehicule_id' => 'Véhicule en maintenance']);
         }
 
@@ -134,6 +153,15 @@ class VoyageController extends Controller
         }
 
         $voyage->update($data);
+
+        // Sync vehicle mileage
+        $maxKm = Voyage::where('vehicule_id', $data['vehicule_id'])->max('km_arrivee');
+        $maxStartKm = Voyage::where('vehicule_id', $data['vehicule_id'])->max('km_depart');
+        $finalMax = max($maxKm ?? 0, $maxStartKm ?? 0);
+
+        if ($finalMax > $vehicule->kilometrage) {
+            $vehicule->update(['kilometrage' => $finalMax]);
+        }
 
         return back()->with('success','Modifié');
     }

@@ -54,6 +54,9 @@
                 <span class="text-xl font-bold text-gray-900 dark:text-white">{{ $stats['maintenances_en_cours'] }}</span>
             </div>
             <p class="text-xs text-gray-500">Maintenances en cours</p>
+            @if($nb_alertes_maintenance_km > 0)
+                <p class="text-[9px] text-orange-500 font-bold mt-1 uppercase">{{ $nb_alertes_maintenance_km }} à prévoir (KM)</p>
+            @endif
         </div>
     </div>
 

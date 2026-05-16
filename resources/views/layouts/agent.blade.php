@@ -124,9 +124,9 @@
 
                     <!-- Déconnexion -->
                     <div class="pt-8 mt-4 border-t border-white/10">
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form-agent">
                             @csrf
-                            <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group transition">
+                            <button type="submit" class="w-full nav-item flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 group transition cursor-pointer">
                                 <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 group-hover:bg-red-500/30 transition-all border border-red-500/20">
                                     <i class="fas fa-power-off text-sm"></i>
                                 </div>
@@ -187,7 +187,7 @@
                                     <h3 class="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
                                     <template x-if="count > 0">
                                         <button @click="
-                                            fetch('/notifications/mark-as-read', {
+                                            fetch('{{ url('/notifications/mark-as-read') }}', {
                                                 method: 'POST',
                                                 headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                                             }).then(() => {
@@ -207,7 +207,7 @@
                                         </div>
                                     </template>
                                     <template x-for="n in notifications" :key="n.id">
-                                        <a :href="'/notifications/' + n.id + '/read'" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors border-b border-gray-50 dark:border-gray-700 last:border-0">
+                                        <a :href="'{{ url('/notifications') }}/' + n.id + '/read'" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors border-b border-gray-50 dark:border-gray-700 last:border-0">
                                             <div class="flex gap-3">
                                                 <div :class="{
                                                     'w-8 h-8 rounded-lg flex items-center justify-center shrink-0': true,

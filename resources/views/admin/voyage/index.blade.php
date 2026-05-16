@@ -75,7 +75,17 @@
                     </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6" x-data="{ 
+                    selectedVehiculeId: '{{ old('vehicule_id') }}',
+                    nbPassagers: '{{ old('nb_passagers', 0) }}',
+                    vehicules: {{ json_encode($vehicules->mapWithKeys(fn($v) => [$v->id => $v->capacite])) }},
+                    get currentCapacite() {
+                        return this.selectedVehiculeId ? this.vehicules[this.selectedVehiculeId] : 52;
+                    },
+                    get isOverCapacity() {
+                        return this.selectedVehiculeId && parseInt(this.nbPassagers) > this.currentCapacite;
+                    }
+                }">
                     @if(session('success'))
                         <div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg animate-fade-in-up">
                             <div class="flex items-center gap-2">
@@ -128,12 +138,17 @@
                                 </svg>
                                 Destination
                             </label>
-                            <input type="text"
-                                   name="destination"
-                                   value="{{ old('destination') }}"
-                                   placeholder="Ex: Douala, Yaoundé, Garoua..."
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
-                                   required>
+                            <select name="destination" 
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
+                                    required>
+                                <option value="">-- Sélectionner une destination --</option>
+                                @php
+                                    $destinations = ['Point-Noire', 'Brazzaville', 'Nkayi', 'Ouesso', 'Owando', 'Gamboma', 'Djambala', 'Impfondo', 'Ewo', 'Kinkala', 'Mossaka', 'Loango', 'Dolisie', 'Madingou', 'Sibiti'];
+                                @endphp
+                                @foreach($destinations as $dest)
+                                    <option value="{{ $dest }}" {{ old('destination') == $dest ? 'selected' : '' }}>{{ $dest }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <!-- Véhicule -->
@@ -145,12 +160,13 @@
                                 Véhicule
                             </label>
                             <select name="vehicule_id"
+                                    x-model="selectedVehiculeId"
                                     class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
                                     required>
                                 <option value="">-- Sélectionnez un véhicule --</option>
                                 @foreach($vehicules as $v)
-                                    <option value="{{ $v->id }}" {{ old('vehicule_id') == $v->id ? 'selected' : '' }}>
-                                        {{ $v->immatriculation }} - {{ $v->marque }} {{ $v->modele }}
+                                    <option value="{{ $v->id }}">
+                                        {{ $v->immatriculation }} ({{ $v->capacite }} places)
                                     </option>
                                 @endforeach
                             </select>
@@ -200,24 +216,38 @@
                         </div>
 
                         <!-- Nombre de passagers -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-users text-orange-500"></i> Passagers
+                                </label>
+                                <input type="number" 
+                                       name="nb_passagers" 
+                                       x-model="nbPassagers"
+                                       :class="isOverCapacity ? 'border-red-500 ring-red-500' : 'border-gray-300'"
+                                       min="1" 
+                                       class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                <p x-show="isOverCapacity" class="text-[10px] text-red-500 mt-1">Dépasse la capacité (<span x-text="currentCapacite"></span>)</p>
+                            </div>
+                            <div>
+                                <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-tachometer-alt text-orange-500"></i> KM Départ
+                                </label>
+                                <input type="number" name="km_depart" value="{{ old('km_depart') }}" min="0" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            </div>
+                        </div>
+
                         <div>
                             <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                                <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                Nombre de passagers
+                                <i class="fas fa-flag-checkered text-orange-500"></i> KM Arrivée (Si terminé)
                             </label>
-                            <input type="number"
-                                   name="nb_passagers"
-                                   value="{{ old('nb_passagers') }}"
-                                   min="0"
-                                   max="52"
-                                   placeholder="Ex: 4"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200">
+                            <input type="number" name="km_arrivee" value="{{ old('km_arrivee') }}" min="0" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500" placeholder="Laissez vide si en cours">
                         </div>
 
                         <!-- Bouton d'envoi -->
                         <button type="submit"
+                                :disabled="isOverCapacity"
+                                :class="isOverCapacity ? 'opacity-50 cursor-not-allowed grayscale' : ''"
                                 class="w-full group relative overflow-hidden bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-lg py-3 transition-all duration-300 hover:scale-105 shadow-lg">
                             <div class="relative flex items-center justify-center gap-2">
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -50,21 +50,27 @@ class ChauffeurController extends Controller
         if ($role === 'admin') $view = 'admin.chauffeur.create';
         if (!view()->exists($view)) $view = 'admin.chauffeur.create';
         
-        return view($view);
+        $rolePrefix = $role;
+        return view($view, compact('rolePrefix'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nom' => 'required',
-            'prenom' => 'required',
+        $request->validate([
+            'nom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
+            'prenom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
+            'telephone' => ['required', 'regex:/^(05|06)[0-9]{7}$/'],
             'permis' => ['required', 'unique:chauffeurs'],
-            'telephone' => 'nullable',
             'contact' => 'nullable',
             'actif' => 'required|in:0,1',
             'photo' => 'nullable|image'
+        ], [
+            'nom.regex' => 'Le nom ne doit contenir que des lettres.',
+            'prenom.regex' => 'Le prénom ne doit contenir que des lettres.',
+            'telephone.regex' => 'Le numéro doit commencer par 05 ou 06 et contenir exactement 9 chiffres.',
         ]);
 
+        $data = $request->except('photo');
         $data['nom'] = strtoupper($data['nom']);
         $data['prenom'] = ucfirst(strtolower($data['prenom']));
         $data['actif'] = (int) $data['actif'];
@@ -88,23 +94,29 @@ class ChauffeurController extends Controller
         if ($role === 'admin') $view = 'admin.chauffeur.edit';
         if (!view()->exists($view)) $view = 'admin.chauffeur.edit';
         
-        return view($view, compact('chauffeur'));
+        $rolePrefix = $role;
+        return view($view, compact('chauffeur', 'rolePrefix'));
     }
 
     public function update(Request $request, $id)
     {
         $chauffeur = Chauffeur::findOrFail($id);
 
-        $data = $request->validate([
-            'nom' => 'required',
-            'prenom' => 'required',
+        $request->validate([
+            'nom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
+            'prenom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
+            'telephone' => ['required', 'regex:/^(05|06)[0-9]{7}$/'],
             'permis' => ['required', 'unique:chauffeurs,permis,' . $id],
-            'telephone' => 'nullable',
             'contact' => 'nullable',
             'actif' => 'required|in:0,1',
             'photo' => 'nullable|image'
+        ], [
+            'nom.regex' => 'Le nom ne doit contenir que des lettres.',
+            'prenom.regex' => 'Le prénom ne doit contenir que des lettres.',
+            'telephone.regex' => 'Le numéro doit commencer par 05 ou 06 et contenir exactement 9 chiffres.',
         ]);
 
+        $data = $request->except('photo');
         $data['nom'] = strtoupper($data['nom']);
         $data['prenom'] = ucfirst(strtolower($data['prenom']));
         $data['actif'] = (int) $data['actif'];

@@ -22,6 +22,14 @@
                     <p class="text-purple-100 text-sm mt-1">Supervision globale de l'entreprise</p>
                 </div>
             </div>
+
+            @if($nb_alertes_maintenance_km > 0)
+            <div class="flex items-center gap-2 px-4 py-2 bg-red-500/30 border border-red-500/50 rounded-xl animate-pulse backdrop-blur-md">
+                <i class="fas fa-exclamation-triangle text-red-200 text-sm"></i>
+                <span class="text-xs font-black text-white">{{ $nb_alertes_maintenance_km }} maintenance(s) KM urgente(s)</span>
+            </div>
+            @endif
+
             <div class="flex items-center gap-2 px-4 py-2 bg-white/15 rounded-xl backdrop-blur-sm border border-white/20">
                 <div class="w-2 h-2 rounded-full bg-green-300 animate-pulse"></div>
                 <span class="text-xs text-white font-medium">Vue Globale Active</span>
@@ -182,5 +190,27 @@
 
     </div>
 
+    @if($nb_alertes_maintenance_km > 0)
+    <div class="rounded-2xl bg-white dark:bg-gray-800 border border-red-200 dark:border-red-900/30 p-4 shadow-lg shrink-0 animate-fade-in-up" style="animation-delay: 0.3s">
+        <h2 class="text-sm font-bold text-red-600 dark:text-red-400 flex items-center gap-2 mb-3">
+            <i class="fas fa-exclamation-circle"></i>
+            Bus nécessitant un entretien (Seuil 5000 km atteint)
+        </h2>
+        <div class="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
+            @foreach($vehicules_alerte_km as $alerte)
+            <div class="flex-shrink-0 w-64 p-3 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20 flex flex-col gap-2">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-black text-gray-900 dark:text-white">{{ $alerte['immatriculation'] }}</span>
+                    <span class="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full">+ {{ number_format($alerte['depassement'], 0) }} km</span>
+                </div>
+                <p class="text-[10px] text-gray-500">Distance depuis dernier entretien : <span class="font-bold text-red-600">{{ number_format($alerte['distance'], 0) }} km</span></p>
+                <a href="{{ route('manager.maintenances.create', ['vehicule_id' => $alerte['id']]) }}" class="w-full text-center py-1.5 bg-red-600 text-white text-[10px] font-bold rounded-lg hover:bg-red-700 transition">
+                    Planifier l'entretien
+                </a>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
 </div>
 @endsection

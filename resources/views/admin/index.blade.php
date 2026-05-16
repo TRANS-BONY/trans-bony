@@ -44,6 +44,14 @@
                     <p class="text-gray-300 text-[10px] mt-0.5">Vue d'ensemble et statistiques en temps réel</p>
                 </div>
             </div>
+            
+            @if($nb_alertes_maintenance_km > 0)
+            <div class="flex items-center gap-2 px-4 py-2 bg-rose-500/20 border border-rose-500/30 rounded-xl animate-pulse">
+                <i class="fas fa-tools text-rose-400 text-sm"></i>
+                <span class="text-xs font-bold text-rose-200">{{ $nb_alertes_maintenance_km }} maintenance(s) à prévoir</span>
+            </div>
+            @endif
+
             <div class="hidden sm:flex items-center gap-2">
                 <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 backdrop-blur-sm border border-emerald-500/25">
                     <div class="relative">
@@ -250,6 +258,34 @@
             <canvas id="statsChart"></canvas>
         </div>
     </div>
+
+    @if($nb_alertes_maintenance_km > 0)
+    <!-- Alertes Maintenance Kilométrage -->
+    <div class="rounded-2xl bg-slate-900/90 backdrop-blur-xl border border-rose-500/20 p-4 shadow-xl shrink-0 animate-fade-in-up" style="animation-delay: 0.7s">
+        <h2 class="text-sm font-bold text-rose-400 flex items-center gap-2 mb-3">
+            <i class="fas fa-exclamation-triangle"></i>
+            Maintenances à prévoir (Seuil 5000 km)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            @foreach($vehicules_alerte_km as $alerte)
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 group hover:bg-white/10 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-white">{{ $alerte['immatriculation'] }}</p>
+                        <p class="text-[10px] text-gray-400">Parcourus: <span class="text-rose-400 font-bold">{{ number_format($alerte['distance'], 0) }} km</span></p>
+                    </div>
+                </div>
+                <a href="{{ route('admin.maintenances.create', ['vehicule_id' => $alerte['id']]) }}" class="px-3 py-1.5 bg-rose-500 text-white text-[10px] font-bold rounded-lg hover:bg-rose-600 transition-colors">
+                    Planifier
+                </a>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

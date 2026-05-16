@@ -19,7 +19,17 @@
             </h2>
         </div>
 
-        <div class="p-6">
+        <div class="p-6" x-data="{ 
+            selectedVehiculeId: '{{ old('vehicule_id') }}',
+            nbPassagers: '{{ old('nb_passagers', 0) }}',
+            vehicules: {{ json_encode($vehicules->mapWithKeys(fn($v) => [$v->id => $v->capacite])) }},
+            get currentCapacite() {
+                return this.selectedVehiculeId ? this.vehicules[this.selectedVehiculeId] : 52;
+            },
+            get isOverCapacity() {
+                return this.selectedVehiculeId && parseInt(this.nbPassagers) > this.currentCapacite;
+            }
+        }">
             <form action="{{ route('agent.voyages.store') }}" method="POST" class="space-y-6">
                 @csrf
 
@@ -44,12 +54,17 @@
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                             <i class="fas fa-map-marker-alt text-orange-500"></i> Destination
                         </label>
-                        <input type="text" 
-                               name="destination" 
-                               value="{{ old('destination') }}" 
-                               placeholder="Lieu de destination..." 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors" 
-                               required>
+                        <select name="destination" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors" 
+                                required>
+                            <option value="">Sélectionner une destination</option>
+                            @php
+                                $destinations = ['Point-Noire', 'Brazzaville', 'Nkayi', 'Ouesso', 'Owando', 'Gamboma', 'Djambala', 'Impfondo', 'Ewo', 'Kinkala', 'Mossaka', 'Loango', 'Dolisie', 'Madingou', 'Sibiti'];
+                            @endphp
+                            @foreach($destinations as $dest)
+                                <option value="{{ $dest }}" {{ old('destination') == $dest ? 'selected' : '' }}>{{ $dest }}</option>
+                            @endforeach
+                        </select>
                         @error('destination')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -61,12 +76,13 @@
                             <i class="fas fa-car text-orange-500"></i> Véhicule
                         </label>
                         <select name="vehicule_id" 
+                                x-model="selectedVehiculeId"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors" 
                                 required>
                             <option value="">Sélectionner un véhicule</option>
                             @foreach($vehicules as $v)
-                                <option value="{{ $v->id }}" {{ old('vehicule_id') == $v->id ? 'selected' : '' }}>
-                                    {{ $v->immatriculation }} - {{ $v->marque }} {{ $v->modele }}
+                                <option value="{{ $v->id }}">
+                                    {{ $v->immatriculation }} ({{ $v->capacite }} places)
                                 </option>
                             @endforeach
                         </select>
@@ -102,10 +118,12 @@
                         </label>
                         <input type="number" 
                                name="nb_passagers" 
-                               value="{{ old('nb_passagers') }}" 
-                               min="0" max="52" 
+                               x-model="nbPassagers"
+                               :class="isOverCapacity ? 'border-red-500 ring-red-500' : 'border-gray-300'"
+                               min="1" 
                                placeholder="Ex: 4" 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
+                        <p x-show="isOverCapacity" class="text-xs text-red-500 mt-1">Dépasse la capacité (<span x-text="currentCapacite"></span>)</p>
                         @error('nb_passagers')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -132,7 +150,10 @@
                     <a href="{{ route('agent.voyages') }}" class="px-5 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors shadow-sm">
                         Annuler
                     </a>
-                    <button type="submit" class="px-5 py-2.5 bg-orange-500 text-white hover:bg-orange-600 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2">
+                    <button type="submit" 
+                            :disabled="isOverCapacity"
+                            :class="isOverCapacity ? 'opacity-50 cursor-not-allowed grayscale' : ''"
+                            class="px-5 py-2.5 bg-orange-500 text-white hover:bg-orange-600 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2">
                         <i class="fas fa-paper-plane"></i> Planifier le voyage
                     </button>
                 </div>
