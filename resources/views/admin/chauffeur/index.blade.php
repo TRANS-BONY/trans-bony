@@ -146,16 +146,16 @@
             </div>
 
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 flex justify-between items-center gap-2">
-                <a href="{{ route($rolePrefix . '.chauffeurs.show', $c->id) }}" class="flex-1 text-center py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl transition-colors font-medium text-sm">
+                <a href="{{ route($rolePrefix . '.chauffeurs.show', $c->id) }}" class="flex-1 text-center py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl transition-colors font-bold text-xs">
                     <i class="fas fa-eye mr-1"></i> Voir
                 </a>
-                <a href="{{ route($rolePrefix . '.chauffeurs.edit', $c->id) }}" class="flex-1 text-center py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl transition-colors font-medium text-sm">
+                <a href="{{ route($rolePrefix . '.chauffeurs.edit', $c->id) }}" class="flex-1 text-center py-2 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl transition-colors font-bold text-xs">
                     <i class="fas fa-edit mr-1"></i> Éditer
                 </a>
                 <form method="POST" action="{{ route($rolePrefix . '.chauffeurs.destroy', $c->id) }}" class="flex-1" onsubmit="return confirm('Attention: Confirmer la suppression ?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="w-full text-center py-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-xl transition-colors font-medium text-sm">
+                    <button type="submit" class="w-full text-center py-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-xl transition-colors font-bold text-xs">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </form>

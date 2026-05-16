@@ -32,7 +32,7 @@
                 <!-- Name -->
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nom complet <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" value="{{ old('name') }}" placeholder="Ex: Jean Dupont" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 transition-all" required>
+                    <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Ex: JEAN DUPONT" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 transition-all" required pattern="[A-ZÀ-ÿ][A-ZÀ-ÿ\s\'-]*" title="Le nom doit commencer par une lettre et ne peut contenir que des lettres, des espaces, des tirets ou des apostrophes.">
                     @error('name') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 
@@ -88,5 +88,25 @@
         </form>
     </div>
 </div>
+@push('scripts')
+<script>
+    const nameInput = document.getElementById('name');
+    if (nameInput) {
+        nameInput.addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase();
+            
+            // Filter allowed characters: letters, space, hyphen, apostrophe
+            value = value.replace(/[^A-ZÀ-ÿ\s\'-]/g, '');
+
+            // Ensure it starts with a letter (strip non-letters from the beginning)
+            while (value.length > 0 && !/[A-ZÀ-ÿ]/.test(value[0])) {
+                value = value.substring(1);
+            }
+            
+            e.target.value = value;
+        });
+    }
+</script>
+@endpush
 @endsection
 

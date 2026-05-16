@@ -39,11 +39,13 @@
                     id="name"
                     name="name"
                     class="auth-input @error('name') is-invalid @enderror"
-                    placeholder="Jean Dupont"
+                    placeholder="JEAN DUPONT"
                     value="{{ old('name') }}"
                     required
                     autofocus
                     autocomplete="name"
+                    pattern="[A-ZÀ-ÿ][A-ZÀ-ÿ\s\'-]*"
+                    title="Le nom doit commencer par une lettre et ne peut contenir que des lettres, des espaces, des tirets ou des apostrophes."
                 >
                 @error('name')
                     <span class="inline-error">{{ $message }}</span>
@@ -136,6 +138,22 @@
 </div>
 
 <script>
+    // Name validation and formatting
+    const nameInput = document.getElementById('name');
+    nameInput.addEventListener('input', function(e) {
+        let value = e.target.value.toUpperCase();
+        
+        // Filter allowed characters: letters, space, hyphen, apostrophe
+        value = value.replace(/[^A-ZÀ-ÿ\s\'-]/g, '');
+
+        // Ensure it starts with a letter (strip non-letters from the beginning)
+        while (value.length > 0 && !/[A-ZÀ-ÿ]/.test(value[0])) {
+            value = value.substring(1);
+        }
+        
+        e.target.value = value;
+    });
+
     // Loading state on submit
     document.getElementById('register-form').addEventListener('submit', function() {
         const btn  = document.getElementById('submit-btn');
