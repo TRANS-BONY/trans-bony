@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
+        "cloudinary-labs/cloudinary-laravel": "^3.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",
@@ -84,6 +85,15 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "audit": {
+            "ignore": [
+                "PKSA-8cfg-tzhf-fr83",
+                "PKSA-x13r-n4wc-4gcr",
+                "PKSA-gz3f-3cz3-3wsw",
+                "PKSA-jtdk-dcr5-f11n",
+                "PKSA-hznc-gbby-6w16"
+            ]
         }
     },
     "minimum-stability": "stable",
