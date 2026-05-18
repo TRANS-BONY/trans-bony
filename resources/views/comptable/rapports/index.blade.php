@@ -90,7 +90,7 @@
     <!-- Barre de recherche -->
     <div class="shrink-0">
         <form method="GET" class="relative">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs z-10 cursor-pointer hover:opacity-80 transition-opacity"><i class="fas fa-search"></i></button>
             <input type="text" name="search" placeholder="Rechercher un rapport..." value="{{ request('search') }}"
                    class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all shadow-sm">
         </form>

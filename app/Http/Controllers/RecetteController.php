@@ -16,7 +16,13 @@ class RecetteController extends Controller
         $recettes = RecetteMensuelle::when($search, function($q) use ($search) {
             return $q->where(function($q2) use ($search) {
                 $q2->where('montant', 'like', "%{$search}%")
-                ;
+                   ->orWhere('type', 'like', "%{$search}%")
+                   ->orWhere('date', 'like', "%{$search}%")
+                   ->orWhereHas('vehicule', function($q3) use ($search) {
+                       $q3->where('immatriculation', 'like', "%{$search}%")
+                          ->orWhere('marque', 'like', "%{$search}%")
+                          ->orWhere('modele', 'like', "%{$search}%");
+                   });
             });
         })->with('vehicule')->orderByDesc('date')->paginate(15)->appends(request()->query());
 

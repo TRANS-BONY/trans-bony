@@ -48,10 +48,19 @@
                     <p class="text-emerald-100 text-sm mt-1">Gestion des revenus de la flotte</p>
                 </div>
             </div>
-            <a href="{{ route('comptable.recettes.create') }}"
-               class="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 font-bold rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
-                <i class="fas fa-plus"></i> Nouvelle recette
-            </a>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('comptable.recettes.create') }}"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 font-bold rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                    <i class="fas fa-plus"></i> Nouvelle recette
+                </a>
+                <form method="GET" class="relative group">
+                    <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors z-10 cursor-pointer hover:opacity-80 transition-opacity">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
+                           class="w-64 pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none backdrop-blur-sm transition-all">
+                </form>
+            </div>
         </div>
     </div>
 

@@ -91,7 +91,7 @@
     <!-- Barre de recherche -->
     <div class="relative animate-fade-in-up" style="animation-delay: 0.2s">
         <form method="GET" class="relative group">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10 cursor-pointer hover:opacity-80 transition-opacity"><i class="fas fa-search"></i></button>
             <input type="text" name="search" placeholder="Rechercher une action, une table ou un ID..." value="{{ request('search') }}"
                    class="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-slate-500 outline-none shadow-sm transition-all">
         </form>

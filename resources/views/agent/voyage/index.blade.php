@@ -284,7 +284,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if(confirm("Supprimer ce voyage ?")){
                 fetch('/agent/voyages/' + info.event.id, {
                     method: 'DELETE',
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                    headers: { 
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
                 })
                 .then(res => res.json())
                 .then(data => {

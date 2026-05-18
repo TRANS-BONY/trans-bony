@@ -26,7 +26,7 @@
             <!-- Search/Filter -->
             <div class="flex flex-col md:flex-row gap-4 mb-8 p-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 rounded-2xl">
                 <form method="GET" class="relative flex-1 max-w-md">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10 cursor-pointer hover:opacity-80 transition-opacity"><i class="fas fa-search"></i></button>
                     <input type="text" name="search" placeholder="Rechercher par nom ou email..." value="{{ request('search') }}"
                            class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm">
                 </form>

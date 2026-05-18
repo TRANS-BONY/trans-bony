@@ -457,7 +457,8 @@ events: "{{ route($rolePrefix . '.voyages.events') }}",
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 })
                 .then(res => res.json())

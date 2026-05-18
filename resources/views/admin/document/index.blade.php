@@ -166,7 +166,7 @@
             <!-- Search Bar -->
             <div class="mb-4">
                 <form method="GET" class="relative shadow-sm rounded-xl overflow-hidden">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10 cursor-pointer hover:opacity-80 transition-opacity"><i class="fas fa-search"></i></button>
                     <input type="text" name="search" placeholder="Rechercher (type, référence...)" value="{{ request('search') }}"
                            class="w-full pl-12 pr-4 py-3 border-none bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-purple-500 outline-none">
                 </form>

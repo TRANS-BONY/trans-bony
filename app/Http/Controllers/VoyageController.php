@@ -16,8 +16,14 @@ class VoyageController extends Controller
             ->when($search, function($q) use ($search) {
                 return $q->where(function($q2) use ($search) {
                     $q2->where('destination', 'like', "%{$search}%")
-                       ->orWhere('statut', 'like', "%{$search}%")
-                    ;
+                       ->orWhere('type', 'like', "%{$search}%")
+                       ->orWhereHas('vehicule', function($q3) use ($search) {
+                           $q3->where('immatriculation', 'like', "%{$search}%");
+                       })
+                       ->orWhereHas('chauffeur', function($q4) use ($search) {
+                           $q4->where('nom', 'like', "%{$search}%")
+                              ->orWhere('prenom', 'like', "%{$search}%");
+                       });
                 });
             })
             ->orderByDesc('date_depart')
@@ -195,12 +201,20 @@ class VoyageController extends Controller
 
     public function destroy($id)
     {
-        Voyage::destroy($id);
-        
-        if (request()->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Voyage supprimé avec succès']);
-        }
+        try {
+            $voyage = Voyage::findOrFail($id);
+            $voyage->delete();
 
-        return back()->with('success','Voyage supprimé avec succès');
+            if (request()->ajax() || request()->wantsJson() || request()->isJson()) {
+                return response()->json(['success' => true, 'message' => 'Voyage supprimé avec succès']);
+            }
+
+            return back()->with('success','Voyage supprimé avec succès');
+        } catch (\Exception $e) {
+            if (request()->ajax() || request()->wantsJson() || request()->isJson()) {
+                return response()->json(['success' => false, 'error' => 'Erreur serveur: ' . $e->getMessage()], 500);
+            }
+            return back()->with('error', 'Erreur: ' . $e->getMessage());
+        }
     }
 }
