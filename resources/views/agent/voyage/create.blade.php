@@ -7,7 +7,7 @@
             <h1 class="text-2xl font-bold text-gray-800">Planifier un Voyage</h1>
             <p class="text-sm text-gray-500 mt-1">Créez une nouvelle mission ou maintenance pour la flotte</p>
         </div>
-        <a href="{{ route('agent.voyages') }}" class="px-4 py-2 border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 rounded-lg transition-all shadow-sm flex items-center gap-2">
+        <a href="{{ route('agent.voyages.index') }}" class="px-4 py-2 border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 rounded-lg transition-all shadow-sm flex items-center gap-2">
             <i class="fas fa-arrow-left"></i> Retour
         </a>
     </div>
@@ -147,7 +147,7 @@
                 </div>
 
                 <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end gap-3">
-                    <a href="{{ route('agent.voyages') }}" class="px-5 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors shadow-sm">
+                    <a href="{{ route('agent.voyages.index') }}" class="px-5 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors shadow-sm">
                         Annuler
                     </a>
                     <button type="submit" 

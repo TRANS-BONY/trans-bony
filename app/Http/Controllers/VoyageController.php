@@ -56,6 +56,21 @@ class VoyageController extends Controller
         return view($view, compact('voyage', 'rolePrefix'));
     }
 
+    public function create()
+    {
+        $vehicules = Vehicule::where('statut', 'disponible')->get();
+        $chauffeurs = Chauffeur::where('actif', 1)->get();
+
+        $role = auth()->user()->getRoleNames()->first() ?: 'admin';
+        $rolePrefix = $role;
+        
+        $view = "{$role}.voyages.create";
+        if ($role === 'admin' || $role === 'agent') $view = "{$role}.voyage.create";
+        if (!view()->exists($view)) $view = 'admin.voyage.create';
+        
+        return view($view, compact('vehicules', 'chauffeurs', 'rolePrefix'));
+    }
+
     // 📅 EVENTS POUR FULLCALENDAR
     public function events()
     {
@@ -118,9 +133,9 @@ class VoyageController extends Controller
         $voyage = Voyage::create($data);
 
         // Update vehicle mileage if arrival KM is provided
-        if ($data['km_arrivee'] && $data['km_arrivee'] > $vehicule->kilometrage) {
+        if (isset($data['km_arrivee']) && $data['km_arrivee'] && $data['km_arrivee'] > $vehicule->kilometrage) {
             $vehicule->update(['kilometrage' => $data['km_arrivee']]);
-        } elseif ($data['km_depart'] && $data['km_depart'] > $vehicule->kilometrage) {
+        } elseif (isset($data['km_depart']) && $data['km_depart'] && $data['km_depart'] > $vehicule->kilometrage) {
             $vehicule->update(['kilometrage' => $data['km_depart']]);
         }
 
