@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier des Charges - TRANS-BONY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #3b82f6;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f1f5f9;
+            padding: 0;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 25mm;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+                page-break-after: always;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+
+        /* Cover Page */
+        .cover {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 247mm;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .logo-placeholder {
+            width: 120px;
+            height: 120px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 40px;
+            margin-bottom: 40px;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+        }
+
+        .cover h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 52pt;
+            color: var(--dark);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .cover h2 {
+            font-size: 20pt;
+            font-weight: 400;
+            color: var(--secondary);
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .cover .meta {
+            margin-top: 100px;
+            font-size: 14pt;
+            color: var(--secondary);
+            text-align: left;
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+        }
+
+        /* Content Styles */
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28pt;
+            color: var(--dark);
+            margin-top: 40px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        h3 {
+            font-size: 18pt;
+            color: var(--primary);
+            margin-top: 30px;
+            margin-bottom: 12px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        p, li {
+            font-size: 12pt;
+            margin-bottom: 12px;
+            text-align: justify;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 10pt;
+            font-weight: 600;
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1px solid #dbeafe;
+            margin-right: 5px;
+        }
+
+        .module-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 15mm;
+            left: 25mm;
+            right: 25mm;
+            font-size: 9pt;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-print {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.5);
+            background: #1e293b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-print no-print" onclick="window.print()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Exporter en PDF
+    </button>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page">
+        <div class="cover">
+            <div class="logo-placeholder">TB</div>
+            <h1>TRANS-BONY</h1>
+            <h2>Cahier des Charges Fonctionnel</h2>
+            <div class="meta">
+                <p><strong>Version:</strong> 1.0</p>
+                <p><strong>Date:</strong> 23 Mai 2026</p>
+                <p><strong>Secteur:</strong> Transport & Logistique</p>
+                <p><strong>État:</strong> Version Finale</p>
+            </div>
+        </div>
+        <div class="footer">
+            <span>TRANS-BONY © 2026</span>
+            <span>Document de Spécifications</span>
+        </div>
+    </div>
+
+    <!-- PAGE 2: INTRODUCTION & TECH -->
+    <div class="page">
+        <h2 class="section-title">1. Introduction</h2>
+        <h3>1.1 Vision du Projet</h3>
+        <p>
+            <strong>TRANS-BONY</strong> est une plateforme de gestion intégrée (ERP) dédiée aux entreprises de transport. Elle vise à digitaliser l'ensemble des processus opérationnels, de la maintenance préventive des véhicules au suivi rigoureux des recettes financières.
+        </p>
+
+        <h3>1.2 Objectifs Stratégiques</h3>
+        <ul>
+            <li><strong>Réduction des Coûts :</strong> Optimisation de la consommation de carburant et réduction des pannes grâce au suivi de maintenance.</li>
+            <li><strong>Transparence Totale :</strong> Audit exhaustif des actions utilisateurs pour prévenir les erreurs et les fraudes.</li>
+            <li><strong>Performance Opérationnelle :</strong> Centralisation de la planification des voyages et de la gestion documentaire.</li>
+        </ul>
+
+        <h2 class="section-title">2. Stack Technique</h2>
+        <p>Le choix technologique s'oriente vers la robustesse et la rapidité de déploiement.</p>
+        <table>
+            <tr>
+                <th>Domaine</th>
+                <th>Solution</th>
+            </tr>
+            <tr>
+                <td>Cœur du Système</td>
+                <td>Laravel 11 (Framework PHP de pointe)</td>
+            </tr>
+            <tr>
+                <td>Stockage de Données</td>
+                <td>Relationnel MySQL / MariaDB</td>
+            </tr>
+            <tr>
+                <td>Interface Utilisateur</td>
+                <td>Premium Dark System (Tailwind CSS / Vanilla JS)</td>
+            </tr>
+            <tr>
+                <td>Reporting</td>
+                <td>Moteurs PDF & Excel intégrés</td>
+            </tr>
+        </table>
+        <div class="footer">
+            <span>TRANS-BONY - Cahier des Charges</span>
+            <span>Page 2 / 4</span>
+        </div>
+    </div>
+
+    <!-- PAGE 3: MODULES -->
+    <div class="page">
+        <h2 class="section-title">3. Modules Opérationnels</h2>
+
+        <div class="module-card">
+            <h3>3.1 Gestion de la Flotte</h3>
+            <p>Le module <strong>Véhicule</strong> centralise toutes les informations techniques (Châssis, modèle, carburant) et permet un suivi en temps réel de la disponibilité du parc automobile.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>3.2 Planification des Voyages</h3>
+            <p>Gestion dynamique des départs. Ce module permet d'associer un véhicule, un chauffeur et un itinéraire. Les statuts sont mis à jour en temps réel pour une visibilité totale sur l'activité.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>3.3 Maintenance Technique</h3>
+            <p>Suivi rigoureux des vidanges, changements de pneus et réparations. Les techniciens peuvent enregistrer les interventions pour maintenir un carnet d'entretien numérique.</p>
+        </div>
+
+        <div class="module-card">
+            <h3>3.4 Coffre-fort Documentaire</h3>
+            <p>Automatisation de la gestion des documents légaux. Le système alerte les gestionnaires avant l'expiration des assurances ou des visites techniques.</p>
+        </div>
+
+        <div class="footer">
+            <span>TRANS-BONY - Cahier des Charges</span>
+            <span>Page 3 / 4</span>
+        </div>
+    </div>
+
+    <!-- PAGE 4: FINANCES & ACCÈS -->
+    <div class="page">
+        <h2 class="section-title">4. Finance & Analystique</h2>
+        <h3>4.1 Gestion des flux financiers</h3>
+        <p>Saisie des recettes par voyage avec calcul automatique des soldes. Toutes les transactions sont effectuées en <strong>Franc CFA (XOF)</strong> pour une compatibilité régionale totale.</p>
+        
+        <h3>4.2 Exports & Rapports</h3>
+        <p>Transformation des données brutes en informations stratégiques via des exports PDF et Excel personnalisés pour la comptabilité.</p>
+
+        <h2 class="section-title">5. Matrice des Rôles</h2>
+        <table>
+            <tr>
+                <th>Rôle</th>
+                <th>Responsabilités Principales</th>
+            </tr>
+            <tr>
+                <td><strong>Admin</strong></td>
+                <td>Contrôle total, Sécurité, Gestion des utilisateurs et Audits.</td>
+            </tr>
+            <tr>
+                <td><strong>Comptable</strong></td>
+                <td>Gestion exclusive des Recettes et édition des Rapports financiers.</td>
+            </tr>
+            <tr>
+                <td><strong>Gestionnaire</strong></td>
+                <td>Administration de la flotte, des chauffeurs et des documents.</td>
+            </tr>
+            <tr>
+                <td><strong>Agent</strong></td>
+                <td>Opérations quotidiennes : Création et suivi des Voyages.</td>
+            </tr>
+            <tr>
+                <td><strong>Technicien</strong></td>
+                <td>Exécution et suivi des Maintenances.</td>
+            </tr>
+        </table>
+
+        <div class="module-card" style="margin-top: 30px; border-left-color: var(--dark);">
+            <h3>6. Sécurité & Intégrité</h3>
+            <p>Le système d'<strong>Audit Trail</strong> (Piste d'audit) garantit que chaque modification est tracée, offrant une protection contre les manipulations de données non autorisées.</p>
+        </div>
+
+        <div class="footer">
+            <span>TRANS-BONY - Cahier des Charges</span>
+            <span>Page 4 / 4</span>
+        </div>
+    </div>
+</body>
+</html>
