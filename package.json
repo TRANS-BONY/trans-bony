@@ -19,6 +19,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.2.0",
         "aos": "^2.3.4",
         "chart.js": "^4.5.1",
         "laravel-echo": "^2.3.1",

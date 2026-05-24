@@ -5,22 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TRANS BONY - Espace Agent</title>
 
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {}
-        }
-    }
-</script>
-
-<!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Alpine.js -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Fonts & Local Styles via Vite -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 <style> @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } } .floating { animation: floating 4s ease-in-out infinite; } .floating-fast { animation: floating 2.5s ease-in-out infinite; } .floating-slow { animation: floating 6s ease-in-out infinite; } .floating-hover { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); } .floating-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     /* Transitions personnalisées */
