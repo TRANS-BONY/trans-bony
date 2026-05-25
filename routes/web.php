@@ -42,7 +42,7 @@ require __DIR__.'/auth.php';
 | APRÈS LOGIN → DASHBOARD
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth','active'])->group(function(){
+Route::middleware(['auth', 'active', 'audit'])->group(function(){
 
     // ──────────────────────────────────────────────────────────────
     // SALLE D'ATTENTE (Pour les utilisateurs sans rôle)

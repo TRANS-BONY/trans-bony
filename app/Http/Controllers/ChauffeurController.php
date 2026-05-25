@@ -59,15 +59,18 @@ class ChauffeurController extends Controller
         $request->validate([
             'nom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
             'prenom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
-            'telephone' => ['required', 'regex:/^(05|06)[0-9]{7}$/'],
-            'permis' => ['required', 'unique:chauffeurs'],
-            'contact' => 'nullable',
+            'telephone' => ['required', 'regex:/^(04|05|06)[0-9]{7}$/'],
+            'permis' => ['required', 'unique:chauffeurs', 'regex:/^CG-\d{6}-[A-Z]{3}-[A-Z0-9]{4}$/'],
+            'contact' => ['required', 'regex:/^(04|05|06)[0-9]{7}$/'],
             'actif' => 'required|in:0,1',
             'photo' => 'nullable|image'
         ], [
             'nom.regex' => 'Le nom ne doit contenir que des lettres.',
             'prenom.regex' => 'Le prénom ne doit contenir que des lettres.',
-            'telephone.regex' => 'Le numéro doit commencer par 05 ou 06 et contenir exactement 9 chiffres.',
+            'telephone.regex' => 'Le numéro doit commencer par 04, 05 ou 06 et contenir exactement 9 chiffres.',
+            'permis.regex' => 'Le format du permis doit être : CG-123456-ABC-202H',
+            'contact.required' => 'Le contact d\'urgence est obligatoire.',
+            'contact.regex' => 'Le numéro d\'urgence doit commencer par 04, 05 ou 06 et contenir exactement 9 chiffres.',
         ]);
 
         $data = $request->except('photo');
@@ -105,15 +108,18 @@ class ChauffeurController extends Controller
         $request->validate([
             'nom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
             'prenom' => ['required', 'string', 'regex:/^[a-zA-Z\s\-]+$/'],
-            'telephone' => ['required', 'regex:/^(05|06)[0-9]{7}$/'],
-            'permis' => ['required', 'unique:chauffeurs,permis,' . $id],
-            'contact' => 'nullable',
+            'telephone' => ['required', 'regex:/^(04|05|06)[0-9]{7}$/'],
+            'permis' => ['required', 'unique:chauffeurs,permis,' . $id, 'regex:/^CG-\d{6}-[A-Z]{3}-[A-Z0-9]{4}$/'],
+            'contact' => ['required', 'regex:/^(04|05|06)[0-9]{7}$/'],
             'actif' => 'required|in:0,1',
             'photo' => 'nullable|image'
         ], [
             'nom.regex' => 'Le nom ne doit contenir que des lettres.',
             'prenom.regex' => 'Le prénom ne doit contenir que des lettres.',
-            'telephone.regex' => 'Le numéro doit commencer par 05 ou 06 et contenir exactement 9 chiffres.',
+            'telephone.regex' => 'Le numéro doit commencer par 04, 05 ou 06 et contenir exactement 9 chiffres.',
+            'permis.regex' => 'Le format du permis doit être : CG-123456-ABC-202H',
+            'contact.required' => 'Le contact d\'urgence est obligatoire.',
+            'contact.regex' => 'Le numéro d\'urgence doit commencer par 04, 05 ou 06 et contenir exactement 9 chiffres.',
         ]);
 
         $data = $request->except('photo');

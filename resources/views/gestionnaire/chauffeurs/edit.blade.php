@@ -20,18 +20,43 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ 
+                permis: '{{ old('permis', $chauffeur->permis) }}',
+                formatPermis() {
+                    let val = this.permis.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    let formatted = '';
+                    if (val.length > 0) formatted += val.substring(0, 2);
+                    if (val.length > 2) formatted += '-' + val.substring(2, 8);
+                    if (val.length > 8) formatted += '-' + val.substring(8, 11);
+                    if (val.length > 11) formatted += '-' + val.substring(11, 15);
+                    this.permis = formatted;
+                }
+            }">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">N° Permis</label>
-                    <input type="text" name="permis" required value="{{ old('permis', $chauffeur->permis) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
+                    <input type="text" name="permis" x-model="permis" @input="formatPermis" placeholder="CG-123456-ABC-202H"
+                           maxlength="18"
+                           pattern="CG-[0-9]{6}-[A-Z]{3}-[A-Z0-9]{4}" title="Format: CG-123456-ABC-202H"
+                           class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('permis') border-red-500 @enderror"
+                           required>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Téléphone</label>
-                    <input type="text" name="telephone" value="{{ old('telephone', $chauffeur->telephone) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
+                    <input type="text" name="telephone" value="{{ old('telephone', $chauffeur->telephone) }}" 
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9)"
+                           pattern="(04|05|06)[0-9]{7}" title="Doit commencer par 04, 05 ou 06"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Contact Urgence</label>
+                    <input type="text" name="contact" required value="{{ old('contact', $chauffeur->contact) }}" 
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9)"
+                           pattern="(04|05|06)[0-9]{7}" title="Doit commencer par 04, 05 ou 06"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
+                </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Statut</label>
                     <select name="actif" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
@@ -39,6 +64,8 @@
                         <option value="0" {{ !$chauffeur->actif ? 'selected' : '' }}>Inactif</option>
                     </select>
                 </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Photo (Modifier)</label>
                     <input type="file" name="photo" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 transition">

@@ -80,37 +80,50 @@
                         @error('prenom') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Permis -->
-                    <div class="space-y-2">
+                    <div class="space-y-2" x-data="{ 
+                        permis: '{{ old('permis', $chauffeur->permis) }}',
+                        formatPermis() {
+                            let val = this.permis.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                            let formatted = '';
+                            if (val.length > 0) formatted += val.substring(0, 2);
+                            if (val.length > 2) formatted += '-' + val.substring(2, 8);
+                            if (val.length > 8) formatted += '-' + val.substring(8, 11);
+                            if (val.length > 11) formatted += '-' + val.substring(11, 15);
+                            this.permis = formatted;
+                        }
+                    }">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                             Numéro de Permis <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="permis" value="{{ old('permis', $chauffeur->permis) }}" placeholder="Ex: CG-123456-ABC-2024"
+                        <input type="text" name="permis" x-model="permis" @input="formatPermis" placeholder="CG-123456-ABC-202H"
+                               maxlength="18"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('permis') border-red-500 @enderror"
                                required>
-                        <p class="text-[10px] text-gray-400">Exemple: CG-123456-ABC-202X</p>
+                        <p class="text-[10px] text-gray-400">Format automatique: CG-XXXXXX-XXX-XXXX</p>
                         @error('permis') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Téléphone -->
                     <div class="space-y-2">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                             Téléphone <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="telephone" value="{{ old('telephone', $chauffeur->telephone) }}" placeholder="Ex: 061234567"
-                               pattern="(05|06)[0-9]{7}" title="Doit commencer par 05 ou 06 suivi de 7 chiffres (Ex: 061234567)"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9)"
+                               pattern="(04|05|06)[0-9]{7}" title="Doit commencer par 04, 05 ou 06 suivi de 7 chiffres"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('telephone') border-red-500 @enderror"
                                required>
                         @error('telephone') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Contact d'urgence -->
                     <div class="space-y-2">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Contact d'urgence
+                            Contact d'urgence <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="contact" value="{{ old('contact', $chauffeur->contact) }}" placeholder="Nom et numéro du contact"
-                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('contact') border-red-500 @enderror">
+                        <input type="text" name="contact" value="{{ old('contact', $chauffeur->contact) }}" placeholder="Ex: 041234567"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9)"
+                               pattern="(04|05|06)[0-9]{7}" title="Doit commencer par 04, 05 ou 06 suivi de 7 chiffres"
+                               class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('contact') border-red-500 @enderror"
+                               required>
                         @error('contact') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
