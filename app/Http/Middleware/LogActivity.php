@@ -16,9 +16,16 @@ class LogActivity
             $method = $request->method();
             // Log only modifications to avoid flooding with GET requests
             if (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+                $actionMap = [
+                    'POST'   => 'CREATE',
+                    'PUT'    => 'UPDATE',
+                    'PATCH'  => 'UPDATE',
+                    'DELETE' => 'DELETE',
+                ];
+
                 Audit::create([
                     'user_id'    => Auth::id(),
-                    'action'     => $method,
+                    'action'     => $actionMap[$method] ?? $method,
                     'table_name' => $request->segment(2) ?? 'system', // segment(2) is usually the module name in this app
                     'record_id'  => $this->getRecordId($request),
                     'ip_address' => $request->ip(),

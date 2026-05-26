@@ -28,4 +28,21 @@ class Audit extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * 📝 Description lisible de l'action
+     */
+    public function getDescriptionAttribute()
+    {
+        $actionMap = [
+            'CREATE' => 'Création',
+            'UPDATE' => 'Modification',
+            'DELETE' => 'Suppression',
+        ];
+
+        $action = $actionMap[$this->action] ?? $this->action;
+        $module = ucfirst($this->table_name);
+        
+        return "{$action} dans le module {$module}" . ($this->record_id ? " (#{$this->record_id})" : "");
+    }
 }

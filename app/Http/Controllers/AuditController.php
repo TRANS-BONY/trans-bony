@@ -17,8 +17,10 @@ class AuditController extends Controller
         $audits = Audit::when($search, function($q) use ($search) {
             return $q->where(function($q2) use ($search) {
                 $q2->where('action', 'like', "%{$search}%")
-                   ->orWhere('description', 'like', "%{$search}%")
-                ;
+                   ->orWhere('table_name', 'like', "%{$search}%")
+                   ->orWhereHas('user', function($query) use ($search) {
+                       $query->where('name', 'like', "%{$search}%");
+                   });
             });
         })->with('user')->latest()->paginate(20)->appends(request()->query());
 
