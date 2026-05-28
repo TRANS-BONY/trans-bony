@@ -21,12 +21,11 @@ class User extends Authenticatable
         'profile_photo',
     ];
 
-    public function getProfilePhotoUrlAttribute()
+    public function setNameAttribute($value)
     {
-        return $this->profile_photo 
-            ? asset('storage/' . $this->profile_photo) 
-            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+        $this->attributes['name'] = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
     }
+
 
     protected $hidden = [
         'password',

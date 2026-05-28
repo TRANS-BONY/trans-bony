@@ -8,7 +8,11 @@
         <div class="relative p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
             <div class="relative group">
                 <div class="w-32 h-32 rounded-full ring-4 ring-white/30 shadow-xl overflow-hidden bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                    @if($user->profile_photo)
+                        <img src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                    @else
+                        <i class="fas fa-user-circle text-5xl text-white/50"></i>
+                    @endif
                 </div>
             </div>
             

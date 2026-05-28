@@ -61,7 +61,8 @@
                             Nom <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="nom" value="{{ old('nom') }}" placeholder="Saisir le nom de famille"
-                               pattern="[a-zA-Z\s\-]+" title="Le nom ne doit contenir que des lettres."
+                               style="text-transform: uppercase;"
+                               pattern="[a-zA-ZÇç\s\-]+" title="Le nom ne doit contenir que des lettres."
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('nom') border-red-500 @enderror"
                                required>
                         @error('nom') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
@@ -73,7 +74,8 @@
                             Prénom <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="prenom" value="{{ old('prenom') }}" placeholder="Saisir le prénom"
-                               pattern="[a-zA-Z\s\-]+" title="Le prénom ne doit contenir que des lettres."
+                               style="text-transform: capitalize;"
+                               pattern="[a-zA-ZÇç\s\-]+" title="Le prénom ne doit contenir que des lettres."
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('prenom') border-red-500 @enderror"
                                required>
                         @error('prenom') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror

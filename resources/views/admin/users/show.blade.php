@@ -7,9 +7,13 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div class="flex items-center gap-6">
                 <div class="relative">
-                    <img src="{{ $user->profile_photo_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=3b82f6&background=f8fafc&size=128&bold=true' }}"
-                         alt="{{ $user->name }}"
-                         class="w-32 h-32 rounded-full ring-4 ring-white/30 shadow-2xl object-cover">
+                    <div class="w-32 h-32 rounded-full ring-4 ring-white/30 shadow-2xl overflow-hidden flex items-center justify-center bg-white/10 backdrop-blur-md">
+                        @if($user->profile_photo)
+                            <img src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                        @else
+                            <i class="fas fa-user-circle text-5xl text-white/50"></i>
+                        @endif
+                    </div>
                     <div class="absolute -bottom-1 -right-1 bg-green-400 w-8 h-8 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
                         <i class="fas fa-circle text-xs text-white {{ $user->is_active ? '' : 'opacity-30' }}"></i>
                     </div>

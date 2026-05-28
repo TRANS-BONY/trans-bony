@@ -216,8 +216,12 @@
 
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center gap-3 p-1 pr-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 hover:bg-gray-100 transition shadow-sm">
-                                <div class="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-gray-600 shadow-sm">
-                                    <img src="{{ auth()->user()->profile_photo_url }}" alt="" class="w-full h-full object-cover">
+                                <div class="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-gray-600 shadow-sm flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                                    @if(auth()->user()->profile_photo)
+                                        <img src="{{ asset('storage/'.auth()->user()->profile_photo) }}" alt="" class="w-full h-full object-cover">
+                                    @else
+                                        <i class="fas fa-user-circle text-gray-400"></i>
+                                    @endif
                                 </div>
                                 <div class="hidden md:block text-left">
                                     <p class="text-xs font-bold text-gray-900 dark:text-white leading-tight">{{ auth()->user()->name }}</p>

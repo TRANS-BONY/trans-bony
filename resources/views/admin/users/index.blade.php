@@ -46,9 +46,13 @@
                         <div @click="open = !open" class="p-8 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors">
                             <div class="flex items-start gap-4">
                                 <div class="relative flex-shrink-0">
-                                    <img src="{{ $user->profile_photo_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=3b82f6&background=f8fafc&size=80&bold=true' }}"
-                                         alt="{{ $user->name }}"
-                                         class="w-20 h-20 rounded-2xl ring-4 {{ $user->is_active ? 'ring-green-200 dark:ring-green-900/50' : 'ring-red-200 dark:ring-red-900/50' }} shadow-lg object-cover transition ring-4">
+                                    <div class="w-20 h-20 rounded-2xl ring-4 {{ $user->is_active ? 'ring-green-200 dark:ring-green-900/50' : 'ring-red-200 dark:ring-red-900/50' }} shadow-lg overflow-hidden flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                                        @if($user->profile_photo)
+                                            <img src="{{ asset('storage/'.$user->profile_photo) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                        @else
+                                            <i class="fas fa-user-circle text-3xl text-gray-400"></i>
+                                        @endif
+                                    </div>
                                     <div class="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
                                         <i class="fas fa-circle text-xs {{ $user->is_active ? 'text-green-500' : 'text-red-500' }}"></i>
                                     </div>

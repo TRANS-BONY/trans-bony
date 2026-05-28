@@ -40,8 +40,13 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 col-span-1 flex flex-col">
             <div class="bg-gradient-to-b from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 p-8 flex flex-col items-center">
                 <div class="relative mb-4">
-                    <img src="{{ $chauffeur->photo ? asset('storage/'.$chauffeur->photo) : asset('images/default-user.png') }}"
-                         class="w-32 h-32 rounded-full object-cover shadow-2xl border-4 border-white dark:border-gray-800">
+                    @if($chauffeur->photo)
+                        <img src="{{ asset('storage/'.$chauffeur->photo) }}" class="w-32 h-32 rounded-full object-cover shadow-2xl border-4 border-white dark:border-gray-800">
+                    @else
+                        <div class="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center shadow-2xl border-4 border-white dark:border-gray-800">
+                            <i class="fas fa-user-tie text-5xl text-gray-400"></i>
+                        </div>
+                    @endif
                     <span class="absolute bottom-1 right-2 w-5 h-5 border-2 border-white dark:border-gray-800 rounded-full {{ $chauffeur->actif ? 'bg-emerald-500' : 'bg-red-500' }}"></span>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white text-center">

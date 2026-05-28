@@ -26,4 +26,5 @@ class Chauffeur extends Model
     {
         return $this->hasMany(Voyage::class);
     }
+
 }

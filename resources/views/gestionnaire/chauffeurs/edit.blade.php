@@ -12,11 +12,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Nom</label>
-                    <input type="text" name="nom" required value="{{ old('nom', $chauffeur->nom) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition uppercase">
+                    <input type="text" name="nom" required value="{{ old('nom', $chauffeur->nom) }}" 
+                           style="text-transform: uppercase;"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition uppercase">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Prénom</label>
-                    <input type="text" name="prenom" required value="{{ old('prenom', $chauffeur->prenom) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
+                    <input type="text" name="prenom" required value="{{ old('prenom', $chauffeur->prenom) }}" 
+                           style="text-transform: capitalize;"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 outline-none transition">
                 </div>
             </div>
 

@@ -111,8 +111,13 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col">
             <div class="p-6 pb-4 flex items-start gap-4">
                 <div class="relative">
-                    <img src="{{ $c->photo ? asset('storage/'.$c->photo) : asset('images/default-user.png') }}"
-                         class="w-16 h-16 rounded-2xl object-cover shadow-md border-2 border-white dark:border-gray-700">
+                    @if($c->photo)
+                        <img src="{{ asset('storage/'.$c->photo) }}" class="w-16 h-16 rounded-2xl object-cover shadow-md border-2 border-white dark:border-gray-700">
+                    @else
+                        <div class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-2 border-white dark:border-gray-700 shadow-md">
+                            <i class="fas fa-user-tie text-2xl text-gray-400"></i>
+                        </div>
+                    @endif
                     <span class="absolute -bottom-1 -right-1 w-4 h-4 border-2 border-white dark:border-gray-800 rounded-full {{ $c->actif ? 'bg-emerald-500' : 'bg-red-500' }}"></span>
                 </div>
                 <div>
