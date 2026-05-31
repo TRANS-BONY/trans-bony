@@ -12,9 +12,15 @@ class VehiculeController extends Controller
         $query = Vehicule::query();
 
         if ($request->search) {
-            $query->where('immatriculation', 'like', "%{$request->search}%")
+            $query->where(function($q) use ($request) {
+                $q->where('immatriculation', 'like', "%{$request->search}%")
                   ->orWhere('marque', 'like', "%{$request->search}%")
                   ->orWhere('modele', 'like', "%{$request->search}%");
+            });
+        }
+
+        if ($request->statut) {
+            $query->where('statut', $request->statut);
         }
 
         $vehicules = $query->latest()->paginate(12)->appends($request->query());
@@ -26,7 +32,14 @@ class VehiculeController extends Controller
         if ($role === 'admin') $view = 'admin.vehicule.index';
         if (!view()->exists($view)) $view = 'admin.vehicule.index';
 
-        return view($view, compact('vehicules', 'rolePrefix'));
+        $stats = [
+            'total' => Vehicule::count(),
+            'disponible' => Vehicule::where('statut', 'disponible')->count(),
+            'mission' => Vehicule::where('statut', 'mission')->count(),
+            'maintenance' => Vehicule::where('statut', 'maintenance')->count(),
+        ];
+
+        return view($view, compact('vehicules', 'rolePrefix', 'stats'));
     }
 
     public function show(Vehicule $vehicule)
@@ -58,14 +71,14 @@ class VehiculeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'immatriculation' => ['required', 'unique:vehicules', 'regex:/^\d{3} [A-Z]{2} \d{1}$/'],
+            'immatriculation' => ['required', 'unique:vehicules', 'regex:/^\d{3,4} [A-Z]{2} \d{1}$/'],
             'marque' => 'required',
             'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
             'capacite' => 'required|integer|between:1,100',
             'statut' => 'required|in:disponible,maintenance,mission'
         ], [
-            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre).'
+            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 123 AB 4 ou 1234 AB 4 (3-4 chiffres, 2 lettres, 1 chiffre).'
         ]);
 
         $data['immatriculation'] = strtoupper($data['immatriculation']);
@@ -90,14 +103,14 @@ class VehiculeController extends Controller
     public function update(Request $request, Vehicule $vehicule)
     {
         $data = $request->validate([
-            'immatriculation' => ['required', 'unique:vehicules,immatriculation,' . $vehicule->id, 'regex:/^\d{3} [A-Z]{2} \d{1}$/'],
+            'immatriculation' => ['required', 'unique:vehicules,immatriculation,' . $vehicule->id, 'regex:/^\d{3,4} [A-Z]{2} \d{1}$/'],
             'marque' => 'required',
             'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
             'capacite' => 'required|integer|between:0,100',
             'statut' => 'required|in:disponible,maintenance,mission'
         ], [
-            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre).'
+            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 123 AB 4 ou 1234 AB 4 (3-4 chiffres, 2 lettres, 1 chiffre).'
         ]);
 
         $data['immatriculation'] = strtoupper($data['immatriculation']);

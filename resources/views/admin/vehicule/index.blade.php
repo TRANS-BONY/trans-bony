@@ -81,29 +81,48 @@
         </div>
     </div>
 
-    <!-- Barre de recherche -->
+    <!-- Barre de recherche et Filtres -->
     <div class="relative animate-fade-in-up" style="animation-delay: 0.1s">
-        <div class="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
-            <form method="GET" class="relative flex items-center w-full">
-                <button type="submit" class="pl-4 cursor-pointer text-gray-400 hover:text-indigo-500 transition-colors z-10" title="Rechercher">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </button>
-                <div class="flex-1">
-                    <input type="text"
-                           name="search"
-                           placeholder="Rechercher par immatriculation, marque, modèle..."
-                           value="{{ request('search') }}"
-                           class="w-full p-3 bg-transparent text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-2">
+            <form method="GET" action="{{ route($rolePrefix . '.vehicules.index') }}" class="flex flex-col md:flex-row gap-2">
+                {{-- Recherche textuelle --}}
+                <div class="relative flex-1 group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                           class="block w-full pl-12 pr-10 py-3.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all shadow-sm group-hover:border-emerald-300"
+                           placeholder="Rechercher par immatriculation, marque, modèle...">
+                    @if(request('search') || request('statut'))
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <a href="{{ route($rolePrefix . '.vehicules.index') }}" class="text-gray-400 hover:text-red-500 transition-colors" title="Effacer les filtres">
+                            <i class="fas fa-times-circle"></i>
+                        </a>
+                    </div>
+                    @endif
                 </div>
-                @if(request('search'))
-                <a href="{{ route($rolePrefix . '.vehicules.index') }}" class="pr-4">
-                    <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </a>
-                @endif
+
+                {{-- Filtres par Statut (Chips) --}}
+                <div class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+                    <input type="hidden" name="statut" id="statut-filter" value="{{ request('statut') }}">
+                    
+                    <button type="button" onclick="filterStatut('')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ !request('statut') ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200 dark:shadow-none' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200' }}">
+                        Tous
+                    </button>
+                    <button type="button" onclick="filterStatut('disponible')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'disponible' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200 dark:shadow-none' : 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:bg-emerald-100' }}">
+                        Disponibles
+                    </button>
+                    <button type="button" onclick="filterStatut('mission')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'mission' ? 'bg-sky-500 text-white shadow-lg shadow-sky-200 dark:shadow-none' : 'bg-sky-50 dark:bg-sky-900/20 text-sky-600 hover:bg-sky-100' }}">
+                        En mission
+                    </button>
+                    <button type="button" onclick="filterStatut('maintenance')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'maintenance' ? 'bg-amber-500 text-white shadow-lg shadow-amber-200 dark:shadow-none' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 hover:bg-amber-100' }}">
+                        Maintenance
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -111,64 +130,68 @@
     <!-- Statistiques rapides des véhicules -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up" style="animation-delay: 0.2s">
         <!-- Total Véhicules -->
-        <div class="rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('')" 
+             class="text-left rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ !request('statut') ? 'ring-2 ring-indigo-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-indigo-100 uppercase tracking-wider">Total</p>
-                    <p class="text-3xl font-bold text-white">{{ $vehicules->count() }}</p>
+                    <p class="text-[10px] text-indigo-100 uppercase tracking-wider font-bold">Total</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['total'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
         <!-- Disponibles -->
-        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('disponible')" 
+             class="text-left rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'disponible' ? 'ring-2 ring-emerald-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-emerald-100 uppercase tracking-wider">Disponibles</p>
-                    <p class="text-3xl font-bold text-white">{{ $vehicules->where('statut', 'disponible')->count() }}</p>
+                    <p class="text-[10px] text-emerald-100 uppercase tracking-wider font-bold">Disponibles</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['disponible'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
         <!-- En mission -->
-        <div class="rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('mission')" 
+             class="text-left rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'mission' ? 'ring-2 ring-sky-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-sky-100 uppercase tracking-wider">En mission</p>
-                    <p class="text-3xl font-bold text-white">{{ $vehicules->where('statut', 'mission')->count() }}</p>
+                    <p class="text-[10px] text-sky-100 uppercase tracking-wider font-bold">En mission</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['mission'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
         <!-- Maintenance -->
-        <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('maintenance')" 
+             class="text-left rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'maintenance' ? 'ring-2 ring-amber-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-amber-100 uppercase tracking-wider">Maintenance</p>
-                    <p class="text-3xl font-bold text-white">{{ $vehicules->where('statut', 'maintenance')->count() }}</p>
+                    <p class="text-[10px] text-amber-100 uppercase tracking-wider font-bold">Maintenance</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['maintenance'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
     </div>
 
     <!-- Liste des véhicules (Tableau Desktop / Cartes Mobile) -->
@@ -371,6 +394,11 @@
             row.style.animationDelay = `${index * 0.05}s`;
         });
     });
+
+    function filterStatut(val) {
+        document.getElementById('statut-filter').value = val;
+        document.getElementById('statut-filter').form.submit();
+    }
 </script>
 
 @endsection

@@ -57,10 +57,17 @@
                 <a href="{{ route('technicien.maintenances.create') }}" class="px-5 py-2.5 bg-white text-amber-600 font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2">
                     <i class="fas fa-plus"></i> Nouvelle Maintenance
                 </a>
-                <form method="GET" class="relative group">
-                    <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors z-10 cursor-pointer hover:opacity-80 transition-opacity"><i class="fas fa-search"></i></button>
+                <form method="GET" action="{{ route($rolePrefix . '.maintenances.index') }}" class="relative group flex-1 max-w-xs">
+                    <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors z-10 cursor-pointer">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <input type="text" name="search" placeholder="Rechercher..." value="{{ request('search') }}"
-                           class="w-64 pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none backdrop-blur-sm transition-all">
+                           class="w-full pl-12 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/20 focus:ring-4 focus:ring-white/10 outline-none backdrop-blur-sm transition-all">
+                    @if(request('search'))
+                    <a href="{{ route($rolePrefix . '.maintenances.index') }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors">
+                        <i class="fas fa-times-circle"></i>
+                    </a>
+                    @endif
                 </form>
             </div>
         </div>

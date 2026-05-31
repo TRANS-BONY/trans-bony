@@ -24,7 +24,18 @@ class MaintenanceController extends Controller
             });
         }
 
-        $maintenances = $query->paginate(10)->appends($request->query());
+        if ($request->filled('statut')) {
+            $query->where('statut', $request->statut);
+        }
+
+        $maintenances = $query->latest()->paginate(10)->appends($request->query());
+
+        $stats = [
+            'total' => Maintenance::count(),
+            'en_cours' => Maintenance::where('statut', 'en_cours')->count(),
+            'termine' => Maintenance::where('statut', 'termine')->count(),
+            'annule' => Maintenance::where('statut', 'annule')->count(),
+        ];
 
         $role = auth()->user()->getRoleNames()->first() ?: 'admin';
         $rolePrefix = $role;
@@ -33,7 +44,7 @@ class MaintenanceController extends Controller
         if ($role === 'admin') $view = 'admin.maintenance.index';
         if (!view()->exists($view)) $view = 'admin.maintenance.index';
 
-        return view($view, compact('maintenances', 'rolePrefix'));
+        return view($view, compact('maintenances', 'rolePrefix', 'stats'));
     }
 
     public function store(MaintenanceRequest $request)

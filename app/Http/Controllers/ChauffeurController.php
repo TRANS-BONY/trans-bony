@@ -9,15 +9,30 @@ class ChauffeurController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
     {
-        $search = request('search');
-        $chauffeurs = Chauffeur::when($search, function($q) use ($search) {
-            return $q->where(function($q2) use ($search) {
-                $q2->where('nom', 'like', "%{$search}%")
-                   ->orWhere('prenom', 'like', "%{$search}%")
-                   ->orWhere('permis', 'like', "%{$search}%")
-                ;
+        $search = $request->search;
+        $statut = $request->statut;
+
+        $query = Chauffeur::query();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('prenom', 'like', "%{$search}%")
+                  ->orWhere('permis', 'like', "%{$search}%");
             });
-        })->latest()->paginate(12)->appends(request()->query());
+        }
+
+        if ($statut !== null && $statut !== '') {
+            $query->where('actif', $statut);
+        }
+
+        $chauffeurs = $query->latest()->paginate(12)->appends($request->query());
+
+        $stats = [
+            'total' => Chauffeur::count(),
+            'actifs' => Chauffeur::where('actif', 1)->count(),
+            'inactifs' => Chauffeur::where('actif', 0)->count(),
+        ];
 
         $role = auth()->user()->getRoleNames()->first() ?: 'admin';
         $rolePrefix = $role;
@@ -27,7 +42,7 @@ class ChauffeurController extends Controller
         if ($role === 'admin') $view = 'admin.chauffeur.index';
         if (!view()->exists($view)) $view = 'admin.chauffeur.index';
 
-        return view($view, compact('chauffeurs', 'rolePrefix'));
+        return view($view, compact('chauffeurs', 'rolePrefix', 'stats'));
     }
 
     public function show(Chauffeur $chauffeur)

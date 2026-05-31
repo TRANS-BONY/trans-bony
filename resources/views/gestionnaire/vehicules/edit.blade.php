@@ -67,16 +67,17 @@
                         </label>
                         <input type="text"
                                name="immatriculation"
+                               id="immatriculation"
                                value="{{ old('immatriculation', $vehicule->immatriculation) }}"
-                               placeholder="EX: 001 XP 4"
+                               placeholder="EX: 123 AB 4"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 @error('immatriculation') border-red-500 @enderror"
-                               oninput="this.value = this.value.toUpperCase()"
-                               pattern="\d{3} [A-Z]{2} \d{1}"
-                               title="Format requis : 001 XP 4 (3 chiffres, 2 lettres, 1 chiffre)"
+                               pattern="\d{3,4} [A-Z]{2} \d{1}"
+                               maxlength="10"
                                required>
                         @error('immatriculation')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Format: 123 AB 4 ou 1234 AB 4 (3-4 chiffres, 2 lettres, 1 chiffre)</p>
                     </div>
 
                     <!-- Marque -->
@@ -281,4 +282,64 @@
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     }
 </style>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const immatInput = document.getElementById('immatriculation');
+    if (immatInput) {
+        immatInput.addEventListener('input', function(e) {
+            let cursorPosition = e.target.selectionStart;
+            let value = e.target.value.toUpperCase();
+            let cleanValue = value.replace(/[^A-Z0-9]/g, '');
+            let formatted = '';
+
+            if (cleanValue.length > 0) {
+                // 1. Chiffres (3 ou 4)
+                let digitsMatch = cleanValue.match(/^\d+/);
+                if (digitsMatch) {
+                    let digits = digitsMatch[0].substring(0, 4);
+                    formatted = digits;
+                    
+                    let rest = cleanValue.substring(digits.length);
+                    if (rest.length > 0) {
+                        if (digits.length === 4 || (digits.length === 3 && rest[0].match(/[A-Z]/))) {
+                            formatted += ' ';
+                            let lettersMatch = rest.match(/[A-Z]+/);
+                            if (lettersMatch) {
+                                let letters = lettersMatch[0].substring(0, 2);
+                                formatted += letters;
+                                let restAfterLetters = rest.substring(letters.length);
+                                if (restAfterLetters.length > 0) {
+                                    let lastDigitMatch = restAfterLetters.match(/\d/);
+                                    if (lastDigitMatch) {
+                                        formatted += ' ' + lastDigitMatch[0];
+                                    }
+                                }
+                            }
+                        } else if (digits.length === 3 && rest.length > 0 && rest[0].match(/\d/)) {
+                            formatted = digits + rest[0];
+                            let restAfter4 = rest.substring(1);
+                            if (restAfter4.length > 0 && restAfter4[0].match(/[A-Z]/)) {
+                                formatted += ' ';
+                                let lettersMatch = restAfter4.match(/[A-Z]+/);
+                                if (lettersMatch) {
+                                    let letters = lettersMatch[0].substring(0, 2);
+                                    formatted += letters;
+                                    let lastPart = restAfter4.substring(letters.length);
+                                    if (lastPart.length > 0) {
+                                        let lastDigit = lastPart.match(/\d/);
+                                        if (lastDigit) formatted += ' ' + lastDigit[0];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            e.target.value = formatted;
+        });
+    }
+});
+</script>
+@endpush
 @endsection

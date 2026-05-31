@@ -34,29 +34,48 @@
         </div>
     </div>
 
-    <!-- Barre de recherche avancée -->
+    <!-- Barre de recherche et Filtres -->
     <div class="relative animate-fade-in-up" style="animation-delay: 0.1s">
-        <div class="relative overflow-hidden rounded-xl bg-white shadow-md border border-gray-200">
-            <form method="GET" class="relative flex items-center w-full">
-                <button type="submit" class="pl-4 cursor-pointer text-gray-400 hover:text-indigo-500 transition-colors z-10" title="Rechercher">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </button>
-                <div class="flex-1">
-                    <input type="text"
-                           name="search"
-                           placeholder="Rechercher par véhicule, type de maintenance..."
-                           value="{{ request('search') }}"
-                           class="w-full p-3 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-2">
+            <form method="GET" action="{{ route($rolePrefix . '.maintenances.index') }}" class="flex flex-col md:flex-row gap-2">
+                {{-- Recherche textuelle --}}
+                <div class="relative flex-1 group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400 group-focus-within:text-orange-500 transition-colors"></i>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                           class="block w-full pl-12 pr-10 py-3.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 focus:outline-none transition-all shadow-sm group-hover:border-orange-300"
+                           placeholder="Rechercher par véhicule, type...">
+                    @if(request('search') || request('statut'))
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <a href="{{ route($rolePrefix . '.maintenances.index') }}" class="text-gray-400 hover:text-red-500 transition-colors" title="Effacer les filtres">
+                            <i class="fas fa-times-circle"></i>
+                        </a>
+                    </div>
+                    @endif
                 </div>
-                @if(request('search'))
-                <a href="{{ route('admin.maintenances.index') }}" class="pr-4">
-                    <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </a>
-                @endif
+
+                {{-- Filtres par Statut (Chips) --}}
+                <div class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+                    <input type="hidden" name="statut" id="statut-filter" value="{{ request('statut') }}">
+                    
+                    <button type="button" onclick="filterStatut('')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ !request('statut') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200 dark:shadow-none' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200' }}">
+                        Tous
+                    </button>
+                    <button type="button" onclick="filterStatut('en_cours')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'en_cours' ? 'bg-amber-500 text-white shadow-lg shadow-amber-200 dark:shadow-none' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 hover:bg-amber-100' }}">
+                        En cours
+                    </button>
+                    <button type="button" onclick="filterStatut('termine')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'termine' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200 dark:shadow-none' : 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:bg-emerald-100' }}">
+                        Terminés
+                    </button>
+                    <button type="button" onclick="filterStatut('annule')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'annule' ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' : 'bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100' }}">
+                        Annulés
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -64,65 +83,68 @@
     <!-- Statistiques rapides -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up" style="animation-delay: 0.2s">
         <!-- Total Maintenances -->
-        <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('')" 
+             class="text-left rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ !request('statut') ? 'ring-2 ring-orange-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-amber-100 uppercase tracking-wider">Total</p>
-                    <p class="text-3xl font-bold text-white">{{ $maintenances->count() }}</p>
-
+                    <p class="text-[10px] text-orange-100 uppercase tracking-wider font-bold">Total</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['total'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
-        <!-- À venir -->
-        <div class="rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <!-- En cours -->
+        <button type="button" onclick="filterStatut('en_cours')" 
+             class="text-left rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'en_cours' ? 'ring-2 ring-amber-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-sky-100 uppercase tracking-wider">À venir</p>
-                    <p class="text-3xl font-bold text-white">{{ $maintenances->where('date_prevue', '>=', now())->count() }}</p>
+                    <p class="text-[10px] text-amber-100 uppercase tracking-wider font-bold">En cours</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['en_cours'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
-        <!-- Coût total -->
-        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <!-- Terminés -->
+        <button type="button" onclick="filterStatut('termine')" 
+             class="text-left rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'termine' ? 'ring-2 ring-emerald-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-emerald-100 uppercase tracking-wider">Coût total</p>
-                    <p class="text-2xl font-bold text-white">{{ number_format($maintenances->sum('cout'), 0, ',', ' ') }} Franc CFA</p>
+                    <p class="text-[10px] text-emerald-100 uppercase tracking-wider font-bold">Terminés</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['termine'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
-        <!-- Urgence -->
-        <div class="rounded-xl bg-gradient-to-br from-red-500 to-red-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <!-- Annulés -->
+        <button type="button" onclick="filterStatut('annule')" 
+             class="text-left rounded-xl bg-gradient-to-br from-red-500 to-red-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'annule' ? 'ring-2 ring-red-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-red-100 uppercase tracking-wider">En retard</p>
-                    <p class="text-3xl font-bold text-white">{{ $maintenances->where('date_prevue', '<', now())->count() }}</p>
+                    <p class="text-[10px] text-red-100 uppercase tracking-wider font-bold">Annulés</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['annule'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
     </div>
 
     <!-- Tableau des maintenances -->
@@ -369,6 +391,11 @@
             row.style.animationDelay = `${index * 0.05}s`;
         });
     });
+
+    function filterStatut(val) {
+        document.getElementById('statut-filter').value = val;
+        document.getElementById('statut-filter').form.submit();
+    }
 </script>
 
 @endsection

@@ -35,76 +35,94 @@
         </div>
     </div>
 
-    <!-- Barre de recherche -->
+    <!-- Barre de recherche et Filtres -->
     <div class="relative animate-fade-in-up" style="animation-delay: 0.1s">
-        <div class="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
-            <form method="GET" class="relative flex items-center w-full">
-                <button type="submit" class="pl-4 cursor-pointer text-gray-400 hover:text-indigo-500 transition-colors z-10" title="Rechercher">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </button>
-                <div class="flex-1">
-                    <input type="text"
-                           name="search"
-                           placeholder="Rechercher par nom, prénom, permis..."
-                           value="{{ request('search') }}"
-                           class="w-full p-3 bg-transparent text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-2">
+            <form method="GET" action="{{ route($rolePrefix . '.chauffeurs.index') }}" class="flex flex-col md:flex-row gap-2">
+                {{-- Recherche textuelle --}}
+                <div class="relative flex-1 group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                           class="block w-full pl-12 pr-10 py-3.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all shadow-sm group-hover:border-emerald-300"
+                           placeholder="Rechercher par nom, prénom, permis...">
+                    @if(request('search') || request('statut') !== null)
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <a href="{{ route($rolePrefix . '.chauffeurs.index') }}" class="text-gray-400 hover:text-red-500 transition-colors" title="Effacer les filtres">
+                            <i class="fas fa-times-circle"></i>
+                        </a>
+                    </div>
+                    @endif
                 </div>
-                @if(request('search'))
-                <a href="{{ route($rolePrefix . '.chauffeurs.index') }}" class="pr-4">
-                    <svg class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </a>
-                @endif
+
+                {{-- Filtres par Statut (Chips) --}}
+                <div class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+                    <input type="hidden" name="statut" id="statut-filter" value="{{ request('statut') }}">
+                    
+                    <button type="button" onclick="filterStatut('')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') === null || request('statut') === '' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200 dark:shadow-none' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200' }}">
+                        Tous
+                    </button>
+                    <button type="button" onclick="filterStatut('1')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') === '1' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200 dark:shadow-none' : 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:bg-emerald-100' }}">
+                        Actifs
+                    </button>
+                    <button type="button" onclick="filterStatut('0')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') === '0' ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' : 'bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100' }}">
+                        Inactifs
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- Statistiques rapides -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up" style="animation-delay: 0.2s">
-        <div class="rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('')" 
+             class="text-left rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') === null || request('statut') === '' ? 'ring-2 ring-indigo-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-indigo-100 uppercase tracking-wider">Total</p>
-                    <p class="text-3xl font-bold text-white">{{ $chauffeurs->total() }}</p>
+                    <p class="text-[10px] text-indigo-100 uppercase tracking-wider font-bold">Total</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['total'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
 
-        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('1')" 
+             class="text-left rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') === '1' ? 'ring-2 ring-emerald-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-emerald-100 uppercase tracking-wider">Actifs</p>
-                    <p class="text-3xl font-bold text-white">{{ $chauffeurs->where('actif', true)->count() }}</p>
+                    <p class="text-[10px] text-emerald-100 uppercase tracking-wider font-bold">Actifs</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['actifs'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
         
-        <div class="rounded-xl bg-gradient-to-br from-red-500 to-red-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <button type="button" onclick="filterStatut('0')" 
+             class="text-left rounded-xl bg-gradient-to-br from-red-500 to-red-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') === '0' ? 'ring-2 ring-red-300 ring-offset-2' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs text-red-100 uppercase tracking-wider">Inactifs</p>
-                    <p class="text-3xl font-bold text-white">{{ $chauffeurs->where('actif', false)->count() }}</p>
+                    <p class="text-[10px] text-red-100 uppercase tracking-wider font-bold">Inactifs</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['inactifs'] }}</p>
                 </div>
                 <div class="p-2 rounded-lg bg-white/20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
     </div>
 
     <!-- Grille des chauffeurs -->
@@ -201,4 +219,11 @@
     .animate-slide-down { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
     .animate-fade-in-up { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 </style>
+
+<script>
+    function filterStatut(val) {
+        document.getElementById('statut-filter').value = val;
+        document.getElementById('statut-filter').form.submit();
+    }
+</script>
 @endsection

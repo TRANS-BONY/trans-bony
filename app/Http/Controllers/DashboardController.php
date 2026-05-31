@@ -95,14 +95,23 @@ class DashboardController extends Controller
         $occupation  = $total_parc > 0 ? round(($vehicules_mission / $total_parc) * 100, 1) : 0;
 
         // ── Graphique (12 derniers mois) ──────────────────────
+        // Optimisation : Une seule requête groupée au lieu de 12 requêtes
+        $startDate = now()->subMonths(11)->startOfMonth();
+        $recettes_groupes = RecetteMensuelle::selectRaw('SUM(montant) as total, YEAR(date) as annee, MONTH(date) as mois')
+                                            ->where('date', '>=', $startDate)
+                                            ->groupBy('annee', 'mois')
+                                            ->get()
+                                            ->keyBy(function($item) {
+                                                return $item->annee . '-' . $item->mois;
+                                            });
+
         $chart_labels = [];
         $chart_data   = [];
         for ($i = 11; $i >= 0; $i--) {
             $d = now()->subMonths($i);
+            $key = $d->year . '-' . $d->month;
             $chart_labels[] = $d->isoFormat('MMM YY');
-            $chart_data[]   = (float) RecetteMensuelle::whereMonth('date', $d->month)
-                                                        ->whereYear('date', $d->year)
-                                                        ->sum('montant');
+            $chart_data[]   = (float) ($recettes_groupes->has($key) ? $recettes_groupes[$key]->total : 0);
         }
 
         // ── Dernières données ──────────────────────────────────
@@ -154,26 +163,26 @@ class DashboardController extends Controller
 
         // ── Maintenances à prévoir (Alertes Kilométrage) ────────
         $seuil_maintenance = 5000; // km
-        $vehicules_alerte_km = [];
-        $all_vehicules = Vehicule::all();
-        foreach ($all_vehicules as $v) {
-            $derniere_maintenance = Maintenance::where('vehicule_id', $v->id)
-                                             ->where('statut', 'terminee')
-                                             ->orderByDesc('updated_at')
-                                             ->first();
-            
+        
+        // Optimisation : Utiliser eager loading pour éviter le N+1
+        $vehicules_alerte_km = Vehicule::with(['maintenances' => function($q) {
+            $q->where('statut', 'terminee')->orderByDesc('updated_at');
+        }])->get()->map(function($v) use ($seuil_maintenance) {
+            $derniere_maintenance = $v->maintenances->first();
             $km_derniere = $derniere_maintenance ? $derniere_maintenance->compteur_km : 0;
             $distance_parcourue = $v->kilometrage - $km_derniere;
             
             if ($distance_parcourue >= $seuil_maintenance) {
-                $vehicules_alerte_km[] = [
+                return [
                     'id' => $v->id,
                     'immatriculation' => $v->immatriculation,
                     'distance' => $distance_parcourue,
                     'depassement' => $distance_parcourue - $seuil_maintenance
                 ];
             }
-        }
+            return null;
+        })->filter()->values()->all();
+
         $nb_alertes_maintenance_km = count($vehicules_alerte_km);
 
         return view($view, compact(
