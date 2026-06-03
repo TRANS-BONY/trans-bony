@@ -122,7 +122,30 @@
                 </div>
                 @endif
             </div>
+            <!-- Analyse Financière -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 lg:col-span-2">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <i class="fas fa-chart-pie text-emerald-500"></i> Performance Financière du Véhicule
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Recettes -->
+                <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-100">
+                    <p class="text-xs text-emerald-600 uppercase font-bold mb-1">Recettes cumulées</p>
+                    <p class="text-2xl font-black text-emerald-700">{{ number_format($totalRecettes, 0, ',', ' ') }} FCFA</p>
+                </div>
+                <!-- Dépenses -->
+                <div class="p-6 rounded-2xl bg-rose-50 border border-rose-100">
+                    <p class="text-xs text-rose-600 uppercase font-bold mb-1">Coûts (Maint. + Carb.)</p>
+                    <p class="text-2xl font-black text-rose-700">{{ number_format($totalDepenses, 0, ',', ' ') }} FCFA</p>
+                </div>
+                <!-- Bénéfice -->
+                <div class="p-6 rounded-2xl {{ $beneficeNet >= 0 ? 'bg-indigo-50 border-indigo-100' : 'bg-red-50 border-red-100' }}">
+                    <p class="text-xs {{ $beneficeNet >= 0 ? 'text-indigo-600' : 'text-red-600' }} uppercase font-bold mb-1">Rentabilité nette</p>
+                    <p class="text-2xl font-black {{ $beneficeNet >= 0 ? 'text-indigo-700' : 'text-red-700' }}">{{ number_format($beneficeNet, 0, ',', ' ') }} FCFA</p>
+                </div>
+            </div>
         </div>
+    </div>
     </div>
 
     <!-- Historique récent -->

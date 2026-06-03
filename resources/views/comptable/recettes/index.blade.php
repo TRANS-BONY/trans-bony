@@ -132,7 +132,7 @@
                     <tr class="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-750 sticky top-0 z-10 shadow-sm">
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Mois / Date</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Type</th>
-                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Véhicule</th>
+                        <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-left">Voyage / Véhicule</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-right">Montant</th>
                         <th class="px-6 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-center">Actions</th>
                     </tr>
@@ -163,9 +163,14 @@
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-sm text-gray-600 dark:text-gray-400">
-                                {{ optional($recette->vehicule)->immatriculation ?? '—' }}
-                            </span>
+                            <div class="flex flex-col">
+                                <span class="font-semibold text-gray-800 dark:text-white">
+                                    {{ optional($recette->voyage)->destination ?? '—' }}
+                                </span>
+                                <span class="text-[10px] text-gray-400 uppercase tracking-tighter">
+                                    {{ optional($recette->vehicule)->immatriculation ?? '—' }}
+                                </span>
+                            </div>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <span class="text-base font-bold text-emerald-600 dark:text-emerald-400">

@@ -122,7 +122,27 @@
 </style>
 </head>
 
+<style>
+    /* Style critique pour le chargement immédiat */
+    #preloader { position: fixed; inset: 0; background: #0f172a; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease-out; }
+    .loader-ring { width: 48px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #3b82f6; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { margin-top: 16px; color: white; font-family: sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.1em; opacity: 0.8; }
+</style>
+
+<div id="preloader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">TRANS BONY</div>
+</div>
+
 <body x-data="app()" :class="{'dark': isDarkMode}" class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <script>
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 500);
+        });
+    </script>
     <div class="flex h-screen overflow-hidden">
         <!-- SIDEBAR -->
         <div

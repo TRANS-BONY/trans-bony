@@ -107,11 +107,16 @@
                             {{ $recette->created_at ? $recette->created_at->format('d/m/Y H:i') : '—' }}
                         </p>
                     </div>
-                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                        <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Dernière modification</p>
-                        <p class="text-base font-bold text-gray-800 dark:text-white">
-                            {{ $recette->updated_at ? $recette->updated_at->format('d/m/Y H:i') : '—' }}
-                        </p>
+                    <div class="sm:col-span-2 p-4 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl border border-emerald-100 dark:border-emerald-800">
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-semibold mb-1">Voyage associé</p>
+                        @if($recette->voyage)
+                            <p class="text-base font-bold text-gray-800 dark:text-white">
+                                {{ $recette->voyage->destination }}
+                            </p>
+                            <p class="text-xs text-gray-400">Date de départ : {{ $recette->voyage->date_depart->format('d/m/Y') }}</p>
+                        @else
+                            <p class="text-sm italic text-gray-400 line-through">Aucun voyage lié</p>
+                        @endif
                     </div>
                 </div>
             </div>

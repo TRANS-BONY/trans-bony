@@ -14,10 +14,11 @@ class StoreRecetteRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'voyage_id'   => 'required|exists:voyages,id',
             'vehicule_id' => 'required|exists:vehicules,id',
-            'montant' => 'required|integer|min:7500',
-            'date' => 'required|date',
-            'type' => 'required|string|max:50',
+            'montant'     => 'required|integer|min:7500',
+            'date'        => 'required|date',
+            'type'        => 'required|string|max:50',
         ];
     }
 

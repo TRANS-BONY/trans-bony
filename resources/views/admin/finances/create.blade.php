@@ -30,23 +30,60 @@
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Voyage --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Voyage Lié <span class="text-red-500">*</span>
+                    </label>
+                    <select name="voyage_id" id="voyage_select" required
+                            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition">
+                        <option value="">Sélectionner un voyage...</option>
+                        @foreach($voyages as $voyage)
+                            <option value="{{ $voyage->id }}" 
+                                    data-vehicule-id="{{ $voyage->vehicule_id }}"
+                                    {{ old('voyage_id') == $voyage->id ? 'selected' : '' }}>
+                                {{ $voyage->destination }} ({{ $voyage->date_depart->format('d/m/Y') }}) - {{ $voyage->vehicule->immatriculation }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('voyage_id') <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p> @enderror
+                </div>
+
                 {{-- Véhicule --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Véhicule <span class="text-red-500">*</span>
+                        Véhicule (Déduit du voyage) <span class="text-red-500">*</span>
                     </label>
-                    <select name="vehicule_id" required
-                            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition">
+                    <select name="vehicule_id" id="vehicule_select" required
+                            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-600 text-gray-500 dark:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition cursor-not-allowed">
                         <option value="">Sélectionner un véhicule...</option>
                         @foreach($vehicules as $vehicule)
                             <option value="{{ $vehicule->id }}" {{ old('vehicule_id') == $vehicule->id ? 'selected' : '' }}>
                                 {{ $vehicule->immatriculation ?? 'VEH-'.$vehicule->id }}
-                                {{ $vehicule->marque ?? '' }} {{ $vehicule->modele ?? '' }}
                             </option>
                         @endforeach
                     </select>
                     @error('vehicule_id') <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const voyageSelect = document.getElementById('voyage_select');
+    const vehiculeSelect = document.getElementById('vehicule_select');
+
+    voyageSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const vehiculeId = selectedOption.getAttribute('data-vehicule-id');
+        if (vehiculeId) {
+            vehiculeSelect.value = vehiculeId;
+        }
+    });
+
+    if (voyageSelect.value) {
+        voyageSelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>
 
                 {{-- Type --}}
                 <div>

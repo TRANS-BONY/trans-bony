@@ -24,7 +24,7 @@ class RecetteController extends Controller
                           ->orWhere('modele', 'like', "%{$search}%");
                    });
             });
-        })->with('vehicule')->orderByDesc('date')->paginate(15)->appends(request()->query());
+        })->with(['vehicule', 'voyage'])->orderByDesc('date')->paginate(15)->appends(request()->query());
 
         // Agrégats globaux
         $recettes_total      = RecetteMensuelle::sum('montant');
@@ -54,13 +54,14 @@ class RecetteController extends Controller
     public function create()
     {
         $vehicules = \App\Models\Vehicule::all();
+        $voyages = \App\Models\Voyage::with('vehicule')->latest()->get();
         $role = auth()->user()->getRoleNames()->first() ?: 'admin';
         
         $view = "{$role}.recettes.create";
         if ($role === 'admin') $view = 'admin.finances.create';
         if (!view()->exists($view)) $view = 'admin.finances.create';
         
-        return view($view, compact('vehicules'));
+        return view($view, compact('vehicules', 'voyages'));
     }
 
     public function store(StoreRecetteRequest $request)
@@ -88,20 +89,34 @@ class RecetteController extends Controller
     public function edit(RecetteMensuelle $recette)
     {
         $vehicules = \App\Models\Vehicule::all();
+        $voyages = \App\Models\Voyage::with('vehicule')->latest()->get();
         $role = auth()->user()->getRoleNames()->first() ?: 'admin';
         
         $view = "{$role}.recettes.edit";
         if ($role === 'admin') $view = 'admin.finances.edit';
         if (!view()->exists($view)) $view = 'admin.finances.edit';
         
-        return view($view, compact('recette', 'vehicules'));
+        return view($view, compact('recette', 'vehicules', 'voyages'));
     }
 
     public function update(UpdateRecetteRequest $request, RecetteMensuelle $recette)
     {
-        $recette->update($request->validated());
+        $data = $request->validated();
+        
+        // Sécurité : Si un voyage est sélectionné, on s'assure que le véhicule suit
+        if (isset($data['voyage_id'])) {
+            $voyage = \App\Models\Voyage::find($data['voyage_id']);
+            if ($voyage) {
+                $data['vehicule_id'] = $voyage->vehicule_id;
+            }
+        }
+
+        $recette->update($data);
+        
         $role = auth()->user()->getRoleNames()->first() ?: 'admin';
-        return redirect()->route($role . '.recettes.index')->with('success', 'Recette modifiée avec succès.');
+        
+        // Redirection vers l'index spécifique au rôle
+        return redirect()->route($role . '.recettes.index')->with('success', 'Recette mise à jour avec succès.');
     }
 
     public function destroy(RecetteMensuelle $recette)

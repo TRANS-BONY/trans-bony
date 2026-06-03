@@ -13,10 +13,39 @@ class MaintenanceRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('maintenance') ? $this->route('maintenance')->id : null;
+
         return [
             'vehicule_id' => 'required|exists:vehicules,id',
             'type'        => 'required|in:preventive,curative',
-            'date_prevue' => 'required|date',
+            'date_prevue' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) use ($id) {
+                    $vehiculeId = $this->input('vehicule_id');
+                    if ($vehiculeId) {
+                        $duplicate = \App\Models\Maintenance::where('vehicule_id', $vehiculeId)
+                            ->whereDate('date_prevue', $value)
+                            ->where('statut', '!=', 'annule')
+                            ->when($id, function ($query) use ($id) {
+                                return $query->where('id', '!=', $id);
+                            })
+                            ->first();
+
+                        if ($duplicate) {
+                            $fail("Ce véhicule a déjà une maintenance ({$duplicate->type}) enregistrée pour cette date (Statut: {$duplicate->statut}).");
+                        }
+
+                        // Vérifier si le véhicule est actuellement en mission
+                        if ($this->input('statut') === 'en_cours') {
+                            $vehicule = \App\Models\Vehicule::find($vehiculeId);
+                            if ($vehicule && $vehicule->statut === 'mission') {
+                                $fail("Impossible de démarrer une maintenance car le véhicule est actuellement en mission.");
+                            }
+                        }
+                    }
+                },
+            ],
             'statut'      => 'required|in:planifie,en_cours,termine,annule',
             'compteur_km' => 'nullable|integer|min:0',
             'cout'        => 'required|numeric|min:0',

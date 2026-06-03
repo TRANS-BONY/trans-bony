@@ -69,8 +69,50 @@
         </div>
     </div>
 
+    <!-- Section Performance Financière (Contraste Amélioré) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0 animate-fade-in-up" style="animation-delay: 0.1s">
+        <!-- Recettes Totales -->
+        <div class="p-4 rounded-2xl bg-indigo-100 dark:bg-indigo-900 border-2 border-indigo-200 dark:border-indigo-800 shadow-md">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-wallet text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-[11px] text-indigo-700 dark:text-indigo-300 uppercase font-bold tracking-wider">Recettes Totales</p>
+                    <p class="text-2xl font-black text-indigo-900 dark:text-white">{{ number_format($totalRecettes, 0, ',', ' ') }} <span class="text-xs font-bold opacity-60">CFA</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Dépenses Totales -->
+        <div class="p-4 rounded-2xl bg-rose-100 dark:bg-rose-900 border-2 border-rose-200 dark:border-rose-800 shadow-md">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-rose-600 flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-gas-pump text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-[11px] text-rose-700 dark:text-rose-300 uppercase font-bold tracking-wider">Dépenses (Carb. + Maint.)</p>
+                    <p class="text-2xl font-black text-rose-900 dark:text-white">{{ number_format($totalDepenses, 0, ',', ' ') }} <span class="text-xs font-bold opacity-60">CFA</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Bénéfice Net -->
+        <div class="p-4 rounded-2xl {{ $beneficeNet >= 0 ? 'bg-emerald-100 dark:bg-emerald-900 border-emerald-200 dark:border-emerald-800' : 'bg-amber-100 dark:bg-amber-900 border-amber-200 dark:border-amber-800' }} border-2 shadow-md">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl {{ $beneficeNet >= 0 ? 'bg-emerald-600' : 'bg-amber-600' }} flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-chart-line text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-[11px] {{ $beneficeNet >= 0 ? 'text-emerald-700 dark:text-emerald-300' : 'text-amber-700 dark:text-amber-300' }} uppercase font-bold tracking-wider">Bénéfice Net Global</p>
+                    <p class="text-2xl font-black {{ $beneficeNet >= 0 ? 'text-emerald-900 dark:text-white' : 'text-amber-900 dark:text-white' }}">
+                        {{ number_format($beneficeNet, 0, ',', ' ') }} <span class="text-xs font-bold opacity-60">CFA</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Grille des cartes statistiques avec couleurs harmonisées -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 shrink-0 animate-fade-in-up">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 shrink-0 animate-fade-in-up" style="animation-delay: 0.2s">
 
         <!-- Carte Véhicules - Bleu -->
         <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-blue-500/20 shadow-lg hover:shadow-blue-500/20 hover:border-blue-500/40 hover:-translate-y-1 transition-transform">
@@ -232,33 +274,6 @@
         </div>
     </div>
 
-    <!-- Section Graphique avec couleurs harmonisées -->
-    <div class="rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-white/10 p-4 shadow-xl flex-1 flex flex-col min-h-0 animate-fade-in-up" style="animation-delay: 0.6s">
-        <div class="flex items-center justify-between shrink-0 mb-3">
-            <div>
-                <h2 class="text-sm font-semibold text-white flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                    Évolution des Recettes
-                </h2>
-                <p class="text-[10px] text-gray-500 mt-0.5">Tendance mensuelle des recettes (12 derniers mois)</p>
-            </div>
-            <div class="flex gap-1.5">
-                <button class="px-2 py-1 text-[10px] rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/30 transition-all duration-300">
-                    Mois
-                </button>
-                <button class="px-2 py-1 text-[10px] rounded bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all duration-300">
-                    Année
-                </button>
-            </div>
-        </div>
-
-        <div class="relative flex-1 min-h-0 w-full">
-            <canvas id="statsChart"></canvas>
-        </div>
-    </div>
-
     @if($nb_alertes_maintenance_km > 0)
     <!-- Alertes Maintenance Kilométrage -->
     <div class="rounded-2xl bg-slate-900/90 backdrop-blur-xl border border-rose-500/20 p-4 shadow-xl shrink-0 animate-fade-in-up" style="animation-delay: 0.7s">
@@ -287,81 +302,5 @@
     </div>
     @endif
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('statsChart').getContext('2d');
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: @json($chart_labels),
-                datasets: [{
-                    label: 'Recettes',
-                    data: @json($chart_data),
-                    backgroundColor: 'rgba(99, 102, 241, 0.8)',
-                    borderColor: 'rgba(99, 102, 241, 1)',
-                    borderWidth: 2,
-                    borderRadius: 4,
-                    barPercentage: 0.65,
-                    categoryPercentage: 0.8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: { padding: 5 },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: '#9ca3af',
-                            font: { size: 10, weight: '500' },
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                        titleColor: '#fff',
-                        bodyColor: '#e5e7eb',
-                        borderColor: '#6366f1',
-                        borderWidth: 1,
-                        padding: 8,
-                        displayColors: true,
-                        callbacks: {
-                            label: function(context) {
-                                return `Recettes: ${context.raw.toLocaleString()} CFA`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                        ticks: { color: '#9ca3af', stepSize: 5, font: { size: 9 } }
-                    },
-                    x: {
-                        grid: { display: false, drawBorder: false },
-                        ticks: { color: '#9ca3af', font: { size: 9, weight: '500' } }
-                    }
-                },
-                animation: { duration: 1500, easing: 'easeOutQuart' },
-                hover: { mode: 'index', intersect: false, animationDuration: 200 },
-                elements: {
-                    bar: {
-                        backgroundColor: 'rgba(99, 102, 241, 0.8)',
-                        hoverBackgroundColor: 'rgba(99, 102, 241, 1)',
-                        borderSkipped: 'round'
-                    }
-                }
-            }
-        });
-    });
-</script>
 
 @endsection

@@ -10,6 +10,7 @@ class RecetteMensuelle extends Model
 
     protected $fillable = [
         'vehicule_id',
+        'voyage_id',
         'montant',
         'date',
         'type'

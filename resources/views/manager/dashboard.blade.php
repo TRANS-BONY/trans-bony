@@ -82,17 +82,15 @@
             </div>
         </div>
 
-        {{-- Finances --}}
-        <div class="card-hover rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer" x-data="{ cardHover: false }" @mouseenter="cardHover = true" @mouseleave="cardHover = false" :class="cardHover ? 'floating shadow-2xl scale-[1.03] z-10' : ''" x-transition.duration.500ms>
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Chiffre d'Affaires</p>
-                    <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">{{ number_format($stats['recettes_total'] ?? 0, 0, ',', ' ') }}</p>
-                    <p class="text-xs text-green-500 mt-0.5">Franc CFA cumulés</p>
-                </div>
-                <div class="p-3 rounded-xl bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
-                    <i class="fas fa-coins text-xl"></i>
-                </div>
+        {{-- Finances (Rentabilité) --}}
+        <div class="card-hover rounded-2xl bg-indigo-50 border-2 border-indigo-200 p-5 shadow-md flex items-center justify-between cursor-pointer" style="animation-delay: 0.3s">
+            <div>
+                <p class="text-xs text-indigo-700 uppercase tracking-wider font-bold">Résultat Net Global</p>
+                <p class="text-2xl font-black {{ $beneficeNet >= 0 ? 'text-emerald-700' : 'text-red-700' }} mt-1">{{ number_format($beneficeNet ?? 0, 0, ',', ' ') }} <span class="text-xs font-normal">CFA</span></p>
+                <p class="text-[10px] text-indigo-500 mt-0.5 font-medium">CA: {{ number_format($totalRecettes, 0, ',', ' ') }} CFA</p>
+            </div>
+            <div class="p-3 rounded-xl bg-indigo-600 text-white shadow-lg">
+                <i class="fas fa-balance-scale text-xl"></i>
             </div>
         </div>
     </div>

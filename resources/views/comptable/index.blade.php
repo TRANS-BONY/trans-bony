@@ -37,8 +37,48 @@
         </div>
     </div>
 
+    {{-- Section Performance Financière (Contraste Amélioré) --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0 animate-fade-in-up" style="animation-delay: 0.1s">
+        <!-- Recettes -->
+        <div class="p-4 rounded-2xl bg-emerald-100 border-2 border-emerald-200 shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-emerald-800 uppercase font-bold">Total Recettes</p>
+                    <p class="text-xl font-black text-emerald-900">{{ number_format($totalRecettes, 0, ',', ' ') }} <span class="text-xs font-normal">CFA</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Dépenses -->
+        <div class="p-4 rounded-2xl bg-rose-100 border-2 border-rose-200 shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-rose-600 flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-rose-800 uppercase font-bold">Dépenses Exploitation</p>
+                    <p class="text-xl font-black text-rose-900">{{ number_format($totalDepenses, 0, ',', ' ') }} <span class="text-xs font-normal">CFA</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Résultat -->
+        <div class="p-4 rounded-2xl bg-indigo-100 border-2 border-indigo-200 shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-indigo-800 uppercase font-bold">Résultat Net</p>
+                    <p class="text-xl font-black text-indigo-900">{{ number_format($beneficeNet, 0, ',', ' ') }} <span class="text-xs font-normal">CFA</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- ─── STATS CARDS ─── --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 animate-fade-in-up shrink-0" style="animation-delay:0.1s">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 animate-fade-in-up shrink-0" style="animation-delay:0.2s">
         {{-- Recettes du mois --}}
         <div class="rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-4 shadow-lg hover:scale-[1.02] transition-transform">
             <div class="flex items-center justify-between mb-2">

@@ -45,6 +45,14 @@ class VehiculeController extends Controller
     public function show(Vehicule $vehicule)
     {
         $vehicule->loadCount(['voyages', 'maintenances']);
+        
+        // Calcul de rentabilité du véhicule
+        $totalRecettes    = \App\Models\RecetteMensuelle::where('vehicule_id', $vehicule->id)->sum('montant');
+        $totalCarburant   = \App\Models\Carburant::where('vehicule_id', $vehicule->id)->sum('montant');
+        $totalMaintenance = \App\Models\Maintenance::where('vehicule_id', $vehicule->id)->sum('cout');
+        
+        $totalDepenses = $totalCarburant + $totalMaintenance;
+        $beneficeNet   = $totalRecettes - $totalDepenses;
 
         $role = auth()->user()->getRoleNames()->first() ?: 'admin';
         $rolePrefix = $role;
@@ -53,7 +61,7 @@ class VehiculeController extends Controller
         if ($role === 'admin') $view = 'admin.vehicule.show';
         if (!view()->exists($view)) $view = 'admin.vehicule.show';
 
-        return view($view, compact('vehicule', 'rolePrefix'));
+        return view($view, compact('vehicule', 'rolePrefix', 'totalRecettes', 'totalDepenses', 'beneficeNet'));
     }
 
     public function create()

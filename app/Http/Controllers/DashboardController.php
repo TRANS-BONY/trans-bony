@@ -94,6 +94,14 @@ class DashboardController extends Controller
         $total_parc  = $vehicules_disponibles + $vehicules_mission + $vehicules_maintenance;
         $occupation  = $total_parc > 0 ? round(($vehicules_mission / $total_parc) * 100, 1) : 0;
 
+        // ── Statistiques Financières (Rentabilité) ────────────────
+        $totalRecettes    = RecetteMensuelle::sum('montant');
+        $totalCarburant   = \App\Models\Carburant::sum('montant');
+        $totalMaintenance = \App\Models\Maintenance::sum('cout');
+        
+        $totalDepenses = $totalCarburant + $totalMaintenance;
+        $beneficeNet   = $totalRecettes - $totalDepenses;
+
         // ── Graphique (12 derniers mois) ──────────────────────
         // Optimisation : Une seule requête groupée au lieu de 12 requêtes
         $startDate = now()->subMonths(11)->startOfMonth();
@@ -198,7 +206,8 @@ class DashboardController extends Controller
             'users',
             'occupation',
             'nb_rapports', 'nb_recettes', 'nb_recettes_mois',
-            'vehicules_alerte_km', 'nb_alertes_maintenance_km'
+            'vehicules_alerte_km', 'nb_alertes_maintenance_km',
+            'totalRecettes', 'totalDepenses', 'beneficeNet'
         ));
     }
 }
