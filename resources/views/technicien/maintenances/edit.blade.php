@@ -53,9 +53,10 @@
                             <i class="fas fa-info-circle text-gray-400"></i>
                         </div>
                         <select name="statut" class="pl-10 w-full rounded-xl border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white shadow-sm focus:border-orange-500 focus:ring-orange-500 transition py-2.5" required>
-                            <option value="planifiee" {{ old('statut', $maintenance->statut) == 'planifiee' ? 'selected' : '' }}>Planifiée</option>
-                            <option value="en cours" {{ old('statut', $maintenance->statut) == 'en cours' ? 'selected' : '' }}>En cours</option>
-                            <option value="terminee" {{ old('statut', $maintenance->statut) == 'terminee' ? 'selected' : '' }}>Terminée</option>
+                            <option value="planifie" {{ old('statut', $maintenance->statut) == 'planifie' ? 'selected' : '' }}>Planifiée</option>
+                            <option value="en_cours" {{ old('statut', $maintenance->statut) == 'en_cours' ? 'selected' : '' }}>En cours</option>
+                            <option value="termine" {{ old('statut', $maintenance->statut) == 'termine' ? 'selected' : '' }}>Terminée</option>
+                            <option value="annule" {{ old('statut', $maintenance->statut) == 'annule' ? 'selected' : '' }}>Annulée</option>
                         </select>
                     </div>
                 </div>

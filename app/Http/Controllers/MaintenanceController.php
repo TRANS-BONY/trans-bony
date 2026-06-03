@@ -32,6 +32,7 @@ class MaintenanceController extends Controller
 
         $stats = [
             'total' => Maintenance::count(),
+            'planifie' => Maintenance::where('statut', 'planifie')->count(),
             'en_cours' => Maintenance::where('statut', 'en_cours')->count(),
             'termine' => Maintenance::where('statut', 'termine')->count(),
             'annule' => Maintenance::where('statut', 'annule')->count(),

@@ -111,9 +111,10 @@
                 <div class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700 last:border-0 shrink-0">
                     <div class="flex items-center gap-2">
                         <div class="w-7 h-7 rounded-lg flex items-center justify-center
-                            {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : '' }}
-                            {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
-                            {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : '' }}">
+                            {{ $m->statut == 'termine' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' : '' }}
+                            {{ $m->statut == 'en_cours' ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
+                            {{ $m->statut == 'planifie' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
+                            {{ $m->statut == 'annule' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' : '' }}">
                             <i class="fas fa-tools text-[10px]"></i>
                         </div>
                         <div>
@@ -125,10 +126,11 @@
                     </div>
                     <div class="text-right">
                         <span class="text-[10px] px-1.5 py-0.5 rounded font-semibold
-                            {{ $m->statut == 'terminee' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : '' }}
-                            {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
-                            {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}">
-                            {{ ucfirst($m->statut) }}
+                            {{ $m->statut == 'termine' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : '' }}
+                            {{ $m->statut == 'en_cours' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
+                            {{ $m->statut == 'planifie' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
+                            {{ $m->statut == 'annule' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : '' }}">
+                            {{ ucfirst(str_replace('_', ' ', $m->statut)) }}
                         </span>
                         <p class="text-[10px] text-gray-500 mt-1">{{ $m->date_prevue->format('d/m/Y') }}</p>
                     </div>

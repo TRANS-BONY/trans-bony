@@ -101,10 +101,11 @@
                         <td class="p-4 text-gray-700 dark:text-gray-300">{{ $m->date_prevue->format('d/m/Y') }}</td>
                         <td class="p-4 text-center">
                             <span class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-lg
-                                {{ $m->statut == 'terminee' ? 'bg-emerald-100 text-emerald-700' : '' }}
-                                {{ $m->statut == 'en cours' ? 'bg-orange-100 text-orange-700' : '' }}
-                                {{ $m->statut == 'planifiee' ? 'bg-blue-100 text-blue-700' : '' }}">
-                                {{ $m->statut }}
+                                {{ $m->statut == 'termine' ? 'bg-emerald-100 text-emerald-700' : '' }}
+                                {{ $m->statut == 'en_cours' ? 'bg-orange-100 text-orange-700' : '' }}
+                                {{ $m->statut == 'planifie' ? 'bg-blue-100 text-blue-700' : '' }}
+                                {{ $m->statut == 'annule' ? 'bg-red-100 text-red-700' : '' }}">
+                                {{ str_replace('_', ' ', $m->statut) }}
                             </span>
                         </td>
                         <td class="p-4 text-right font-bold text-amber-600 dark:text-amber-400">

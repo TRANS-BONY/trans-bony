@@ -23,18 +23,20 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-gray-700">
                 <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl
-                    {{ $maintenance->statut == 'terminee' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' : '' }}
-                    {{ $maintenance->statut == 'en cours' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400' : '' }}
-                    {{ $maintenance->statut == 'planifiee' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' : '' }}">
+                    {{ $maintenance->statut == 'termine' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' : '' }}
+                    {{ $maintenance->statut == 'en_cours' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400' : '' }}
+                    {{ $maintenance->statut == 'planifie' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' : '' }}
+                    {{ $maintenance->statut == 'annule' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' : '' }}">
                     <i class="fas fa-tools"></i>
                 </div>
                 <div>
                     <h2 class="text-lg font-bold text-gray-900 dark:text-white">Intervention {{ ucfirst($maintenance->type) }}</h2>
                     <span class="inline-block mt-1 px-2.5 py-1 text-xs font-semibold rounded-lg
-                        {{ $maintenance->statut == 'terminee' ? 'bg-green-100 text-green-700' : '' }}
-                        {{ $maintenance->statut == 'en cours' ? 'bg-orange-100 text-orange-700' : '' }}
-                        {{ $maintenance->statut == 'planifiee' ? 'bg-blue-100 text-blue-700' : '' }}">
-                        {{ ucfirst($maintenance->statut) }}
+                        {{ $maintenance->statut == 'termine' ? 'bg-green-100 text-green-700' : '' }}
+                        {{ $maintenance->statut == 'en_cours' ? 'bg-orange-100 text-orange-700' : '' }}
+                        {{ $maintenance->statut == 'planifie' ? 'bg-blue-100 text-blue-700' : '' }}
+                        {{ $maintenance->statut == 'annule' ? 'bg-red-100 text-red-700' : '' }}">
+                        {{ ucfirst(str_replace('_', ' ', $maintenance->statut)) }}
                     </span>
                 </div>
             </div>

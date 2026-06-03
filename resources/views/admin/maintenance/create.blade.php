@@ -127,9 +127,10 @@
                         <div class="relative">
                             <select name="statut" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer">
-                                <option value="planifiee" {{ old('statut') == 'planifiee' ? 'selected' : '' }}>📅 Planifiée</option>
-                                <option value="en cours" {{ old('statut') == 'en cours' ? 'selected' : '' }}>⏳ En cours</option>
-                                <option value="terminee" {{ old('statut') == 'terminee' ? 'selected' : '' }}>✅ Terminée</option>
+                                <option value="planifie" {{ old('statut') == 'planifie' ? 'selected' : '' }}>📅 Planifiée</option>
+                                <option value="en_cours" {{ old('statut') == 'en_cours' ? 'selected' : '' }}>⏳ En cours</option>
+                                <option value="termine" {{ old('statut') == 'termine' ? 'selected' : '' }}>✅ Terminée</option>
+                                <option value="annule" {{ old('statut') == 'annule' ? 'selected' : '' }}>❌ Annulée</option>
                             </select>
                         </div>
                     </div>

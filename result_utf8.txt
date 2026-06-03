@@ -1,0 +1,38 @@
+﻿=== TEST : STATISTIQUES DU TABLEAU DE BORD ===
+
+--- CARTES KPI ---
+Vehicules total      : 40
+Chauffeurs total     : 26
+Voyages total        : 15
+Voyages ce mois      : 1
+Maintenances total   : 13
+
+--- FINANCES ---
+Recettes totales     : 1 899 043 FCFA
+Recettes ce mois     : 100 000 FCFA
+Recettes mois pr├®c.  : 0 FCFA
+├ëvolution            : N/A (pas de mois pr├®c├®dent)
+
+--- DONN├ëES GRAPHIQUE (12 derniers mois) ---
+juil. 2025 : 159 365 FCFA
+ao├╗t 2025 : 309 852 FCFA
+sept. 2025 : 131 811 FCFA
+oct. 2025 : 144 440 FCFA
+nov. 2025 : 79 383 FCFA
+d├®c. 2025 : 215 852 FCFA
+janv. 2026 : 149 554 FCFA
+f├®vr. 2026 : 102 871 FCFA
+mars 2026 : 40 457 FCFA
+avr. 2026 : 308 844 FCFA
+mai 2026 : 0 FCFA
+juin 2026 : 100 000 FCFA
+
+--- STATUT MAINTENANCES ---
+En cours             : 10
+Planifi├®es           : 2
+Termin├®es            : 1
+
+--- ALERTES KILOM├ëRIQUE (seuil 5000 km) ---
+  Aucune alerte kilom├®trique d├®tect├®e
+
+=== FIN DES TESTS ===

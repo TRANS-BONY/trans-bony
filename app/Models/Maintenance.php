@@ -32,7 +32,7 @@ class Maintenance extends Model
         });
 
         static::updated(function ($maintenance) {
-            if ($maintenance->wasChanged('statut') && $maintenance->statut === 'terminee') {
+            if ($maintenance->wasChanged('statut') && $maintenance->statut === 'termine') {
                 // Si la maintenance est terminée, on enregistre le kilométrage actuel du véhicule
                 $maintenance->update(['compteur_km' => $maintenance->vehicule->kilometrage]);
                 $maintenance->vehicule->update(['statut' => 'disponible']);

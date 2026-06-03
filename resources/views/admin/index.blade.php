@@ -240,9 +240,9 @@
                     <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                     </svg>
-                    Évolution des Activités
+                    Évolution des Recettes
                 </h2>
-                <p class="text-[10px] text-gray-500 mt-0.5">Tendance mensuelle des opérations (Janvier - Mai)</p>
+                <p class="text-[10px] text-gray-500 mt-0.5">Tendance mensuelle des recettes (12 derniers mois)</p>
             </div>
             <div class="flex gap-1.5">
                 <button class="px-2 py-1 text-[10px] rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/30 transition-all duration-300">
@@ -297,10 +297,10 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'],
+                labels: @json($chart_labels),
                 datasets: [{
-                    label: 'Activités',
-                    data: [10, 20, 15, 30, 25],
+                    label: 'Recettes',
+                    data: @json($chart_data),
                     backgroundColor: 'rgba(99, 102, 241, 0.8)',
                     borderColor: 'rgba(99, 102, 241, 1)',
                     borderWidth: 2,
@@ -334,7 +334,7 @@
                         displayColors: true,
                         callbacks: {
                             label: function(context) {
-                                return `Activités: ${context.raw}`;
+                                return `Recettes: ${context.raw.toLocaleString()} CFA`;
                             }
                         }
                     }

@@ -60,8 +60,12 @@
                     <input type="hidden" name="statut" id="statut-filter" value="{{ request('statut') }}">
                     
                     <button type="button" onclick="filterStatut('')" 
-                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ !request('statut') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200 dark:shadow-none' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200' }}">
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ !request('statut') ? 'bg-orange-600 text-white shadow-lg shadow-orange-200 dark:shadow-none' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600' }}">
                         Tous
+                    </button>
+                    <button type="button" onclick="filterStatut('planifie')" 
+                            class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'planifie' ? 'bg-blue-500 text-white shadow-lg shadow-blue-200 dark:shadow-none' : 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 hover:bg-blue-100' }}">
+                        Planifiés
                     </button>
                     <button type="button" onclick="filterStatut('en_cours')" 
                             class="whitespace-nowrap px-4 py-2 rounded-xl text-[10px] font-bold uppercase transition-all {{ request('statut') == 'en_cours' ? 'bg-amber-500 text-white shadow-lg shadow-amber-200 dark:shadow-none' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 hover:bg-amber-100' }}">
@@ -81,7 +85,7 @@
     </div>
 
     <!-- Statistiques rapides -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up" style="animation-delay: 0.2s">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-fade-in-up" style="animation-delay: 0.2s">
         <!-- Total Maintenances -->
         <button type="button" onclick="filterStatut('')" 
              class="text-left rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ !request('statut') ? 'ring-2 ring-orange-300 ring-offset-2' : '' }}">
@@ -93,6 +97,22 @@
                 <div class="p-2 rounded-lg bg-white/20">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                </div>
+            </div>
+        </button>
+
+        <!-- Planifiés -->
+        <button type="button" onclick="filterStatut('planifie')" 
+             class="text-left rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl {{ request('statut') == 'planifie' ? 'ring-2 ring-blue-300 ring-offset-2' : '' }}">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] text-blue-100 uppercase tracking-wider font-bold">Planifiés</p>
+                    <p class="text-2xl font-bold text-white">{{ $stats['planifie'] ?? 0 }}</p>
+                </div>
+                <div class="p-2 rounded-lg bg-white/20">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                 </div>
             </div>
@@ -155,6 +175,7 @@
                     <tr class="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
                         <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Véhicule</th>
                         <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                        <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Statut</th>
                         <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Date prévue</th>
                         <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Coût</th>
                         <th class="p-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">Actions</th>
@@ -189,13 +210,30 @@
                             </span>
                         </td>
                         <td class="p-4">
+                            @php
+                                $statutConfig = [
+                                    'planifie' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-700', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'label' => 'Planifiée'],
+                                    'en_cours' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-700', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'En cours'],
+                                    'termine' => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-700', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Terminée'],
+                                    'annule' => ['bg' => 'bg-red-100', 'text' => 'text-red-700', 'icon' => 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z', 'label' => 'Annulée']
+                                ];
+                                $sConfig = $statutConfig[$m->statut] ?? $statutConfig['planifie'];
+                            @endphp
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold {{ $sConfig['bg'] }} {{ $sConfig['text'] }}">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sConfig['icon'] }}"></path>
+                                </svg>
+                                {{ $sConfig['label'] }}
+                            </span>
+                        </td>
+                        <td class="p-4">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
                                 <span class="text-gray-700">{{ \Carbon\Carbon::parse($m->date_prevue)->format('d/m/Y') }}</span>
                             </div>
-                            @if(\Carbon\Carbon::parse($m->date_prevue)->isPast())
+                            @if(in_array($m->statut, ['planifie', 'en_cours']) && \Carbon\Carbon::parse($m->date_prevue)->isPast())
                                 <span class="inline-flex items-center gap-1 text-xs text-red-500 mt-1">
                                     <span class="relative flex h-2 w-2">
                                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -203,7 +241,7 @@
                                     </span>
                                     En retard
                                 </span>
-                            @elseif(\Carbon\Carbon::parse($m->date_prevue)->diffInDays(now()) <= 7)
+                            @elseif(in_array($m->statut, ['planifie', 'en_cours']) && \Carbon\Carbon::parse($m->date_prevue)->diffInDays(now()) <= 7)
                                 <span class="inline-flex items-center gap-1 text-xs text-amber-500 mt-1">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>

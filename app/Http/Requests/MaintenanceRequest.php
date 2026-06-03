@@ -17,7 +17,7 @@ class MaintenanceRequest extends FormRequest
             'vehicule_id' => 'required|exists:vehicules,id',
             'type'        => 'required|in:preventive,curative',
             'date_prevue' => 'required|date',
-            'statut'      => 'required|in:planifiee,en cours,terminee',
+            'statut'      => 'required|in:planifie,en_cours,termine,annule',
             'compteur_km' => 'nullable|integer|min:0',
             'cout'        => 'required|numeric|min:0',
         ];

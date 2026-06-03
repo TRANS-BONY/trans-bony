@@ -130,9 +130,10 @@
                         <select name="statut" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 text-gray-900 appearance-none cursor-pointer @error('statut') border-red-500 @enderror">
                             <option value="" disabled>-- Sélectionnez un statut --</option>
-                            <option value="planifiee" {{ old('statut', $maintenance->statut) == 'planifiee' ? 'selected' : '' }}>📅 Planifiée</option>
-                            <option value="en cours" {{ old('statut', $maintenance->statut) == 'en cours' ? 'selected' : '' }}>⏳ En cours</option>
-                            <option value="terminee" {{ old('statut', $maintenance->statut) == 'terminee' ? 'selected' : '' }}>✅ Terminée</option>
+                            <option value="planifie" {{ old('statut', $maintenance->statut) == 'planifie' ? 'selected' : '' }}>📅 Planifiée</option>
+                            <option value="en_cours" {{ old('statut', $maintenance->statut) == 'en_cours' ? 'selected' : '' }}>⏳ En cours</option>
+                            <option value="termine" {{ old('statut', $maintenance->statut) == 'termine' ? 'selected' : '' }}>✅ Terminée</option>
+                            <option value="annule" {{ old('statut', $maintenance->statut) == 'annule' ? 'selected' : '' }}>❌ Annulée</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,7 +166,10 @@
                         $datePrevue = \Carbon\Carbon::parse($maintenance->date_prevue);
                         $statusClass = '';
                         $statusText = '';
-                        if ($datePrevue->isPast()) {
+                        if (in_array($maintenance->statut, ['termine', 'annule'])) {
+                            $statusClass = 'text-gray-500 bg-gray-50';
+                            $statusText = 'ℹ️ Historique ('.($maintenance->statut == 'termine' ? 'Terminée' : 'Annulée').')';
+                        } elseif ($datePrevue->isPast()) {
                             $statusClass = 'text-red-500 bg-red-50';
                             $statusText = '⚠️ Cette maintenance est en retard';
                         } elseif ($datePrevue->diffInDays(now()) <= 7) {

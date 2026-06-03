@@ -82,25 +82,46 @@ class GlobalObserver
     public function updated_recettemensuelle(\App\Models\RecetteMensuelle $rm) { $this->notifyRelevantRoles("Recette modifiée", 'info', 'fas fa-wallet', "/recettes/{$rm->id}", ['comptable']); }
     public function deleted_recettemensuelle(\App\Models\RecetteMensuelle $rm) { $this->notifyRelevantRoles("Recette supprimée", 'warning', 'fas fa-wallet', "/recettes", ['comptable']); }
     
+    // Guard against recursive observer calls (infinite loop)
+    private static bool $isNotifying = false;
+
     // Generic methods
     public function created($model) {
-        $name = class_basename($model);
-        $method = "created_" . strtolower($name);
-        if (method_exists($this, $method)) { $this->$method($model); }
-        else { $this->notifyRelevantRoles("Nouveau $name créé", 'success', 'fas fa-plus-circle', null); }
+        if (self::$isNotifying) return;
+        self::$isNotifying = true;
+        try {
+            $name = class_basename($model);
+            $method = "created_" . strtolower($name);
+            if (method_exists($this, $method)) { $this->$method($model); }
+            else { $this->notifyRelevantRoles("Nouveau $name créé", 'success', 'fas fa-plus-circle', null); }
+        } finally {
+            self::$isNotifying = false;
+        }
     }
 
     public function updated($model) {
-        $name = class_basename($model);
-        $method = "updated_" . strtolower($name);
-        if (method_exists($this, $method)) { $this->$method($model); }
-        else { $this->notifyRelevantRoles("$name mis à jour", 'info', 'fas fa-edit', null); }
+        if (self::$isNotifying) return;
+        self::$isNotifying = true;
+        try {
+            $name = class_basename($model);
+            $method = "updated_" . strtolower($name);
+            if (method_exists($this, $method)) { $this->$method($model); }
+            else { $this->notifyRelevantRoles("$name mis à jour", 'info', 'fas fa-edit', null); }
+        } finally {
+            self::$isNotifying = false;
+        }
     }
 
     public function deleted($model) {
-        $name = class_basename($model);
-        $method = "deleted_" . strtolower($name);
-        if (method_exists($this, $method)) { $this->$method($model); }
-        else { $this->notifyRelevantRoles("$name supprimé", 'warning', 'fas fa-trash-alt', null); }
+        if (self::$isNotifying) return;
+        self::$isNotifying = true;
+        try {
+            $name = class_basename($model);
+            $method = "deleted_" . strtolower($name);
+            if (method_exists($this, $method)) { $this->$method($model); }
+            else { $this->notifyRelevantRoles("$name supprimé", 'warning', 'fas fa-trash-alt', null); }
+        } finally {
+            self::$isNotifying = false;
+        }
     }
 }
