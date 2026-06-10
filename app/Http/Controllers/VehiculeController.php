@@ -79,14 +79,14 @@ class VehiculeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'immatriculation' => ['required', 'unique:vehicules', 'regex:/^\d{3,4} [A-Z]{2} \d{1}$/'],
+            'immatriculation' => ['required', 'unique:vehicules', 'regex:/^\d{3} [A-Z]{2} \d{1}$/'],
             'marque' => 'required',
             'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
             'capacite' => 'required|integer|between:1,100',
             'statut' => 'required|in:disponible,maintenance,mission'
         ], [
-            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 123 AB 4 ou 1234 AB 4 (3-4 chiffres, 2 lettres, 1 chiffre).'
+            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 123 AB 4 (3 chiffres, 2 lettres, 1 chiffre).'
         ]);
 
         $data['immatriculation'] = strtoupper($data['immatriculation']);
@@ -111,14 +111,14 @@ class VehiculeController extends Controller
     public function update(Request $request, Vehicule $vehicule)
     {
         $data = $request->validate([
-            'immatriculation' => ['required', 'unique:vehicules,immatriculation,' . $vehicule->id, 'regex:/^\d{3,4} [A-Z]{2} \d{1}$/'],
+            'immatriculation' => ['required', 'unique:vehicules,immatriculation,' . $vehicule->id, 'regex:/^\d{3} [A-Z]{2} \d{1}$/'],
             'marque' => 'required',
             'modele' => 'required',
             'annee' => 'required|integer|between:1950,2026',
             'capacite' => 'required|integer|between:0,100',
             'statut' => 'required|in:disponible,maintenance,mission'
         ], [
-            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 123 AB 4 ou 1234 AB 4 (3-4 chiffres, 2 lettres, 1 chiffre).'
+            'immatriculation.regex' => 'Le format de l\'immatriculation doit être : 123 AB 4 (3 chiffres, 2 lettres, 1 chiffre).'
         ]);
 
         $data['immatriculation'] = strtoupper($data['immatriculation']);

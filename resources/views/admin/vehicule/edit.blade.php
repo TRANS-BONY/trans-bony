@@ -71,13 +71,13 @@
                                value="{{ old('immatriculation', $vehicule->immatriculation) }}"
                                class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                                placeholder="Ex: 123 AB 4"
-                               pattern="\d{3,4} [A-Z]{2} \d{1}"
-                               maxlength="10"
+                               pattern="\d{3} [A-Z]{2} \d{1}"
+                               maxlength="8"
                                required>
                         @error('immatriculation')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Format: 123 AB 4 ou 1234 AB 4 (3-4 chiffres, 2 lettres, 1 chiffre)</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Format: 123 AB 4 (3 chiffres, 2 lettres, 1 chiffre)</p>
                     </div>
 
                     <!-- Marque -->
@@ -354,42 +354,24 @@ document.addEventListener('DOMContentLoaded', function() {
             let formatted = '';
 
             if (cleanValue.length > 0) {
-                // 1. Chiffres (3 ou 4)
+                // 1. Chiffres (3)
                 let digitsMatch = cleanValue.match(/^\d+/);
                 if (digitsMatch) {
-                    let digits = digitsMatch[0].substring(0, 4);
+                    let digits = digitsMatch[0].substring(0, 3);
                     formatted = digits;
                     
                     let rest = cleanValue.substring(digits.length);
-                    if (rest.length > 0) {
-                        if (digits.length === 4 || (digits.length === 3 && rest[0].match(/[A-Z]/))) {
-                            formatted += ' ';
-                            let lettersMatch = rest.match(/[A-Z]+/);
-                            if (lettersMatch) {
-                                let letters = lettersMatch[0].substring(0, 2);
-                                formatted += letters;
-                                let restAfterLetters = rest.substring(letters.length);
-                                if (restAfterLetters.length > 0) {
-                                    let lastDigitMatch = restAfterLetters.match(/\d/);
-                                    if (lastDigitMatch) {
-                                        formatted += ' ' + lastDigitMatch[0];
-                                    }
-                                }
-                            }
-                        } else if (digits.length === 3 && rest.length > 0 && rest[0].match(/\d/)) {
-                            formatted = digits + rest[0];
-                            let restAfter4 = rest.substring(1);
-                            if (restAfter4.length > 0 && restAfter4[0].match(/[A-Z]/)) {
-                                formatted += ' ';
-                                let lettersMatch = restAfter4.match(/[A-Z]+/);
-                                if (lettersMatch) {
-                                    let letters = lettersMatch[0].substring(0, 2);
-                                    formatted += letters;
-                                    let lastPart = restAfter4.substring(letters.length);
-                                    if (lastPart.length > 0) {
-                                        let lastDigit = lastPart.match(/\d/);
-                                        if (lastDigit) formatted += ' ' + lastDigit[0];
-                                    }
+                    if (digits.length === 3 && rest.length > 0) {
+                        formatted += ' ';
+                        let lettersMatch = rest.match(/[A-Z]+/);
+                        if (lettersMatch) {
+                            let letters = lettersMatch[0].substring(0, 2);
+                            formatted += letters;
+                            let restAfterLetters = rest.substring(letters.length);
+                            if (letters.length === 2 && restAfterLetters.length > 0) {
+                                let lastDigitMatch = restAfterLetters.match(/\d/);
+                                if (lastDigitMatch) {
+                                    formatted += ' ' + lastDigitMatch[0];
                                 }
                             }
                         }
