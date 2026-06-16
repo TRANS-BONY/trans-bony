@@ -313,6 +313,12 @@
                             <button @click="show = false" class="text-emerald-500 hover:text-emerald-700">&times;</button>
                         </div>
                     @endif
+                    @if(session('error'))
+                        <div class="mb-4 p-4 bg-red-50 border border-red-100 text-red-700 rounded-2xl flex items-center justify-between shadow-sm" x-data="{ show: true }" x-show="show">
+                            <span class="text-sm font-medium">{{ session('error') }}</span>
+                            <button @click="show = false" class="text-red-500 hover:text-red-700">&times;</button>
+                        </div>
+                    @endif
                     
                     @yield('content')
                 </div>
@@ -365,5 +371,37 @@
         }
     </script>
     @stack('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('invalid', function(e) {
+                if (this.validity.valueMissing) {
+                    this.setCustomValidity('Veuillez renseigner ce champ.');
+                } else if (this.validity.typeMismatch) {
+                    if (this.type === 'email') {
+                        this.setCustomValidity('Veuillez saisir une adresse e-mail valide.');
+                    } else if (this.type === 'url') {
+                        this.setCustomValidity('Veuillez saisir une URL valide.');
+                    } else {
+                        this.setCustomValidity('Type invalide.');
+                    }
+                } else if (this.validity.patternMismatch) {
+                    this.setCustomValidity(this.title ? 'Format requis : ' + this.title : 'Veuillez respecter le format requis.');
+                } else if (this.validity.tooShort) {
+                    this.setCustomValidity('Veuillez rallonger ce texte pour qu\'il comporte au moins ' + this.minLength + ' caractères.');
+                } else {
+                    this.setCustomValidity('Valeur invalide.');
+                }
+            });
+            
+            input.addEventListener('input', function(e) {
+                this.setCustomValidity('');
+            });
+        });
+    });
+</script>
 </body>
 </html>
+
+

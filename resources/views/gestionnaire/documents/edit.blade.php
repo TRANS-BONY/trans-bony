@@ -80,4 +80,50 @@ document.getElementById('date_emission').addEventListener('change', function() {
     }
 });
 </script>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"][name="fichier"]');
+        if (!fileInput) return;
+        
+        const previewContainer = fileInput.nextElementSibling;
+        if (!previewContainer) return;
+        
+        const fileNameEl = previewContainer.querySelector('p.text-sm.text-gray-500') || previewContainer.querySelector('p.text-gray-500');
+        const iconEl = previewContainer.querySelector('i');
+        
+        // Add error element
+        const errorEl = document.createElement('p');
+        errorEl.className = 'text-sm text-red-500 mt-2 font-semibold hidden';
+        fileInput.parentElement.parentElement.appendChild(errorEl);
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Check size (5MB)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    errorEl.textContent = 'Le fichier selectionné est trop volumineux (Maximum 5MB).';
+                    errorEl.classList.remove('hidden');
+                    fileInput.value = ''; // clear
+                    if(fileNameEl) fileNameEl.textContent = 'Cliquez ou glissez le fichier ici';
+                    return;
+                }
+                
+                errorEl.classList.add('hidden');
+                if(fileNameEl) fileNameEl.textContent = file.name;
+                if(iconEl) {
+                    iconEl.className = 'fas fa-file-check text-3xl text-emerald-600 mb-2 transition-transform';
+                }
+            } else {
+                errorEl.classList.add('hidden');
+                if(fileNameEl) fileNameEl.textContent = 'Cliquez ou glissez le fichier ici';
+                if(iconEl) iconEl.className = 'fas fa-file-upload text-3xl text-emerald-400 mb-2 group-hover:scale-110 transition-transform';
+            }
+        });
+    });
+</script>
+@endpush
 @endsection
+

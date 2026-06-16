@@ -77,13 +77,6 @@ class DocumentController extends Controller
                 'required',
                 'date',
                 'after:date_emission',
-                function ($attribute, $value, $fail) use ($request) {
-                    $emission = Carbon::parse($request->date_emission);
-                    $expiration = Carbon::parse($value);
-                    if ($emission->addYears(5)->format('Y-m-d') !== $expiration->format('Y-m-d')) {
-                        $fail('La durée de validité doit être exactement de 5 ans.');
-                    }
-                },
             ],
             'fichier' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
@@ -143,13 +136,6 @@ class DocumentController extends Controller
                 'required',
                 'date',
                 'after:date_emission',
-                function ($attribute, $value, $fail) use ($request) {
-                    $emission = Carbon::parse($request->date_emission);
-                    $expiration = Carbon::parse($value);
-                    if ($emission->addYears(5)->format('Y-m-d') !== $expiration->format('Y-m-d')) {
-                        $fail('La durée de validité doit être exactement de 5 ans.');
-                    }
-                },
             ],
             'fichier' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
@@ -184,8 +170,8 @@ class DocumentController extends Controller
     {
         $this->authorize('view', $document);
 
-        if (! Storage::disk('public')->exists($document->fichier)) {
-            abort(404, 'Fichier non trouvé');
+        if (!$document->fichier || !Storage::disk('public')->exists($document->fichier)) {
+            return back()->with('error', 'Le document ne contient aucun fichier ou le fichier est introuvable.');
         }
 
         return Storage::disk('public')->download($document->fichier, basename($document->fichier));
