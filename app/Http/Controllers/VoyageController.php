@@ -108,6 +108,13 @@ class VoyageController extends Controller
         $chauffeur = Chauffeur::find($data['chauffeur_id']);
 
         // 🚫 règles métier
+        $expiredDocs = \App\Models\Document::where('vehicule_id', $vehicule->id)
+            ->whereDate('date_expiration', '<', $data['date_depart'])
+            ->exists();
+
+        if ($expiredDocs) {
+            return back()->withErrors(['vehicule_id' => "Le véhicule sélectionné n'est pas en règle : un ou plusieurs de ses documents seront expirés à la date de départ prévue."])->withInput();
+        }
         if ($data['nb_passagers'] > $vehicule->capacite) {
             return back()->withErrors(['nb_passagers' => "La capacité de ce véhicule est de {$vehicule->capacite} passagers maximum."])->withInput();
         }
@@ -161,6 +168,14 @@ class VoyageController extends Controller
         $vehicule = Vehicule::find($data['vehicule_id']);
         $chauffeur = Chauffeur::find($data['chauffeur_id']);
 
+        $expiredDocs = \App\Models\Document::where('vehicule_id', $vehicule->id)
+            ->whereDate('date_expiration', '<', $data['date_depart'])
+            ->exists();
+
+        if ($expiredDocs) {
+            return back()->withErrors(['vehicule_id' => "Le véhicule sélectionné n'est pas en règle : un ou plusieurs de ses documents seront expirés à la date de départ prévue."])->withInput();
+        }
+
         if ($data['nb_passagers'] > $vehicule->capacite) {
             return back()->withErrors(['nb_passagers' => "La capacité de ce véhicule est de {$vehicule->capacite} passagers maximum."])->withInput();
         }
@@ -195,6 +210,13 @@ class VoyageController extends Controller
         $newDate = $request->date;
 
         // 🚫 vérifier conflit
+        $expiredDocs = \App\Models\Document::where('vehicule_id', $voyage->vehicule_id)
+            ->whereDate('date_expiration', '<', $newDate)
+            ->exists();
+
+        if ($expiredDocs) {
+            return response()->json(['error' => "Le véhicule n'est pas en règle (documents expirés pour cette date)."], 400);
+        }
         if (Voyage::where('vehicule_id',$voyage->vehicule_id)
             ->where('date_depart',$newDate)
             ->where('id','!=',$id)

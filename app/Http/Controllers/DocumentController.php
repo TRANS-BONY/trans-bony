@@ -72,11 +72,26 @@ class DocumentController extends Controller
         $request->validate([
             'vehicule_id' => 'required|exists:vehicules,id',
             'type' => 'required|string|max:255',
-            'date_emission' => 'required|date',
+            'date_emission' => 'required|date|before_or_equal:today',
             'date_expiration' => [
                 'required',
                 'date',
                 'after:date_emission',
+                function ($attribute, $value, $fail) use ($request) {
+                    $emission = Carbon::parse($request->date_emission);
+                    $expiration = Carbon::parse($value);
+                    $type = strtolower($request->type ?? '');
+
+                    if ($type === 'carte grise') {
+                        if ($emission->addYears(5)->format('Y-m-d') !== $expiration->format('Y-m-d')) {
+                            $fail("La date d'expiration doit être exactement de 5 ans après l'émission (Carte Grise).");
+                        }
+                    } elseif ($type === 'assurance' || $type === 'visite technique') {
+                        if ($expiration->greaterThan($emission->copy()->addYears(1))) {
+                            $fail("La date d'expiration ne peut pas dépasser 1 an par rapport à l'émission pour ce type de document.");
+                        }
+                    }
+                },
             ],
             'fichier' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
@@ -131,11 +146,26 @@ class DocumentController extends Controller
         $request->validate([
             'vehicule_id' => 'required|exists:vehicules,id',
             'type' => 'required|string|max:255',
-            'date_emission' => 'required|date',
+            'date_emission' => 'required|date|before_or_equal:today',
             'date_expiration' => [
                 'required',
                 'date',
                 'after:date_emission',
+                function ($attribute, $value, $fail) use ($request) {
+                    $emission = Carbon::parse($request->date_emission);
+                    $expiration = Carbon::parse($value);
+                    $type = strtolower($request->type ?? '');
+
+                    if ($type === 'carte grise') {
+                        if ($emission->addYears(5)->format('Y-m-d') !== $expiration->format('Y-m-d')) {
+                            $fail("La date d'expiration doit être exactement de 5 ans après l'émission (Carte Grise).");
+                        }
+                    } elseif ($type === 'assurance' || $type === 'visite technique') {
+                        if ($expiration->greaterThan($emission->copy()->addYears(1))) {
+                            $fail("La date d'expiration ne peut pas dépasser 1 an par rapport à l'émission pour ce type de document.");
+                        }
+                    }
+                },
             ],
             'fichier' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
