@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Client;
+use Illuminate\Http\Request;
+
+class ClientController extends Controller
+{
+    /**
+     * Affiche la liste des clients.
+     */
+    public function index()
+    {
+        $clients = Client::latest()->paginate(10);
+        return view('admin.client.index', compact('clients'));
+    }
+}
